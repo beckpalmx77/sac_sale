@@ -1,0 +1,1 @@
+SELECT * FROM ims_customer_ar
