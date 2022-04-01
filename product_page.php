@@ -26,7 +26,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <table id='TableRecordList' class='display dataTable'>
                                             <thead>
                                             <tr>
-                                                <th>ชื่อ</th>
+                                                <th>ชื่อสินค้า</th>
                                                 <th>จังหวัด</th>
                                                 <th>Action</th>
                                             </tr>
@@ -117,7 +117,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_CUSTOMER", sub_action: "GET_MASTER"};
+
+            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -136,7 +137,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_customer_ar_process.php',
+                    'url': 'model/manage_product_process.php',
                     'data': formData
                 },
                 'columns': [

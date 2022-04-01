@@ -4,6 +4,7 @@ error_reporting(0);
 
 include('../config/connect_db.php');
 include('../config/lang.php');
+include('../cond_file/query-product-price-main.php');
 
 
 if ($_POST["action"] === 'GET_DATA') {
@@ -29,10 +30,6 @@ if ($_POST["action"] === 'GET_DATA') {
 
 if ($_POST["action"] === 'GET_PRODUCT') {
 
-    $my_file = fopen("wd_file.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " | ");
-    fclose($my_file);
-
     ## Read value
     $draw = $_POST['draw'];
     $row = $_POST['start'];
@@ -47,13 +44,17 @@ if ($_POST["action"] === 'GET_PRODUCT') {
 ## Search
     $searchQuery = " ";
     if ($searchValue != '') {
-        $searchQuery = " AND (customer_id LIKE :customer_id or
-        f_name LIKE :f_name ) ";
+        $searchQuery = " AND (SKU_NAME LIKE :product_name or
+        SKU_CODE LIKE :product_code ) ";
         $searchArray = array(
-            'customer_id' => "%$searchValue%",
-            'f_name' => "%$searchValue%",
+            'product_code' => "%$searchValue%",
+            'product_name' => "%$searchValue%",
         );
     }
+
+    $my_file = fopen("wd_file2.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " Condition = " . $searchQuery);
+    fclose($my_file);
 
 ## Total number of records without filtering
     $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar ");
@@ -87,18 +88,16 @@ if ($_POST["action"] === 'GET_PRODUCT') {
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
                 "id" => $row['id'],
-                "customer_id" => $row['customer_id'],
-                "f_name" => $row['f_name'],
-                "update" => "<button type='button' name='update' id='" . $row['id'] . "' class='btn btn-info btn-xs update' data-toggle='tooltip' title='Update'>Update</button>",
-                "delete" => "<button type='button' name='delete' id='" . $row['id'] . "' class='btn btn-danger btn-xs delete' data-toggle='tooltip' title='Delete'>Delete</button>",
-                "province" => $row['f_name']
+                "product_name" => $row['SKU_NAME'],
+                "price" => $row['ARPLU_U_PRC'],
+                "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Update</button>"
             );
         } else {
             $data[] = array(
                 "id" => $row['id'],
-                "customer_id" => $row['customer_id'],
-                "f_name" => $row['f_name'],
-                "select" => "<button type='button' name='select' id='" . $row['customer_id'] . "@" . $row['f_name'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
+                "product_name" => $row['SKU_NAME'],
+                "price" => $row['ARPLU_U_PRC'],
+                "select" => "<button type='button' name='select' id='" . $row['id'] . "@" . $row['SKU_NAME'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",
             );
         }
