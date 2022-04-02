@@ -21,20 +21,25 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                     </div>
                                 </div>
+                                <div class="col-lg-2">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="price_code" name="price_code" readonly="true" value="CP1">
+                                </div>
+                                </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <table id='TableRecordList' class='display dataTable'>
                                             <thead>
                                             <tr>
                                                 <th>ชื่อสินค้า</th>
-                                                <th>จังหวัด</th>
+                                                <th>ราคา</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tfoot>
                                             <tr>
-                                                <th>ชื่อ</th>
-                                                <th>จังหวัด</th>
+                                                <th>ชื่อสินค้า</th>
+                                                <th>ราคา</th>
                                                 <th>Action</th>
                                             </tr>
                                             </tfoot>
@@ -117,8 +122,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-
-            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER"};
+            let price_code = $('#price_code').val();
+            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER" , price_code: price_code};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -141,8 +146,8 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'f_name'},
-                    {data: 'province'},
+                    {data: 'name_t'},
+                    {data: 'price'},
                     {data: 'detail'}
                 ]
             });
@@ -150,7 +155,7 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
 
-    <script>
+    <!--script>
 
         $("#TableRecordList").on('click', '.detail', function () {
             let id = $(this).attr("id");
@@ -158,7 +163,7 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_customer_ar_process.php',
+                url: 'model/manage_product_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
@@ -168,9 +173,9 @@ if (strlen($_SESSION['alogin']) == "") {
                         let customer_id = response[i].customer_id;
                         let tax_id = response[i].tax_id;
                         let citizend_id = response[i].citizend_id;
-                        let f_name = response[i].f_name;
+                        let product_name = response[i].product_name;
                         let phone = response[i].phone;
-                        let province = response[i].province;
+                        let price = response[i].price;
                         let amphure = response[i].amphure;
                         let tumbol = response[i].tumbol;
                         let zipcode = response[i].zipcode;
@@ -183,9 +188,9 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#customer_id').val(customer_id);
                         $('#tax_id').val(tax_id);
                         $('#citizend_id').val(citizend_id);
-                        $('#f_name').val(f_name);
+                        $('#product_name').val(product_name);
                         $('#phone').val(phone);
-                        $('#province').val(province);
+                        $('#price').val(price);
                         $('#amphure').val(amphure);
                         $('#tumbol').val(tumbol);
                         $('#zipcode').val(zipcode);
@@ -203,7 +208,7 @@ if (strlen($_SESSION['alogin']) == "") {
             });
         });
 
-    </script>
+    </script-->
 
 
     <script>

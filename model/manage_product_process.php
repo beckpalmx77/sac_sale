@@ -13,15 +13,16 @@ if ($_POST["action"] === 'GET_DATA') {
 
     $return_arr = array();
 
-    $sql_get = "SELECT * FROM ims_customer_ar WHERE id = " . $id;
+    $sql_get = "SELECT * FROM ims_product WHERE id = " . $id;
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($results as $result) {
         $return_arr[] = array("id" => $result['id'],
-            "customer_id" => $result['customer_id'],
-            "f_name" => $result['f_name'],
-            "province" => $result['province']);
+            "product_id" => $result['product_id'],
+            "product_name" => $result['name_t'],
+            "price_code" => $result['price_code'],
+            "price" => $result['price']);
     }
 
     echo json_encode($return_arr);
@@ -29,6 +30,12 @@ if ($_POST["action"] === 'GET_DATA') {
 }
 
 if ($_POST["action"] === 'GET_PRODUCT') {
+
+    $price_code = $_POST["price_code"];
+
+    $my_file = fopen("price_code.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " price_code = " . $price_code);
+    fclose($my_file);
 
     ## Read value
     $draw = $_POST['draw'];
@@ -42,35 +49,43 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $searchArray = array();
 
 ## Search
-    $searchQuery = " ";
+    $searchQuery = " AND price_code like '" . $price_code . "%' ";
+
     if ($searchValue != '') {
-        $searchQuery = " AND (SKU_NAME LIKE :product_name or
-        SKU_CODE LIKE :product_code ) ";
+        $searchQuery = " AND (name_t LIKE :name_t or
+        product_id LIKE :product_id ) ";
         $searchArray = array(
-            'product_code' => "%$searchValue%",
-            'product_name' => "%$searchValue%",
+            'name_t' => "%$searchValue%",
+            'product_id' => "%$searchValue%",
         );
     }
 
     $my_file = fopen("wd_file2.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " Condition = " . $searchQuery);
+    fwrite($my_file, " Condition = " . $searchQuery . " | " . $price_code);
     fclose($my_file);
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar ");
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE 1 " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product WHERE 1 " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-    $stmt = $conn->prepare("SELECT * FROM ims_customer_ar WHERE 1 " . $searchQuery
-        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+
+    $sql_getdata = "SELECT * FROM ims_product WHERE 1 " . $searchQuery
+        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
+
+    $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_getdata = " . $sql_getdata);
+    fclose($my_file);
+
+    $stmt = $conn->prepare($sql_getdata);
 
 // Bind values
     foreach ($searchArray as $key => $search) {
@@ -87,17 +102,16 @@ if ($_POST["action"] === 'GET_PRODUCT') {
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
-                "id" => $row['id'],
-                "product_name" => $row['SKU_NAME'],
-                "price" => $row['ARPLU_U_PRC'],
-                "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Update</button>"
+                "name_t" => $row['name_t'],
+                "price" => $row['price'],
+                "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Detail</button>"
             );
         } else {
             $data[] = array(
                 "id" => $row['id'],
-                "product_name" => $row['SKU_NAME'],
-                "price" => $row['ARPLU_U_PRC'],
-                "select" => "<button type='button' name='select' id='" . $row['id'] . "@" . $row['SKU_NAME'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
+                "name_t" => $row['name_t'],
+                "price" => $row['price'],
+                "select" => "<button type='button' name='select' id='" . $row['id'] . "@" . $row['name_t'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",
             );
         }
