@@ -22,7 +22,7 @@ if ($_POST["action"] === 'GET_DATA') {
             "product_id" => $result['product_id'],
             "product_name" => $result['name_t'],
             "price_code" => $result['price_code'],
-            "price" => $result['price']);
+            "price" => number_format($result['price'], 2));
     }
 
     echo json_encode($return_arr);
@@ -103,7 +103,7 @@ if ($_POST["action"] === 'GET_PRODUCT') {
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
                 "name_t" => $row['name_t'],
-                "price" => $row['price'],
+                "price" => number_format($row['price'], 2),
                 "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Detail</button>"
             );
         } else {

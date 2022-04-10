@@ -63,6 +63,91 @@ if (strlen($_SESSION['alogin']) == "") {
         </div>
     </div>
 
+    <div class="modal fade" id="recordModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                </div>
+                <form method="post" id="recordForm">
+                    <div class="modal-body">
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label for="customer_id" class="control-label">รหัสลูกค้า</label>
+                                    <input type="customer_id" class="form-control"
+                                           id="customer_id" name="product_id"
+                                           required="required"
+                                           placeholder="รหัสลูกค้า">
+                                </div>
+
+                                <div class="col-sm-8">
+                                    <label for="f_name"
+                                           class="control-label">ชื่อลูกค้า</label>
+                                    <input type="text" class="form-control"
+                                           id="f_name"
+                                           name="f_name"
+                                           required="required"
+                                           placeholder="ชื่อลูกค้า">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-8">
+                                    <label for="address" class="control-label">ที่อยู่</label>
+                                    <input type="text" class="form-control"
+                                           id="address" name="address"
+                                           required="required"
+                                           placeholder="ที่อยู่">
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <label for="province"
+                                           class="control-label">จังหวัด</label>
+                                    <input type="text" class="form-control"
+                                           id="province"
+                                           name="province"
+                                           required="required"
+                                           placeholder="จังหวัด">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone"
+                                       class="control-label">หมายเลขโทรศัพท์</label>
+                                <input type="text" class="form-control"
+                                       id="phone"
+                                       name="phone"
+                                       required="required"
+                                       placeholder="หมายเลขโทรศัพท์">
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" id="id"/>
+                        <input type="hidden" name="action" id="action" value=""/>
+                        <span class="icon-input-btn">
+                                                                <i class="fa fa-check"></i>
+                                                            <input type="submit" name="save" id="save"
+                                                                   class="btn btn-primary" value="Save"/>
+                                                            </span>
+                        <button type="button" class="btn btn-danger"
+                                data-dismiss="modal">Close <i
+                                    class="fa fa-window-close"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 
     <!-- Scroll to top -->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -169,6 +254,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         let citizend_id = response[i].citizend_id;
                         let f_name = response[i].f_name;
                         let phone = response[i].phone;
+                        let address = response[i].address;
                         let province = response[i].province;
                         let amphure = response[i].amphure;
                         let tumbol = response[i].tumbol;
@@ -184,6 +270,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#citizend_id').val(citizend_id);
                         $('#f_name').val(f_name);
                         $('#phone').val(phone);
+                        $('#address').val(address);
                         $('#province').val(province);
                         $('#amphure').val(amphure);
                         $('#tumbol').val(tumbol);

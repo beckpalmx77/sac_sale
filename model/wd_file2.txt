@@ -1,2 +1,1 @@
- Condition =  AND (name_t LIKE :name_t or
-        product_id LIKE :product_id )  | CP1
+ Condition =  AND price_code like 'CP1%'  | CP1

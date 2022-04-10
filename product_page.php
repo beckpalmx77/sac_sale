@@ -68,6 +68,78 @@ if (strlen($_SESSION['alogin']) == "") {
         </div>
     </div>
 
+    <div class="modal fade" id="recordModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                </div>
+                <form method="post" id="recordForm">
+                    <div class="modal-body">
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="product_id" class="control-label">รหัสสินค้า</label>
+                                <input type="product_id" class="form-control"
+                                       id="product_id" name="product_id"
+                                       readonly="true"
+                                       placeholder="รหัสสินค้า">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="product_name"
+                                       class="control-label">ชื่อสินค้า</label>
+                                <input type="text" class="form-control"
+                                       id="product_name"
+                                       name="product_name"
+                                       required="required"
+                                       placeholder="ชื่อสินค้า">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price_code"
+                                       class="control-label">รหัสราคาสินค้า</label>
+                                <input type="text" class="form-control"
+                                       id="price_code"
+                                       name="price_code"
+                                       required="required"
+                                       placeholder="รหัสราคาสินค้า">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price"
+                                       class="control-label">ราคาสินค้า</label>
+                                <input type="text" class="form-control"
+                                       id="price"
+                                       name="price"
+                                       required="required"
+                                       placeholder="ราคาสินค้า">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" id="id"/>
+                        <input type="hidden" name="action" id="action" value=""/>
+                        <span class="icon-input-btn">
+                                                                <i class="fa fa-check"></i>
+                                                            <input type="submit" name="save" id="save"
+                                                                   class="btn btn-primary" value="Save"/>
+                                                            </span>
+                        <button type="button" class="btn btn-danger"
+                                data-dismiss="modal">Close <i
+                                    class="fa fa-window-close"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 
     <!-- Scroll to top -->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -110,6 +182,7 @@ if (strlen($_SESSION['alogin']) == "") {
             top: 30%;
         }
     </style>
+
     <script>
         $(document).ready(function () {
             $(".icon-input-btn").each(function () {
@@ -147,7 +220,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 },
                 'columns': [
                     {data: 'name_t'},
-                    {data: 'price'},
+                    {data: 'price', className: 'text-right'},
                     {data: 'detail'}
                 ]
             });
@@ -155,7 +228,7 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
 
-    <!--script>
+    <script>
 
         $("#TableRecordList").on('click', '.detail', function () {
             let id = $(this).attr("id");
@@ -170,33 +243,17 @@ if (strlen($_SESSION['alogin']) == "") {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let customer_id = response[i].customer_id;
-                        let tax_id = response[i].tax_id;
-                        let citizend_id = response[i].citizend_id;
+                        let product_id = response[i].product_id;
                         let product_name = response[i].product_name;
-                        let phone = response[i].phone;
+                        let price_code = response[i].price_code;
                         let price = response[i].price;
-                        let amphure = response[i].amphure;
-                        let tumbol = response[i].tumbol;
-                        let zipcode = response[i].zipcode;
-                        let lat = response[i].lat;
-                        let long = response[i].long;
-                        let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
-                        $('#customer_id').val(customer_id);
-                        $('#tax_id').val(tax_id);
-                        $('#citizend_id').val(citizend_id);
+                        $('#product_id').val(product_id);
                         $('#product_name').val(product_name);
-                        $('#phone').val(phone);
+                        $('#price_code').val(price_code);
                         $('#price').val(price);
-                        $('#amphure').val(amphure);
-                        $('#tumbol').val(tumbol);
-                        $('#zipcode').val(zipcode);
-                        $('#lat').val(lat);
-                        $('#long').val(long);
-                        $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Detail Record");
                         $('#action').val('UPDATE');
                         $('#save').val('Save');
@@ -208,7 +265,7 @@ if (strlen($_SESSION['alogin']) == "") {
             });
         });
 
-    </script-->
+    </script>
 
 
     <script>
