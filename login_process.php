@@ -34,7 +34,7 @@ if ($query->rowCount() == 1) {
             $_SESSION['user_picture'] = $result->picture;
             $_SESSION['lang'] = $result->lang;
             $_SESSION['permission_price'] = $result->permission_price;
-            $_SESSION['dashboard_page'] = $dashboard_page . ".php";
+            $_SESSION['dashboard_page'] = $dashboard_page;
             $_SESSION['system_name'] = $system_name;
 
 
@@ -47,7 +47,7 @@ if ($query->rowCount() == 1) {
                 setcookie("password", "");
                 setcookie("remember_chk", "");
             }
-            echo $dashboard_page . ".php";
+            echo $dashboard_page;
 
         } else {
             echo 0;

@@ -13,7 +13,7 @@ if ($_POST["action"] === 'GET_DATA') {
 
     $return_arr = array();
 
-    $sql_get = "SELECT * FROM ims_customer_ar WHERE id = " . $id;
+    $sql_get = "SELECT * FROM ims_customer_ar WHERE . AR_CODE like 'SAC%' AND id = " . $id;
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -152,19 +152,19 @@ if ($_POST["action"] === 'GET_CUSTOMER') {
     }
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar ");
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE . AR_CODE like 'SAC%' ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE 1 " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE AR_CODE like 'SAC%' " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-    $stmt = $conn->prepare("SELECT * FROM ims_customer_ar WHERE 1 " . $searchQuery
+    $stmt = $conn->prepare("SELECT * FROM ims_customer_ar WHERE AR_CODE like 'SAC%' " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
 // Bind values

@@ -44,6 +44,15 @@ include('includes/Header.php');
                                             </span>
                                 </div>
 
+                                <div class="form-group">
+                                    <button type="button" name="productCockpitBtn" id="productCockpitBtn" tabindex="4"
+                                            class="form-control btn btn-primary">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                รายการสินค้า Cockpit
+                                            </span>
+                                </div>
+
 
                                 <div class="form-group">
                                     <button type="button" name="exitBtn" id="exitBtn" tabindex="4"
@@ -67,7 +76,15 @@ include('includes/Header.php');
 <script>
     $(document).ready(function () {
         $("#productBtn").click(function () {
-            window.location.href = "product_page.php";
+            window.location.href = "product_page";
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#productCockpitBtn").click(function () {
+            window.location.href = "cockpit_sale_page";
         });
     });
 </script>
@@ -75,7 +92,7 @@ include('includes/Header.php');
 <script>
     $(document).ready(function () {
         $("#customertBtn").click(function () {
-            window.location.href = "customer_page.php";
+            window.location.href = "customer_page";
         });
     });
 </script>
@@ -83,7 +100,7 @@ include('includes/Header.php');
 <script>
     $(document).ready(function () {
         $("#exitBtn").click(function () {
-            window.location.href = "login.php";
+            window.location.href = "login";
         });
     });
 </script>
