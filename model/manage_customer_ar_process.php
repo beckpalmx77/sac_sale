@@ -13,7 +13,7 @@ if ($_POST["action"] === 'GET_DATA') {
 
     $return_arr = array();
 
-    $sql_get = "SELECT * FROM ims_customer_ar WHERE . AR_CODE like 'SAC%' AND id = " . $id;
+    $sql_get = "SELECT * FROM ims_customer_ar WHERE customer_id like 'SAC%' AND id = " . $id;
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -41,92 +41,6 @@ if ($_POST["action"] === 'GET_DATA') {
 
 }
 
-if ($_POST["action"] === 'SEARCH') {
-
-    if ($_POST["f_name"] !== '') {
-
-        $f_name = $_POST["f_name"];
-        $sql_find = "SELECT * FROM ims_customer_ar WHERE f_name = '" . $f_name . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            echo 2;
-        } else {
-            echo 1;
-        }
-    }
-}
-
-if ($_POST["action"] === 'ADD') {
-    if ($_POST["f_name"] !== '') {
-        $customer_id = "B-" . sprintf('%04s', LAST_ID($conn, "ims_customer_ar", 'id'));
-        $f_name = $_POST["f_name"];
-        $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_customer_ar WHERE f_name = '" . $f_name . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            echo $dup;
-        } else {
-            $sql = "INSERT INTO ims_customer_ar(customer_id,f_name,status) VALUES (:customer_id,:f_name,:status)";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
-            $query->bindParam(':f_name', $f_name, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->execute();
-            $lastInsertId = $conn->lastInsertId();
-
-            if ($lastInsertId) {
-                echo $save_success;
-            } else {
-                echo $error;
-            }
-        }
-    }
-}
-
-
-if ($_POST["action"] === 'UPDATE') {
-
-    if ($_POST["f_name"] != '') {
-
-        $id = $_POST["id"];
-        $customer_id = $_POST["customer_id"];
-        $f_name = $_POST["f_name"];
-        $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_customer_ar WHERE customer_id = '" . $customer_id . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            $sql_update = "UPDATE ims_customer_ar SET customer_id=:customer_id,f_name=:f_name,status=:status            
-            WHERE id = :id";
-            $query = $conn->prepare($sql_update);
-            $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
-            $query->bindParam(':f_name', $f_name, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->bindParam(':id', $id, PDO::PARAM_STR);
-            $query->execute();
-            echo $save_success;
-        }
-
-    }
-}
-
-if ($_POST["action"] === 'DELETE') {
-
-    $id = $_POST["id"];
-
-    $sql_find = "SELECT * FROM ims_customer_ar WHERE id = " . $id;
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        try {
-            $sql = "DELETE FROM ims_customer_ar WHERE id = " . $id;
-            $query = $conn->prepare($sql);
-            $query->execute();
-            echo $del_success;
-        } catch (Exception $e) {
-            echo 'Message: ' . $e->getMessage();
-        }
-    }
-}
-
 if ($_POST["action"] === 'GET_CUSTOMER') {
 
     ## Read value
@@ -152,19 +66,19 @@ if ($_POST["action"] === 'GET_CUSTOMER') {
     }
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE . AR_CODE like 'SAC%' ");
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE customer_id like 'SAC%' ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE AR_CODE like 'SAC%' " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_customer_ar WHERE customer_id like 'SAC%' " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-    $stmt = $conn->prepare("SELECT * FROM ims_customer_ar WHERE AR_CODE like 'SAC%' " . $searchQuery
+    $stmt = $conn->prepare("SELECT * FROM ims_customer_ar WHERE customer_id like 'SAC%' " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
 // Bind values
