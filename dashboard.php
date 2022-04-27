@@ -36,6 +36,15 @@ include('includes/Header.php');
                                 </div>
 
                                 <div class="form-group">
+                                    <button type="button" name="customertBtn" id="customertBtn" tabindex="4"
+                                            class="form-control btn btn-primary">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                แบบสอบถามลูกค้า SAC
+                                            </span>
+                                </div>
+
+                                <div class="form-group">
                                     <button type="button" name="productBtn" id="productBtn" tabindex="4"
                                             class="form-control btn btn-primary">
                                             <span>
