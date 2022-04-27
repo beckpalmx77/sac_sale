@@ -31,7 +31,7 @@ include('includes/Header.php');
                                             class="form-control btn btn-primary">
                                             <span>
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
-                                                รายชื่อลูกค้า
+                                                รายชื่อลูกค้า SAC
                                             </span>
                                 </div>
 
@@ -40,7 +40,7 @@ include('includes/Header.php');
                                             class="form-control btn btn-primary">
                                             <span>
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
-                                                รายการสินค้า
+                                                รายการสินค้า SAC
                                             </span>
                                 </div>
 
@@ -62,7 +62,7 @@ include('includes/Header.php');
                                                 ออกจากระบบ
                                             </span>
                                 </div>
-
+                                <p style="color:blue"><?php echo $_SESSION['first_name'] . " " . $_SESSION['last_name']?></p>
                             </div>
 
                         </div>

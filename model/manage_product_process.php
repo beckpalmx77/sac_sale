@@ -33,9 +33,9 @@ if ($_POST["action"] === 'GET_PRODUCT') {
 
     $price_code = $_POST["price_code"];
 
-    $my_file = fopen("price_code.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " price_code = " . $price_code);
-    fclose($my_file);
+    //$my_file = fopen("price_code.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, " price_code = " . $price_code);
+    //fclose($my_file);
 
     ## Read value
     $draw = $_POST['draw'];
@@ -60,9 +60,9 @@ if ($_POST["action"] === 'GET_PRODUCT') {
         );
     }
 
-    $my_file = fopen("wd_file2.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " Condition = " . $searchQuery . " | " . $price_code);
-    fclose($my_file);
+    //$my_file = fopen("wd_file2.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, " Condition = " . $searchQuery . " | " . $price_code);
+    //fclose($my_file);
 
 ## Total number of records without filtering
     $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product ");
@@ -81,9 +81,9 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $sql_getdata = "SELECT * FROM ims_product WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
-    $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " sql_getdata = " . $sql_getdata);
-    fclose($my_file);
+    //$my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, " sql_getdata = " . $sql_getdata);
+    //fclose($my_file);
 
     $stmt = $conn->prepare($sql_getdata);
 
