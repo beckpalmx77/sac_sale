@@ -128,11 +128,11 @@ if (strlen($_SESSION['alogin']) == "") {
                     <div class="modal-footer">
                         <input type="hidden" name="id" id="id"/>
                         <input type="hidden" name="action" id="action" value=""/>
-                        <span class="icon-input-btn">
+                        <!--span class="icon-input-btn">
                                                                 <i class="fa fa-check"></i>
                                                             <input type="submit" name="save" id="save"
                                                                    class="btn btn-primary" value="Save"/>
-                                                            </span>
+                                                            </span-->
                         <button type="button" class="btn btn-danger"
                                 data-dismiss="modal">Close <i
                                     class="fa fa-window-close"></i>
