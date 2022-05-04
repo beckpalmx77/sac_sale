@@ -26,7 +26,7 @@ include('includes/Header.php');
                                     <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                 </div>
 
-                                <div class="form-group">
+                                <!--div class="form-group">
                                     <button type="button" name="customertBtn" id="customertBtn" tabindex="4"
                                             class="form-control btn btn-primary">
                                             <span>
@@ -51,7 +51,7 @@ include('includes/Header.php');
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
                                                 รายการสินค้า SAC
                                             </span>
-                                </div>
+                                </div-->
 
                                 <div class="form-group">
                                     <button type="button" name="productCockpitBtn" id="productCockpitBtn" tabindex="4"
@@ -93,7 +93,7 @@ include('includes/Header.php');
 <script>
     $(document).ready(function () {
         $("#productCockpitBtn").click(function () {
-            window.location.href = "cockpit_sale_page";
+            window.location.href = "cockpit_products";
         });
     });
 </script>
