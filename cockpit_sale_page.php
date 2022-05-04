@@ -23,16 +23,17 @@ if (strlen($_SESSION['alogin']) == "") {
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
-                                <div class="form-group">
-                                    <input type="hidden" class="form-control" id="price_code" name="price_code" readonly="true" value="CP1">
-                                </div>
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="price_code" name="price_code"
+                                               readonly="true" value="CP1">
+                                    </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <table id='TableRecordList' class='display dataTable'>
                                             <thead>
                                             <tr>
-                                                <!--th>รหัสสินค้า</th-->
+                                                <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -40,7 +41,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </thead>
                                             <tfoot>
                                             <tr>
-                                                <!--th>รหัสสินค้า</th-->
+                                                <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -199,7 +200,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $(document).ready(function () {
             let price_code = $('#price_code').val();
-            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER" , price_code: price_code};
+            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER", price_code: price_code};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -208,6 +209,14 @@ if (strlen($_SESSION['alogin']) == "") {
                     infoEmpty: 'ไม่มีข้อมูล',
                     zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
                     infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    responsive: {
+                        breakpoints: [
+                            {name: 'desktop', width: Infinity},
+                            {name: 'tablet', width: 1024},
+                            {name: 'fablet', width: 768},
+                            {name: 'phone', width: 480}
+                        ]
+                    },
                     paginate: {
                         previous: 'ก่อนหน้า',
                         last: 'สุดท้าย',
@@ -222,7 +231,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    //{data: 'product_id'},
+                    {data: 'product_id'},
                     {data: 'name_t'},
                     {data: 'price', className: 'text-right'},
                     {data: 'detail'}
