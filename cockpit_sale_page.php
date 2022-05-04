@@ -32,7 +32,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <table id='TableRecordList' class='display dataTable'>
                                             <thead>
                                             <tr>
-                                                <th>รหัสสินค้า</th>
+                                                <!--th>รหัสสินค้า</th-->
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -40,7 +40,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </thead>
                                             <tfoot>
                                             <tr>
-                                                <th>รหัสสินค้า</th>
+                                                <!--th>รหัสสินค้า</th-->
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -222,7 +222,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'product_id'},
+                    //{data: 'product_id'},
                     {data: 'name_t'},
                     {data: 'price', className: 'text-right'},
                     {data: 'detail'}
