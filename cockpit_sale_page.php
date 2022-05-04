@@ -103,7 +103,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                        placeholder="ชื่อสินค้า">
                             </div>
 
-                            <div class="form-group">
+                            <!--div class="form-group">
                                 <label for="price_code"
                                        class="control-label">รหัสราคาสินค้า</label>
                                 <input type="text" class="form-control"
@@ -111,7 +111,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                        name="price_code"
                                        required="required"
                                        placeholder="รหัสราคาสินค้า">
-                            </div>
+                            </div-->
 
                             <div class="form-group">
                                 <label for="price"
@@ -258,14 +258,14 @@ if (strlen($_SESSION['alogin']) == "") {
                         let id = response[i].id;
                         let product_id = response[i].product_id;
                         let product_name = response[i].product_name;
-                        let price_code = response[i].price_code;
+                        //let price_code = response[i].price_code;
                         let price = response[i].price;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
                         $('#product_id').val(product_id);
                         $('#product_name').val(product_name);
-                        $('#price_code').val(price_code);
+                        //$('#price_code').val(price_code);
                         $('#price').val(price);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Detail Record");
                         $('#action').val('UPDATE');
