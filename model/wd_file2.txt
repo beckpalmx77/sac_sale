@@ -1,0 +1,2 @@
+ Condition =  AND (product_id LIKE :product_id or
+        name_t LIKE :name_t)  | CP1

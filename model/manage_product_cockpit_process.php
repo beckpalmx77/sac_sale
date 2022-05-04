@@ -71,14 +71,14 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product WHERE 1 " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product WHERE price_code like '" . $price_code . "%' " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
 
-    $sql_getdata = "SELECT * FROM ims_product WHERE 1 " . $searchQuery
+    $sql_getdata = "SELECT * FROM ims_product WHERE price_code like '" . $price_code . "%' " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
     $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
