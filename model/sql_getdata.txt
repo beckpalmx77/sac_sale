@@ -1,2 +1,0 @@
- sql_getdata = SELECT * FROM ims_product WHERE 1  AND (product_id LIKE :product_id or
-        name_t LIKE :name_t)  ORDER BY product_id asc LIMIT :limit,:offset
