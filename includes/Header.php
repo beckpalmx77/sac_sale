@@ -19,8 +19,10 @@
     <link rel="stylesheet" href="vendor/alertify/css/alertify.default.css"/>
     <link rel="stylesheet" href="vendor/alertify/css/main.css"/>
 
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!--script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script-->
+
+
 
     <script src="vendor/alertify/js/alertify.js"></script>
 
@@ -33,6 +35,9 @@
     <script src="../vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
     <script src="../vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
     <link href="../vendor/date-picker-1.9/css/date_picker_style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" type="text/css" href="../css/datatables1115.css">
+    <script type="text/javascript" charset="utf8" src="../js/datatables1115.js"></script>
 
     <?php
     session_start();
