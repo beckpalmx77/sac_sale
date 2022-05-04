@@ -11,7 +11,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <!-- Login Content -->
     <div class="container-login">
         <div class="row justify-content-center">
-            <div class="col-md-9 col-lg-9 col-md-9">
+            <div class="col-md-6 col-lg-6 col-md-9">
                 <div class="card shadow-sm my-5">
                     <div class="card-body p-0">
                         <div class="row">
