@@ -33,7 +33,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <table id='TableRecordList' class='display dataTable'>
                                             <thead>
                                             <tr>
-                                                <!--th>รหัสสินค้า</th-->
+                                                <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -41,7 +41,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </thead>
                                             <tfoot>
                                             <tr>
-                                                <!--th>รหัสสินค้า</th-->
+                                                <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
@@ -168,6 +168,9 @@ if (strlen($_SESSION['alogin']) == "") {
     <link rel="stylesheet" href="vendor/datatables/v11/jquery.dataTables.min.css"/>
     <link rel="stylesheet" href="vendor/datatables/v11/buttons.dataTables.min.css"/>
 
+    <script src="js/datatables-mob.js"></script>
+    <link rel="stylesheet" href="css/datatables-mobile.css"/>
+
     <style>
 
         .icon-input-btn {
@@ -210,18 +213,14 @@ if (strlen($_SESSION['alogin']) == "") {
                     zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
                     infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
                     responsive: {
-                        breakpoints: [
-                            {name: 'desktop', width: Infinity},
-                            {name: 'tablet', width: 1024},
-                            {name: 'fablet', width: 768},
-                            {name: 'phone', width: 480}
-                        ]
+                        responsive: true
                     },
                     paginate: {
                         previous: 'ก่อนหน้า',
                         last: 'สุดท้าย',
                         next: 'ต่อไป'
-                    }
+                    },
+
                 },
                 'processing': true,
                 'serverSide': true,
@@ -231,7 +230,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    //{data: 'product_id'},
+                    {data: 'product_id'},
                     {data: 'name_t'},
                     {data: 'price', className: 'text-right'},
                     {data: 'detail'}
