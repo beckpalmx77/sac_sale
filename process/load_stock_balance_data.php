@@ -16,9 +16,9 @@ if ($_POST["action"] === 'GET_STOCK') {
         . " GROUP BY SKU_CODE,SKU_NAME,WH_CODE,WL_CODE "
         . " HAVING sum(CAST(QTY AS DECIMAL(10,2))) > 0 ";
 
-    $my_file = fopen("get_stock.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, $sql_get);
-    fclose($my_file);
+    //$my_file = fopen("get_stock.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, $sql_get);
+    //fclose($my_file);
 
     ## Read value
     $draw = $_POST['draw'];
