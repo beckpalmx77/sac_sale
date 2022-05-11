@@ -180,7 +180,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                width="100%">
                             <thead>
                             <tr>
-                                <th>SKU</th>
                                 <th>คลัง</th>
                                 <th>จำนวน</th>
                             </tr>
@@ -354,7 +353,6 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'SKU_CODE'},
                     {data: 'WH_WL_CODE'},
                     {data: 'QTY'}
                 ]
