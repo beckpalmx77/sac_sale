@@ -124,8 +124,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                             class="fa fa-info-circle"></i>
                                 </button>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -153,7 +151,6 @@ if (strlen($_SESSION['alogin']) == "") {
                 </div>
 
                 <div class="container"></div>
-                <div class="modal-body">
 
                     <div class="modal-body">
                         <label for="product_name"
@@ -185,7 +182,14 @@ if (strlen($_SESSION['alogin']) == "") {
                             </tr>
                             </thead>
                         </table>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="id"/>
+                    <input type="hidden" name="action" id="action" value=""/>
+                    <button type="button" class="btn btn-danger"
+                            data-dismiss="modal">Close <i
+                                class="fa fa-window-close"></i>
+                    </button>
                 </div>
             </div>
         </div>
