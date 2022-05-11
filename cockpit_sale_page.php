@@ -178,6 +178,7 @@ if (strlen($_SESSION['alogin']) == "") {
                             <thead>
                             <tr>
                                 <th>คลัง</th>
+                                <th>ตำแหน่งเก็บ</th>
                                 <th>จำนวน</th>
                             </tr>
                             </thead>
@@ -357,7 +358,8 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'WH_WL_CODE'},
+                    {data: 'WH_CODE'},
+                    {data: 'WL_CODE'},
                     {data: 'QTY'}
                 ]
             });

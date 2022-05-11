@@ -11,9 +11,9 @@ if ($_POST["action"] === 'GET_STOCK') {
     
     $product_id_detail = $_POST["product_id_detail"];
 
-    $sql_get = " SELECT SKU_CODE,SKU_NAME,WH_CODE,WL_CODE,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM ims_product_stock_balance "
+    $sql_get = " SELECT SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM ims_product_stock_balance "
         . " WHERE SKU_CODE = '" . $product_id_detail . "'"
-        . " GROUP BY SKU_CODE,SKU_NAME,WH_CODE,WL_CODE "
+        . " GROUP BY SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME "
         . " HAVING sum(CAST(QTY AS DECIMAL(10,2))) > 0 ";
 
     //$my_file = fopen("get_stock.txt", "w") or die("Unable to open file!");
@@ -41,8 +41,11 @@ if ($_POST["action"] === 'GET_STOCK') {
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
                 "WH_CODE" => $row['WH_CODE'],
+                "WH_NAME" => $row['WH_NAME'],
                 "WL_CODE" => $row['WL_CODE'],
+                "WL_NAME" => $row['WL_NAME'],
                 "WH_WL_CODE" => $row['WH_CODE'] . " : " . $row['WL_CODE'],
+                "WH_WL_NAME" => $row['WH_NAME'] . " : " . $row['WL_NAME'],
                 "QTY" => number_format($row['QTY'], 2));
         }
     }
