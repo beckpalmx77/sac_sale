@@ -3,9 +3,9 @@ session_start();
 error_reporting(0);
 
 include('../config/connect_db.php');
+include('../config/connect_sqlserver.php');
 include('../config/lang.php');
 include('../cond_file/query-product-price-main.php');
-
 
 if ($_POST["action"] === 'GET_DATA') {
 
@@ -18,6 +18,7 @@ if ($_POST["action"] === 'GET_DATA') {
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($results as $result) {
+        $product_id = $result['product_id'];
         $return_arr[] = array("id" => $result['id'],
             "product_id" => $result['product_id'],
             "product_name" => $result['name_t'],
@@ -118,6 +119,10 @@ if ($_POST["action"] === 'GET_PRODUCT') {
         }
 
     }
+
+    //$my_file = fopen("getproduct_data.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
+    //fclose($my_file);
 
 ## Response Return Value
     $response = array(

@@ -1,1 +1,0 @@
- sql_getdata = SELECT * FROM ims_product WHERE price_code like 'CP1%'  AND price_code like 'CP1%'  ORDER BY product_id asc LIMIT :limit,:offset

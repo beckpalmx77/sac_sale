@@ -113,19 +113,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                        placeholder="ราคาสินค้า">
                             </div>
 
-                            <div class="col-sm-10">
-                                <!--a data-toggle="modal" href="#StockModal"
-                                   class="btn btn-primary">
-                                    ยอดคงเหลือ Click <i class="fa fa-info-circle" aria-hidden="true"></i>
-
-                                </a-->
-                                <button type="button" id="BtnStock" name="BtnStock" class="btn btn-info"
-                                        data-dismiss="modal">ยอดคงเหลือ <i
-                                            class="fa fa-info-circle"></i>
-                                </button>
+                            <div class="form-group">
+                                <table id="TableStockList" class="display table table-striped table-bordered"
+                                       cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>คลัง</th>
+                                        <th>ตำแหน่งเก็บ</th>
+                                        <th>จำนวน</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -138,56 +139,6 @@ if (strlen($_SESSION['alogin']) == "") {
                     </div>
                 </form>
 
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="StockModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Modal title</h4>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">×
-                    </button>
-                </div>
-
-                <div class="container"></div>
-                <div class="modal-body">
-
-                    <div class="modal-body">
-                        <label for="product_name"
-                               class="control-label">รหัสสินค้า</label>
-                        <input type="text" class="form-control"
-                               id="product_id_detail"
-                               name="product_id_detail"
-                               required="required"
-                               readonly="true"
-                               placeholder="สินค้า">
-                        <label for="product_name"
-                               class="control-label">ชื่อสินค้า</label>
-                        <input type="text" class="form-control"
-                               id="product_name_detail"
-                               name="product_name_detail"
-                               required="required"
-                               readonly="true"
-                               placeholder="ชื่อสินค้า">
-                        <br>
-
-                        <table cellpadding="0" cellspacing="0" border="0"
-                               class="display"
-                               id="TableStockList"
-                               width="100%">
-                            <thead>
-                            <tr>
-                                <th>SKU</th>
-                                <th>คลัง</th>
-                                <th>จำนวน</th>
-                            </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -257,6 +208,14 @@ if (strlen($_SESSION['alogin']) == "") {
                     infoEmpty: 'ไม่มีข้อมูล',
                     zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
                     infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    responsive: {
+                        breakpoints: [
+                            {name: 'desktop', width: Infinity},
+                            {name: 'tablet', width: 1024},
+                            {name: 'fablet', width: 768},
+                            {name: 'phone', width: 480}
+                        ]
+                    },
                     paginate: {
                         previous: 'ก่อนหน้า',
                         last: 'สุดท้าย',
@@ -331,52 +290,64 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-
-        $("#BtnStock").click(function () {
-
-            $('#StockModal').modal('show');
-            $('#product_id_detail').val($('#product_id').val());
-            $('#product_name_detail').val($('#product_name').val());
-            let product_id_detail = $('#product_id').val();
-
-            $('#TableStockList').DataTable().clear().destroy();
-
-            let formData = {action: "GET_STOCK", sub_action: "GET_MASTER", product_id_detail: product_id_detail};
-            let dataRecords = $('#TableStockList').DataTable({
-                'searching': false,
-                'paging': false,
-                'info': false,
-                'processing': true,
-                'serverSide': true,
-                'serverMethod': 'post',
-                'ajax': {
-                    'url': 'process/load_stock_balance_data.php',
-                    'data': formData
-                },
-                'columns': [
-                    {data: 'SKU_CODE'},
-                    {data: 'WH_WL_CODE'},
-                    {data: 'QTY'}
-                ]
-            });
-
-        });
-
-    </script>
-
-    <script>
         function load_stock(product_id) {
             let formData = {action: "GET_DATA", product_id: product_id};
             $.ajax({
                 url: "process/process_stock_balance.php",
                 type: "post",
-                data: formData,
+                data: formData ,
                 success: function (response) {
-                    //get_stock_balance(product_id);
+                    get_stock_balance(product_id);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
                 }
+            });
+
+        }
+    </script>
+
+    <script>
+        function get_stock_balance(product_id) {
+
+            let formData = {action: "GET_STOCK", sub_action: "GET_MASTER", product_id: product_id};
+
+            alert(product_id);
+
+            let dataRecords = $('#TableStockList').DataTable({
+                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                'language': {
+                    search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
+                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    infoEmpty: 'ไม่มีข้อมูล',
+                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
+                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    responsive: {
+                        breakpoints: [
+                            {name: 'desktop', width: Infinity},
+                            {name: 'tablet', width: 1024},
+                            {name: 'fablet', width: 768},
+                            {name: 'phone', width: 480}
+                        ]
+                    },
+                    paginate: {
+                        previous: 'ก่อนหน้า',
+                        last: 'สุดท้าย',
+                        next: 'ต่อไป'
+                    }
+                },
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': 'process/load_stock_balance.php',
+                    'data': formData
+                },
+                'columns': [
+                    {data: 'WH_CODE'},
+                    {data: 'WL_CODE'},
+                    {data: 'QTY', className: 'text-right'}
+                ]
             });
 
         }
