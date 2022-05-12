@@ -86,7 +86,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="modal-body">
 
                             <div class="form-group">
-                                <label for="product_id" class="form-control"><b>รหัสสินค้า</b></label>
+                                <label for="product_id" class="control-label"><b>รหัสสินค้า</b></label>
                                 <input type="product_id" class="form-control"
                                        id="product_id" name="product_id"
                                        readonly="true"
