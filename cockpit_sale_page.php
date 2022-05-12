@@ -351,6 +351,7 @@ if (strlen($_SESSION['alogin']) == "") {
             $('#product_id_detail').val($('#product_id').val());
             $('#product_name_detail').val($('#product_name').val());
             $('#price_detail').val($('#price').val());
+            
             let product_id_detail = $('#product_id').val();
 
             $('#TableStockList').DataTable().clear().destroy();
