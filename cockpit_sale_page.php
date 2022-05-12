@@ -86,7 +86,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="modal-body">
 
                             <div class="form-group">
-                                <label for="product_id" class="control-label">รหัสสินค้า</label>
+                                <label for="product_id" class="form-control"><b>รหัสสินค้า</b></label>
                                 <input type="product_id" class="form-control"
                                        id="product_id" name="product_id"
                                        readonly="true"
@@ -95,7 +95,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                             <div class="form-group">
                                 <label for="product_name"
-                                       class="control-label">ชื่อสินค้า</label>
+                                       class="control-label"><b>ชื่อสินค้า</b></label>
                                 <input type="text" class="form-control"
                                        id="product_name"
                                        name="product_name"
@@ -105,7 +105,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                             <div class="form-group">
                                 <label for="price"
-                                       class="control-label">ราคาสินค้า</label>
+                                       class="control-label"><b>ราคาสินค้า</b></label>
                                 <input type="text" class="form-control"
                                        id="price"
                                        name="price"
@@ -152,37 +152,46 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 <div class="container"></div>
 
-                    <div class="modal-body">
-                        <label for="product_name"
-                               class="control-label">รหัสสินค้า</label>
-                        <input type="text" class="form-control"
-                               id="product_id_detail"
-                               name="product_id_detail"
-                               required="required"
-                               readonly="true"
-                               placeholder="สินค้า">
-                        <label for="product_name"
-                               class="control-label">ชื่อสินค้า</label>
-                        <input type="text" class="form-control"
-                               id="product_name_detail"
-                               name="product_name_detail"
-                               required="required"
-                               readonly="true"
-                               placeholder="ชื่อสินค้า">
-                        <br>
+                <div class="modal-body">
+                    <label for="product_id_detail"
+                           class="control-label"><b>รหัสสินค้า</b></label>
+                    <input type="text" class="form-control"
+                           id="product_id_detail"
+                           name="product_id_detail"
+                           required="required"
+                           readonly="true"
+                           placeholder="สินค้า">
 
-                        <table cellpadding="0" cellspacing="0" border="0"
-                               class="display"
-                               id="TableStockList"
-                               width="100%">
-                            <thead>
-                            <tr>
-                                <th>คลัง</th>
-                                <th>ตำแหน่งเก็บ</th>
-                                <th>จำนวน</th>
-                            </tr>
-                            </thead>
-                        </table>
+                    <label for="product_name"
+                           class="control-label"><b>ชื่อสินค้า</b></label>
+                    <input type="text" class="form-control"
+                           id="product_name_detail"
+                           name="product_name_detail"
+                           required="required"
+                           readonly="true"
+                           placeholder="ชื่อสินค้า">
+                    <label for="price"
+                           class="control-label"><b>ราคา</b></label>
+                    <input type="text" class="form-control"
+                           id="price_detail"
+                           name="price_detail"
+                           required="required"
+                           readonly="true"
+                           placeholder="ราคา">
+                    <br>
+
+                    <table cellpadding="0" cellspacing="0" border="0"
+                           class="display"
+                           id="TableStockList"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th>คลัง</th>
+                            <th>ตำแหน่งเก็บ</th>
+                            <th>จำนวน</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="id" id="id"/>
@@ -341,6 +350,7 @@ if (strlen($_SESSION['alogin']) == "") {
             $('#StockModal').modal('show');
             $('#product_id_detail').val($('#product_id').val());
             $('#product_name_detail').val($('#product_name').val());
+            $('#price_detail').val($('#price').val());
             let product_id_detail = $('#product_id').val();
 
             $('#TableStockList').DataTable().clear().destroy();
