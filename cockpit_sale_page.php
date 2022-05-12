@@ -357,6 +357,52 @@ if (strlen($_SESSION['alogin']) == "") {
 
             let formData = {action: "GET_STOCK", sub_action: "GET_MASTER", product_id_detail: product_id_detail};
             let dataRecords = $('#TableStockList').DataTable({
+                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                'language': {
+                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    infoEmpty: 'ไม่มีข้อมูล',
+                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
+                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    paginate: {
+                        previous: 'ก่อนหน้า',
+                        last: 'สุดท้าย',
+                        next: 'ต่อไป'
+                    }
+                },
+                'searching': false,
+                'paging': false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': 'process/load_stock_balance_data.php',
+                    'data': formData
+                },
+                    'columns': [
+                        {data: 'WH_CODE'},
+                        {data: 'WL_CODE'},
+                        {data: 'QTY'}
+                    ]
+                });
+
+        });
+
+    </script>
+
+    <script>
+
+        $("#BtnStock_BAK").click(function () {
+
+            $('#StockModal').modal('show');
+            $('#product_id_detail').val($('#product_id').val());
+            $('#product_name_detail').val($('#product_name').val());
+            $('#price_detail').val($('#price').val());
+            let product_id_detail = $('#product_id').val();
+
+            $('#TableStockList').DataTable().clear().destroy();
+
+            let formData = {action: "GET_STOCK", sub_action: "GET_MASTER", product_id_detail: product_id_detail};
+            let dataRecords = $('#TableStockList').DataTable({
                 'searching': false,
                 'paging': false,
                 'info': false,
