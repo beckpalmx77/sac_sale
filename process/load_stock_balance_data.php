@@ -35,16 +35,22 @@ if ($_POST["action"] === 'GET_STOCK') {
     $data = array();
 
     //"WH_CODE" => $row['WH_CODE'],
+    //"WH_CODE" => "<a href='#' data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>",
+    //"WL_CODE" => "<a href='#' onclick= 'OpenPopup('". $row['WL_NAME'] . "')' data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>",
 
     foreach ($empRecords as $row) {
         $record++;
         if ($_POST['sub_action'] === "GET_MASTER") {
+
+            $link_wh  =  "<a href='#' data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>" ;
+            $link_wl  =  "<a href='#'  onclick=\"OpenPopup('" . $row['WL_NAME'] ."')\" data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>" ;
+
             $data[] = array(
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
-                "WH_CODE" => "<a href='#' data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>",
+                "WH_CODE" => $link_wh,
                 "WH_NAME" => $row['WH_NAME'],
-                "WL_CODE" => "<a href='#' data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>",
+                "WL_CODE" => $link_wl,
                 "WL_NAME" => $row['WL_NAME'],
                 "WH_WL_CODE" => $row['WH_CODE'] . " : " . $row['WL_CODE'],
                 "WH_WL_NAME" => $row['WH_NAME'] . " : " . $row['WL_NAME'],
