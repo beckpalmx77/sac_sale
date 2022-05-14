@@ -34,15 +34,17 @@ if ($_POST["action"] === 'GET_STOCK') {
     $empRecords = $stmt->fetchAll();
     $data = array();
 
+    //"WH_CODE" => $row['WH_CODE'],
+
     foreach ($empRecords as $row) {
         $record++;
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
-                "WH_CODE" => $row['WH_CODE'],
+                "WH_CODE" => "<a href='#' data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>",
                 "WH_NAME" => $row['WH_NAME'],
-                "WL_CODE" => $row['WL_CODE'],
+                "WL_CODE" => "<a href='#' data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>",
                 "WL_NAME" => $row['WL_NAME'],
                 "WH_WL_CODE" => $row['WH_CODE'] . " : " . $row['WL_CODE'],
                 "WH_WL_NAME" => $row['WH_NAME'] . " : " . $row['WL_NAME'],
