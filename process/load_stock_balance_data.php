@@ -42,8 +42,8 @@ if ($_POST["action"] === 'GET_STOCK') {
         $record++;
         if ($_POST['sub_action'] === "GET_MASTER") {
 
-            $link_wh  =  "<a href='#'  onclick=\"OpenPopup('" . $row['WH_NAME'] ."')\" data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>" ;
-            $link_wl  =  "<a href='#'  onclick=\"OpenPopup('" . $row['WL_NAME'] ."')\" data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>" ;
+            $link_wh  =  "<a href='#'  onclick=\"OpenPopup('" . $row['WH_CODE'] . " " . $row['WH_NAME'] ."')\" data-toggle='tooltip' title='" . $row['WH_NAME'] . "'>" . $row['WH_CODE'] . "</a>" ;
+            $link_wl  =  "<a href='#'  onclick=\"OpenPopup('" . $row['WL_CODE'] . " " . $row['WL_NAME'] ." = " .  $row['QTY'] . "')\" data-toggle='tooltip' title='" . $row['WL_NAME'] . "'>" . $row['WL_CODE'] . "</a>" ;
 
             $data[] = array(
                 "SKU_CODE" => $row['SKU_CODE'],
