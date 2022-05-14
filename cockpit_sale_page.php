@@ -510,7 +510,7 @@ if (strlen($_SESSION['alogin']) == "") {
         function OpenPopup(data) {
             //let popup = document.getElementById("myPopup");
             //popup.classList.toggle("show");
-            alert(data);
+            alertify.success(data);
         }
     </script>
 
