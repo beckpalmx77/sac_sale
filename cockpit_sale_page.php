@@ -452,10 +452,7 @@ if (strlen($_SESSION['alogin']) == "") {
             //alert(data);
             //alertify.confirm(data);
 
-            alertify
-                .alert(data, function(){
-                    alertify.message('OK');
-                });
+            alertify.alert(data);
 
         }
     </script>
