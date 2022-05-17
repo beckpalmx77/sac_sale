@@ -450,7 +450,13 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         function OpenPopup(data) {
             //alert(data);
-            alertify.confirm(data);
+            //alertify.confirm(data);
+
+            alertify
+                .alert(data, function(){
+                    alertify.message('OK');
+                });
+
         }
     </script>
 
