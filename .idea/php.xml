@@ -60,4 +60,9 @@
       <path value="$PROJECT_DIR$/vendor/fontawesome-free/scss" />
     </include_path>
   </component>
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="localhost" id="fd03c3ae-170c-4c42-9330-a045e06f20db" name="localhost-sale" use_path_mappings="true" />
+    </servers>
+  </component>
 </project>

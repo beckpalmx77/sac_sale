@@ -449,13 +449,22 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         function OpenPopup(data) {
-            //alert(data);
-            //alertify.confirm(data);
-
             alertify.alert(data);
-
         }
     </script>
+
+    <style>
+
+        body {
+            width: 1200px;
+            margin: 3rem auto;
+        }
+
+        #chart-container {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 
 
     </body>

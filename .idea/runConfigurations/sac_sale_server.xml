@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="sac_sale_server" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" singleton="false" browser="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" server_name="localhost" start_url="/sac_sale">
+  <configuration default="false" name="sac_sale_server" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" singleton="false" browser="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" server_name="localhost-sale" start_url="/sac_sale">
     <method v="2" />
   </configuration>
 </component>
