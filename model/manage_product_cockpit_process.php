@@ -79,6 +79,8 @@ if ($_POST["action"] === 'GET_PRODUCT') {
 
 ## Fetch records
 
+    $columnName = " product_id,price_code ";
+
     $sql_getdata = "SELECT * FROM ims_product WHERE price_code like '" . $price_code . "%' " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
@@ -105,6 +107,7 @@ if ($_POST["action"] === 'GET_PRODUCT') {
             $data[] = array(
                 "product_id" => $row['product_id'],
                 "name_t" => $row['name_t'],
+                "price_code" => $row['price_code'],
                 "price" => number_format($row['price'], 2),
                 "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Detail</button>"
             );
@@ -112,6 +115,7 @@ if ($_POST["action"] === 'GET_PRODUCT') {
             $data[] = array(
                 "id" => $row['id'],
                 "name_t" => $row['name_t'],
+                "price_code" => $row['price_code'],
                 "price" => $row['price'],
                 "select" => "<button type='button' name='select' id='" . $row['id'] . "@" . $row['name_t'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",

@@ -54,6 +54,15 @@ include('includes/Header.php');
                                 </div-->
 
                                 <div class="form-group">
+                                    <button type="button" name="productSacBtn" id="productSacBtn" tabindex="4"
+                                            class="form-control btn btn-primary">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                รายการสินค้า SAC
+                                            </span>
+                                </div>
+
+                                <div class="form-group">
                                     <button type="button" name="productCockpitBtn" id="productCockpitBtn" tabindex="4"
                                             class="form-control btn btn-primary">
                                             <span>
@@ -86,6 +95,14 @@ include('includes/Header.php');
     $(document).ready(function () {
         $("#productBtn").click(function () {
             window.location.href = "product_page";
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#productSacBtn").click(function () {
+            window.location.href = "sac_products";
         });
     });
 </script>

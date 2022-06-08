@@ -19,13 +19,12 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="product-form">
                                     <div class="text-center">
                                         <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
-                                        <div><img src="img/logo/cockpit_logo.jpg" width="200" height="50"/></div>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" id="price_code" name="price_code"
-                                               readonly="true" value="CP">
+                                               readonly="true" value="S">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -35,6 +34,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <tr>
                                                 <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
+                                                <th>ช่องราคา</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
                                             </tr>
@@ -43,6 +43,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <tr>
                                                 <th>รหัสสินค้า</th>
                                                 <th>ชื่อสินค้า</th>
+                                                <th>ช่องราคา</th>
                                                 <th>ราคา</th>
                                                 <th>Action</th>
                                             </tr>
@@ -298,6 +299,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 'columns': [
                     {data: 'product_id'},
                     {data: 'name_t'},
+                    {data: 'price_code', className: 'text-center'},
                     {data: 'price', className: 'text-right'},
                     {data: 'detail'}
                 ]
