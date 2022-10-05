@@ -25,7 +25,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" id="price_code" name="price_code"
-                                               readonly="true" value="CP">
+                                               readonly="true" value="BTC">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -292,7 +292,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_product_cockpit_process.php',
+                    'url': 'model/manage_product_btc_process.php',
                     'data': formData
                 },
                 'columns': [
@@ -314,7 +314,7 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_product_cockpit_process.php',
+                url: 'model/manage_product_btc_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
