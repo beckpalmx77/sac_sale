@@ -29,32 +29,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                     </div>
 
-                                    <!--div class="form-group">
-                                        <button type="button" name="customertBtn" id="customertBtn" tabindex="4"
-                                                class="form-control btn btn-primary">
-                                                <span>
-                                                    <i class="fa fa-tags" aria-hidden="true"></i>
-                                                    รายชื่อลูกค้า SAC
-                                                </span>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <button type="button" name="customertBtn" id="customertBtn" tabindex="4"
-                                                class="form-control btn btn-primary">
-                                                <span>
-                                                    <i class="fa fa-tags" aria-hidden="true"></i>
-                                                    แบบสอบถามลูกค้า SAC
-                                                </span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="button" name="productBtn" id="productBtn" tabindex="4"
-                                                class="form-control btn btn-primary">
-                                                <span>
-                                                    <i class="fa fa-tags" aria-hidden="true"></i>
-                                                    รายการสินค้า SAC
-                                                </span>
-                                    </div-->
                                     <?php if ($_SESSION['account_type'] !== 'cockpit') { ?>
                                         <div class="form-group">
                                             <button type="button" name="productSacBtn" id="productSacBtn" tabindex="4"
@@ -65,6 +40,18 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </span>
                                         </div>
                                     <?php } ?>
+
+                                    <div class="form-group">
+                                        <button type="button" name="productBTCBtn" id="productBTCBtn"
+                                                tabindex="4"
+                                                class="form-control btn btn-primary">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                รายการสินค้า BTC
+                                            </span>
+                                    </div>
+
+
 
                                     <div class="form-group">
                                         <button type="button" name="productCockpitBtn" id="productCockpitBtn"
@@ -108,6 +95,14 @@ if (strlen($_SESSION['alogin']) == "") {
         $(document).ready(function () {
             $("#productSacBtn").click(function () {
                 window.location.href = "sac_products";
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#productBTCBtn").click(function () {
+                window.location.href = "btc_products";
             });
         });
     </script>
