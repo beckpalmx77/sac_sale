@@ -84,9 +84,9 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $sql_getdata = "SELECT * FROM ims_product WHERE price_code like '" . $price_code . "%' " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
-    //$my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, " sql_getdata = " . $sql_getdata);
-    //fclose($my_file);
+    $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_getdata = " . $sql_getdata);
+    fclose($my_file);
 
     $stmt = $conn->prepare($sql_getdata);
 
