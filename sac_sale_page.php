@@ -162,7 +162,12 @@ if (strlen($_SESSION['alogin']) == "") {
                 <div class="container"></div>
 
                 <div class="modal-body">
-                    <label for="product_id_detail"
+
+                    <input type="text" class="form-control"
+                           id="product_detail"
+                           name="product_detail"
+                           placeholder="">
+                    <!--label for="product_id_detail"
                            class="control-label"><b>รหัสสินค้า</b></label>
                     <input type="text" class="form-control"
                            id="product_id_detail"
@@ -187,7 +192,7 @@ if (strlen($_SESSION['alogin']) == "") {
                            required="required"
                            readonly="true"
                            placeholder="ราคา">
-                    <br>
+                    <br-->
 
                     <table cellpadding="0" cellspacing="0" border="0"
                            class="display"
@@ -195,6 +200,7 @@ if (strlen($_SESSION['alogin']) == "") {
                            width="100%">
                         <thead>
                         <tr>
+                            <th>#</th>
                             <th>คลัง</th>
                             <th>ตำแหน่งเก็บ</th>
                             <th>จำนวน</th>
@@ -390,10 +396,11 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'process/load_stock_balance_data.php',
+                    'url': 'process/load_stock_balance_data_svr.php',
                     'data': formData
                 },
                     'columns': [
+                        {data: 'record'},
                         {data: 'WH_CODE'},
                         {data: 'WL_CODE'},
                         {data: 'QTY'}
