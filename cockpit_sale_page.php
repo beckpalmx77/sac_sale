@@ -161,7 +161,12 @@ if (strlen($_SESSION['alogin']) == "") {
                 <div class="container"></div>
 
                 <div class="modal-body">
-                    <label for="product_id_detail"
+
+                    <input type="text" class="form-control"
+                           id="product_detail"
+                           name="product_detail"
+                           placeholder="">
+                    <!--label for="product_id_detail"
                            class="control-label"><b>รหัสสินค้า</b></label>
                     <input type="text" class="form-control"
                            id="product_id_detail"
@@ -186,7 +191,7 @@ if (strlen($_SESSION['alogin']) == "") {
                            required="required"
                            readonly="true"
                            placeholder="ราคา">
-                    <br>
+                    <br-->
 
                     <table cellpadding="0" cellspacing="0" border="0"
                            class="display"
@@ -194,6 +199,7 @@ if (strlen($_SESSION['alogin']) == "") {
                            width="100%">
                         <thead>
                         <tr>
+                            <th>#</th>
                             <th>คลัง</th>
                             <th>ตำแหน่งเก็บ</th>
                             <th>จำนวน</th>
@@ -363,6 +369,7 @@ if (strlen($_SESSION['alogin']) == "") {
             $('#product_id_detail').val($('#product_id').val());
             $('#product_name_detail').val($('#product_name').val());
             $('#price_detail').val($('#price').val());
+            $('#product_detail').val($('#product_id').val() + " | " + $('#product_name').val() + " | " + $('#price').val());
 
             let product_id_detail = $('#product_id').val();
 
@@ -372,7 +379,7 @@ if (strlen($_SESSION['alogin']) == "") {
             let dataRecords = $('#TableStockList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
-                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    info: 'ข้อมูลจำนวน _MAX_ รายการ',
                     infoEmpty: 'ไม่มีข้อมูล',
                     zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
                     infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
@@ -388,10 +395,11 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'process/load_stock_balance_data.php',
+                    'url': 'process/load_stock_balance_data_svr.php',
                     'data': formData
                 },
                     'columns': [
+                        {data: 'record'},
                         {data: 'WH_CODE'},
                         {data: 'WL_CODE'},
                         {data: 'QTY'}

@@ -1,5 +1,5 @@
 <?php
-include('../config/connect_db.php');
+include('../config/connect_sqlserver.php');
 
 if ($_POST["action"] === 'GET_STOCK') {
 
@@ -11,7 +11,7 @@ if ($_POST["action"] === 'GET_STOCK') {
     
     $product_id_detail = $_POST["product_id_detail"];
 
-    $sql_get = " SELECT SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM ims_product_stock_balance "
+    $sql_get = " SELECT SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM v_stock_movement "
         . " WHERE SKU_CODE = '" . $product_id_detail . "'"
         . " GROUP BY SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME "
         . " HAVING sum(CAST(QTY AS DECIMAL(10,2))) > 0 ";
@@ -29,7 +29,7 @@ if ($_POST["action"] === 'GET_STOCK') {
     //$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
     //$searchValue = $_POST['search']['value']; // Search value
 
-    $stmt = $conn->prepare($sql_get);
+    $stmt = $conn_sqlsvr->prepare($sql_get);
     $stmt->execute();
     $empRecords = $stmt->fetchAll();
     $data = array();
