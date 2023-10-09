@@ -77,9 +77,9 @@ include('includes/Header.php');
 
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <label for="lotto_number" class="control-label">หมายเลขที่เลือก (1-900)</label>
+                                        <label for="lotto_number" class="control-label">หมายเลขที่เลือก (1-999)</label>
                                         <input type="number" class="form-control" id="lotto_number" name="lotto_number"
-                                               min="1" max="900" required="true"
+                                               min="1" max="999" required="true"
                                                value=""
                                                placeholder="">
                                     </div>
