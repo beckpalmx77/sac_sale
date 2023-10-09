@@ -151,7 +151,7 @@ include('includes/Header.php');
                     {data: 'lotto_name'},
                     {data: 'lotto_phone'},
                     {data: 'lotto_province'},
-                    {data: 'lotto_number'}
+                    {data: 'lotto_number', className: 'text-right'}
                 ]
             });
         });

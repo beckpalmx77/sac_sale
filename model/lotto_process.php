@@ -97,7 +97,6 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
 if ($_POST["action"] === 'GET_SHOW_LOTTO') {
 
-
     ## Read value
     $draw = $_POST['draw'];
     $row = $_POST['start'];
@@ -110,6 +109,7 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     $searchArray = array();
 
 ## Search
+    $searchQuery = " ";
 
     if ($searchValue != '') {
         $searchQuery = " AND (lotto_name LIKE :lotto_name or
@@ -120,41 +120,33 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
         );
     }
 
-/*
-    $my_file = fopen("wd_file2.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " Condition = " . $searchQuery);
-    fclose($my_file);
-*/
-
 ## Total number of records without filtering
-    $sql_get_rec1 = "SELECT COUNT(*) AS allcount FROM ims_lotto WHERE 1 = 1 ";
-    $stmt = $conn->prepare($sql_get_rec1);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_lotto where 1 = 1 ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $sql_get_rec2 = "SELECT COUNT(*) AS allcount FROM ims_lotto WHERE 1 = 1 " . $searchQuery ;
-    $stmt = $conn->prepare($sql_get_rec2);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_lotto WHERE 1 = 1 " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
 
-    $columnName = " lotto_number ";
+    $columnName = " id,lotto_number,lotto_name ";
 /*
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 */
 
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
-        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row . "," . $rowperpage;
+        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row.  "," . $rowperpage;
 
 
-/*
+    /*
     $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " sql_getdata = " . $sql_getdata . "\n\r" . $sql_get_rec1 . "\n\r" . $sql_get_rec2);
+    fwrite($my_file, " sql_getdata = " . $sql_getdata);
     fclose($my_file);
 */
 
@@ -164,34 +156,35 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     foreach ($searchArray as $key => $search) {
         $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
     }
+
 /*
     $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
     $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
 */
+
     $stmt->execute();
-    $getRecords = $stmt->fetchAll();
+    $empRecords = $stmt->fetchAll();
     $data = array();
 
-    foreach ($getRecords as $row) {
+    foreach ($empRecords as $rows) {
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
-                "id" => $row['id'],
-                "lotto_name" => $row['lotto_name'],
-                "lotto_phone" => $row['lotto_phone'],
-                "lotto_province" => $row['lotto_province'],
-                "lotto_number" => $row['lotto_number'],
+                "id" => $rows['id'],
+                "lotto_name" => $rows['lotto_name'],
+                "lotto_phone" => $rows['lotto_phone'],
+                "lotto_province" => $rows['lotto_province'],
+                "lotto_number" => $rows['lotto_number']
             );
-        } 
+        }
+
     }
 
-    //file_put_contents("getdata.txt", print_r($data, true), FILE_APPEND);
+    //file_put_contents("data_get.txt", print_r($data, true), FILE_APPEND);
 
-/*
-    $my_file = fopen("getdata.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, $data);
-    fclose($my_file);
-*/
+    //$my_file = fopen("getproduct_data.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
+    //fclose($my_file);
 
 ## Response Return Value
     $response = array(
@@ -201,7 +194,10 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
         "aaData" => $data
     );
 
+    //file_put_contents("data_res.txt", print_r($response, true), FILE_APPEND);
+
     echo json_encode($response);
+
 
 }
 
