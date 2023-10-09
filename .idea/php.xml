@@ -62,7 +62,7 @@
   </component>
   <component name="PhpProjectServersManager">
     <servers>
-      <server host="localhost" id="fd03c3ae-170c-4c42-9330-a045e06f20db" name="localhost-sale" use_path_mappings="true" />
+      <server host="localhost" id="fd03c3ae-170c-4c42-9330-a045e06f20db" name="localhost-sale" port="8888" use_path_mappings="true" />
     </servers>
   </component>
 </project>
