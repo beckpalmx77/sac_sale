@@ -1,0 +1,2 @@
+ sql_get = SELECT count(*) as record_counts  FROM ims_lotto WHERE lotto_name = 'pongsak' OR lotto_phone = '0900106833'
+pongsak | 0900106833 | นนทบุรี | 001

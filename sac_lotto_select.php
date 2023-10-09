@@ -1,4 +1,5 @@
 <?php
+include('config/connect_lotto_db.php');
 include('includes/Header.php');
 ?>
 
@@ -23,7 +24,8 @@ include('includes/Header.php');
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label for="lotto_name" class="control-label">ชื่อร้านค้า</label>
-                                        <input type="text" class="form-control" id="lotto_name"
+                                        <input type="text" class="form-control" id="lotto_name" name="lotto_name"
+                                               required="true"
                                                value=""
                                                placeholder="">
                                     </div>
@@ -31,34 +33,87 @@ include('includes/Header.php');
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label for="lotto_phone" class="control-label">หมายเลขโทรศัพท์</label>
-                                        <input type="text" class="form-control" id="lotto_phone"
+                                        <input type="text" class="form-control" id="lotto_phone" name="lotto_phone"
+                                               required="true"
                                                value=""
                                                placeholder="">
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!--div class="form-group">
                                     <div class="form-group">
-                                        <label for="province" class="control-label">จังหวัด</label>
-                                        <input type="text" class="form-control" id="province"
+                                        <label for="lotto_province" class="control-label">จังหวัด</label>
+                                        <input type="text" class="form-control" id="lotto_province" name="lotto_province"
+                                               required="true"
                                                value=""
                                                placeholder="">
                                     </div>
+                                </div-->
+
+                                <div class="form-group has-success">
+                                    <label class="control-label" for="lotto_province">จังหวัด</label>
+                                    <div class=”form-group”>
+                                        <select id="lotto_province" name="lotto_province"
+                                                class="form-control" data-live-search="true"
+                                                title="Please select">
+                                            <option
+                                                    value="<?php echo htmlentities($result->province_name); ?>"
+                                                    selected><?php echo htmlentities($result->province_name); ?></option>
+                                            <?php $sql1 = "SELECT * FROM ims_provinces WHERE 1 =1";
+                                            $query1 = $conn->prepare($sql1);
+                                            $query1->execute();
+                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+                                            if ($query1->rowCount() > 0) {
+                                                foreach ($results1 as $result1) { ?>
+                                                    <option
+                                                            value="<?php echo htmlentities($result1->province_name); ?>"><?php echo htmlentities($result1->province_name); ?></option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+
+                                    </div>
+                                    <span class="help-block"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!--div class="form-group">
                                     <div class="form-group">
                                         <label for="lotto_number" class="control-label">หมายเลขที่เลือก (1-900)</label>
-                                        <input type="number" class="form-control" id="lotto_number"
+                                        <input type="number" class="form-control" id="lotto_number" name="lotto_number"
+                                               min="1" max="900" required="true"
                                                value=""
                                                placeholder="">
                                     </div>
+                                </div-->
+
+                                <div class="form-group has-success">
+                                    <label class="control-label" for="lotto_number">หมายเลขที่เลือก (1-900)</label>
+                                    <div class=”form-group”>
+                                        <select id="lotto_number" name="lotto_number"
+                                                class="form-control" data-live-search="true"
+                                                title="Please select">
+                                            <option
+                                                    value="<?php echo htmlentities($result->lotto_number); ?>"
+                                                    selected><?php echo htmlentities($result->lotto_number); ?></option>
+                                            <?php $sql1 = "SELECT * FROM ims_number_reserve WHERE reserve_status = 'N' ";
+                                            $query1 = $conn->prepare($sql1);
+                                            $query1->execute();
+                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+                                            if ($query1->rowCount() > 0) {
+                                                foreach ($results1 as $result1) { ?>
+                                                    <option
+                                                            value="<?php echo htmlentities($result1->lotto_number); ?>"><?php echo htmlentities($result1->lotto_number); ?></option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+
+                                    </div>
+                                    <span class="help-block"></span>
                                 </div>
 
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" name="saveBtn" id="saveBtn" tabindex="4"
+                                <button type="button" name="saveBtn" id="saveBtn" tabindex="4"
                                         class="form-control btn btn-primary">
                                             <span>
                                                 <i class="fa fa-save" aria-hidden="true"></i>
@@ -153,11 +208,13 @@ include('includes/Header.php');
 
 <script>
 
-    $('#email').blur(function () {
+    $('#lotto_number').blur(function () {
 
-        let action = "GET_COUNT_RECORDS_COND";
+        if ($('#lotto_number').val() >=1 && $('#lotto_number').val() <=900) {
+
+        let action = "CHECK_NUMBER_DATA";
         let table_name = "ims_lotto";
-        let cond = " WHERE lotto_number = " + $('#lotto_number').val() ;
+        let cond = " WHERE lotto_number = " + $('#lotto_number').val();
         let formData = {action: action, table_name: table_name, cond: cond};
         $.ajax({
             type: "POST",
@@ -166,7 +223,39 @@ include('includes/Header.php');
             success: function (response) {
                 if (response > 0) {
                     alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
-                    $('#user_id').val("");
+                    $('#lotto_number').val("");
+                }
+            },
+            error: function (response) {
+                alertify.error("error : " + response);
+            }
+        });
+
+    } else {
+            alertify.error("ป้อนเลข 1 - 900 เท่านั้น");
+            $('#lotto_number').val('');
+        }
+
+    });
+
+</script>
+
+<script>
+
+    $('#lotto_phone').blur(function () {
+
+        let action = "CHECK_NUMBER_DATA";
+        let table_name = "ims_lotto";
+        let cond = " WHERE lotto_phone = '" + $('#lotto_phone').val() + "'" ;
+        let formData = {action: action, table_name: table_name, cond: cond};
+        $.ajax({
+            type: "POST",
+            url: 'model/lotto_process.php',
+            data: formData,
+            success: function (response) {
+                if (response > 0) {
+                    alertify.error("มีการจองโดยหมายเลขโทรศัพท์นี้ในระบบแล้ว");
+                    $('#lotto_phone').val("");
                 }
             },
             error: function (response) {
@@ -177,9 +266,77 @@ include('includes/Header.php');
 
 </script>
 
+<script>
 
+    $('#lotto_name').blur(function () {
 
+        let action = "CHECK_NUMBER_DATA";
+        let table_name = "ims_lotto";
+        let cond = " WHERE lotto_name = '" + $('#lotto_name').val() + "'" ;
+        let formData = {action: action, table_name: table_name, cond: cond};
+        $.ajax({
+            type: "POST",
+            url: 'model/lotto_process.php',
+            data: formData,
+            success: function (response) {
+                if (response > 0) {
+                    alertify.error("มีการจองโดยชื่อร้านค้านี้ในระบบแล้ว");
+                    $('#lotto_name').val("");
+                }
+            },
+            error: function (response) {
+                alertify.error("error : " + response);
+            }
+        });
+    });
 
+</script>
+
+<script>
+
+    $('#saveBtn').click(function () {
+
+        let action = "SAVE_DATA";
+        let table_name = "ims_lotto";
+        let lotto_name = $('#lotto_name').val();
+        let lotto_phone = $('#lotto_phone').val();
+        let lotto_province = $('#lotto_province').val();
+        let lotto_number = $('#lotto_number').val();
+
+        if (lotto_name !== "" && lotto_phone !== "" && lotto_number !== "") {
+
+            let formData = {
+                action: action,
+                table_name: table_name,
+                lotto_name: lotto_name,
+                lotto_phone: lotto_phone,
+                lotto_province: lotto_province,
+                lotto_number: lotto_number
+            };
+            $.ajax({
+                type: "POST",
+                url: 'model/lotto_process.php',
+                data: formData,
+                success: function (response) {
+                    //alertify.error("response = " + response);
+                    if (response > 1) {
+                        alertify.error("ไม่สารถบันทึกข้อมูลได้ กรุณาตรวจสอบข้อมูล");
+                        $('#lotto_number').val("");
+                    } else {
+                        alertify.success("บันทึกสำเร็จ");
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
+        } else {
+            alertify.error("error : ป้อนข้อมูลให้ครบถ้วน");
+        }
+
+    });
+
+</script>
 
 
 </body>

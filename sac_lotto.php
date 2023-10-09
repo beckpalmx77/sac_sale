@@ -35,15 +35,15 @@ include('includes/Header.php');
                                             </span>
                                     </div>
 
-                                    <!--div class="form-group">
+                                    <div class="form-group">
                                         <button type="button" name="LottoShoBtn" id="LottoShoBtn"
                                                 tabindex="4"
-                                                class="form-control btn btn-primary">
+                                                class="form-control btn btn-success">
                                             <span>
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
                                                 หมายเลขเลือก Lotto
                                             </span>
-                                    </div-->
+                                    </div>
 
                                 </div>
 

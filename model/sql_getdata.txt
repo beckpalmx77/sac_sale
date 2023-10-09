@@ -1,1 +1,3 @@
- sql_getdata = SELECT * FROM ims_product WHERE price_code like 'CP%'  AND price_code like 'CP%'  ORDER BY  product_id,price_code  asc LIMIT :limit,:offset
+ sql_getdata = SELECT * FROM ims_lotto WHERE 1 = 1  ORDER BY  lotto_number  asc LIMIT :limit,:offset
+SELECT COUNT(*) AS allcount FROM ims_lotto WHERE 1 = 1 
+SELECT COUNT(*) AS allcount FROM ims_lotto WHERE 1 = 1 
