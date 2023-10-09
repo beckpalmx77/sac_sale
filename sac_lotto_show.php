@@ -3,7 +3,7 @@
 <?php
 include('includes/Header.php');
 ?>
-<body>
+<body id="page-top">
 <div class="col-md-3"></div>
 <div class="col-md-6 well">
     <h3 class="text-primary">SAC LOTTO</h3>

@@ -32,7 +32,10 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $lotto_name = $_POST["lotto_name"];
     $lotto_phone = $_POST["lotto_phone"];
     $lotto_province = $_POST["lotto_province"];
-    $lotto_number = $_POST["lotto_number"];
+
+    //$lotto_number = $_POST["lotto_number"];
+
+    $lotto_number = sprintf("%03d", $_POST["lotto_number"]);
 
     $cond = " WHERE lotto_name = '" . $lotto_name . "'" . " OR lotto_phone = '" . $lotto_phone . "'";
 
@@ -140,17 +143,20 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
 ## Fetch records
 
     $columnName = " lotto_number ";
-
+/*
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
+*/
+
+    $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
+        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row . "," . $rowperpage;
+
 
 /*
-
     $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_getdata = " . $sql_getdata . "\n\r" . $sql_get_rec1 . "\n\r" . $sql_get_rec2);
     fclose($my_file);
 */
-
 
     $stmt = $conn->prepare($sql_getdata);
 
@@ -158,15 +164,15 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     foreach ($searchArray as $key => $search) {
         $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
     }
-
+/*
     $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
     $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+*/
     $stmt->execute();
-    $empRecords = $stmt->fetchAll();
+    $getRecords = $stmt->fetchAll();
     $data = array();
-    $loops = 0 ;
 
-    foreach ($empRecords as $row) {
+    foreach ($getRecords as $row) {
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
@@ -174,24 +180,16 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
                 "lotto_name" => $row['lotto_name'],
                 "lotto_phone" => $row['lotto_phone'],
                 "lotto_province" => $row['lotto_province'],
-                "lotto_number" => $row['lotto_number']
+                "lotto_number" => $row['lotto_number'],
             );
-        } else {
-            $data[] = array(
-                "id" => $row['id'],
-                "lotto_name" => $row['lotto_name'],
-                "lotto_phone" => $row['lotto_phone'],
-                "select" => "<button type='button' name='select' id='" . $row['id'] . "@" . $row['lotto_name'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
-</button>",
-            );
-        }
-
+        } 
     }
 
+    //file_put_contents("getdata.txt", print_r($data, true), FILE_APPEND);
+
 /*
-    $my_file = fopen("s_get_lotto_data.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " s_get_lotto_data = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter);
-    //fwrite($my_file, " data = " . $data_load);
+    $my_file = fopen("getdata.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, $data);
     fclose($my_file);
 */
 
@@ -204,7 +202,6 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     );
 
     echo json_encode($response);
-
 
 }
 
