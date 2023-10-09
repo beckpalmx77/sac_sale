@@ -2,7 +2,7 @@
 
     include('../config/connect_lotto_db.php');
 
-    for ($loop=1;$loop<=900;$loop++) {
+    for ($loop=1;$loop<=999;$loop++) {
 
         $sql = "INSERT INTO ims_number_reserve(lotto_number,reserve_status)
             VALUES (:lotto_number,:reserve_status)";

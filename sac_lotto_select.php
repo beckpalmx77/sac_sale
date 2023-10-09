@@ -77,7 +77,7 @@ include('includes/Header.php');
 
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <label for="lotto_number" class="control-label">หมายเลขที่เลือก (1-999)</label>
+                                        <label for="lotto_number" class="control-label">หมายเลขที่เลือก (001-999)</label>
                                         <input type="number" class="form-control" id="lotto_number" name="lotto_number"
                                                min="1" max="999" required="true"
                                                value=""
@@ -232,7 +232,7 @@ include('includes/Header.php');
         });
 
     } else {
-            alertify.error("ป้อนเลข 1 - 999 เท่านั้น");
+            alertify.error("ป้อนเลข 001 - 999 เท่านั้น");
             $('#lotto_number').val('');
         }
 
