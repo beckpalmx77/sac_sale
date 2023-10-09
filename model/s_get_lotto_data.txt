@@ -1,1 +1,0 @@
- s_get_lotto_data = 1 | 1 | 1

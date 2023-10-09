@@ -40,10 +40,11 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     $return_arr = array();
     $sql_get = "SELECT count(*) as record_counts  FROM " . $table_name . $cond;
-
+/*
     $my_file = fopen("sql_getdata0.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_get = " . $sql_get . "\n\r" . $data);
     fclose($my_file);
+*/
 
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -143,11 +144,12 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
+/*
 
     $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_getdata = " . $sql_getdata . "\n\r" . $sql_get_rec1 . "\n\r" . $sql_get_rec2);
     fclose($my_file);
-
+*/
 
 
     $stmt = $conn->prepare($sql_getdata);

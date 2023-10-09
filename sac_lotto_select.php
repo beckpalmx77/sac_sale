@@ -18,6 +18,7 @@ include('includes/Header.php');
                             <div class="product-form">
                                 <div class="text-center">
                                     <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
+                                    <label for="lotto_name" class="control-label"><b>SAC LOTTO</b></label>
                                 </div>
                             </div>
                             <div class="col-lg-12">
