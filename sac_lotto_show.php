@@ -12,7 +12,7 @@ include('includes/Header.php');
     <div class="col-md-8">
         <form method="POST" action="">
             <button class="btn btn-primary" name="display">DATA</button>
-            <button class="btn btn-danger" id="backBtn" name="backBtn">BACK</button>
+            <!--button class="btn btn-danger" id="backBtn" name="backBtn">BACK</button-->
         </form>
         <br /><br />
         <table class="table table-bordered">

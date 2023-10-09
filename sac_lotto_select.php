@@ -75,7 +75,7 @@ include('includes/Header.php');
                                     <span class="help-block"></span>
                                 </div>
 
-                                <!--div class="form-group">
+                                <div class="form-group">
                                     <div class="form-group">
                                         <label for="lotto_number" class="control-label">หมายเลขที่เลือก (1-900)</label>
                                         <input type="number" class="form-control" id="lotto_number" name="lotto_number"
@@ -83,9 +83,9 @@ include('includes/Header.php');
                                                value=""
                                                placeholder="">
                                     </div>
-                                </div-->
+                                </div>
 
-                                <div class="form-group has-success">
+                                <!--div class="form-group has-success">
                                     <label class="control-label" for="lotto_number">หมายเลขที่เลือก (1-900)</label>
                                     <div class=”form-group”>
                                         <select id="lotto_number" name="lotto_number"
@@ -108,7 +108,7 @@ include('includes/Header.php');
 
                                     </div>
                                     <span class="help-block"></span>
-                                </div>
+                                </div-->
 
                             </div>
 
