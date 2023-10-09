@@ -210,7 +210,7 @@ include('includes/Header.php');
 
     $('#lotto_number').blur(function () {
 
-        if ($('#lotto_number').val() >=1 && $('#lotto_number').val() <=900) {
+        if ($('#lotto_number').val() >=1 && $('#lotto_number').val() <=999) {
 
         let action = "CHECK_NUMBER_DATA";
         let table_name = "ims_lotto";
@@ -232,7 +232,7 @@ include('includes/Header.php');
         });
 
     } else {
-            alertify.error("ป้อนเลข 1 - 900 เท่านั้น");
+            alertify.error("ป้อนเลข 1 - 999 เท่านั้น");
             $('#lotto_number').val('');
         }
 
