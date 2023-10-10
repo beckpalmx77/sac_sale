@@ -1,4 +1,8 @@
-<?php include('includes/Header.php'); ?>
+<?php
+include('includes/Header.php');
+require_once 'config/connect_lotto_db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,19 +39,17 @@
             <table id="DataTable" class="display table table-striped  table-hover table-responsive table-bordered ">
                 <thead>
                 <tr>
-                    <th width="10%">ลำดับ</th>
+                    <th width="5%">ลำดับ</th>
                     <th width="25%">ชื่อร้าน</th>
                     <th width="10%">หมายเลขโทรศัพท์</th>
                     <th width="15%">จังหวัด</th>
-                    <th width="10%">หมายเลขที่เลือก</th>
+                    <th width="15%">หมายเลขที่เลือก</th>
                     <th width="15%">ชื่อ Sale</th>
                     <th width="15%">วันที่บันทึก</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                //คิวรี่ข้อมูลมาแสดงในตาราง
-                require_once 'config/connect_lotto_db.php';
                 $stmt = $conn->prepare("SELECT* FROM ims_lotto order by id");
                 $stmt->execute();
                 $result = $stmt->fetchAll();
