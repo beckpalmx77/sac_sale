@@ -17,8 +17,8 @@ include('includes/Header.php');
                         <div class="col-lg-12">
                             <div class="product-form">
                                 <div class="text-center">
-                                    <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
-                                    <label for="lotto_name" class="control-label"><b>SAC LOTTO</b></label>
+                                    <div><img src="img/logo/logo text-01.png" width="200" height="79"/></div>
+                                    <h6 style="color: blue"><b>SAC LOTTO LIST</b></h6>
                                     <input type="hidden" class="form-control" id="action" name="action" value="SAVE_DATA">
                                     <input type="hidden" class="form-control" id="table_name" name="table_name" value="ims_lotto">
                                 </div>
