@@ -19,6 +19,8 @@ include('includes/Header.php');
                                 <div class="text-center">
                                     <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                     <label for="lotto_name" class="control-label"><b>SAC LOTTO</b></label>
+                                    <input type="hidden" class="form-control" id="action" name="action" value="SAVE_DATA">
+                                    <input type="hidden" class="form-control" id="table_name" name="table_name" value="ims_lotto">
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -148,6 +150,15 @@ include('includes/Header.php');
                             </div>
 
 
+                            <!--div class="form-group">
+                                <button type="button" name="saveBtn1" id="saveBtn1" tabindex="4"
+                                        class="form-control btn btn-primary">
+                                            <span>
+                                                <i class="fa fa-save" aria-hidden="true"></i>
+                                                บันทึก 1
+                                            </span>
+                            </div-->
+
                             <div class="form-group">
                                 <button type="button" name="backBtn" id="backBtn" tabindex="4"
                                         class="form-control btn btn-danger">
@@ -194,6 +205,8 @@ include('includes/Header.php');
 <script src="vendor/datatables/v11/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="vendor/datatables/v11/jquery.dataTables.min.css"/>
 <link rel="stylesheet" href="vendor/datatables/v11/buttons.dataTables.min.css"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <style>
 
@@ -364,6 +377,31 @@ include('includes/Header.php');
 
     });
 
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#saveBtn1').click(function () {
+
+            let formData = $("form").serialize();
+            alert(formData);
+
+            $.ajax({
+                url: 'model/lotto_process.php',
+                method: "POST",
+                data: formData,
+                success: function (data) {
+                    alertify.success(data);
+                    //$('#recordForm')[0].reset();
+                    //$('#recordModal').modal('hide');
+                    //$('#save').attr('disabled', false);
+                    //dataRecords.ajax.reload();
+                }
+            })
+
+
+        });
+    });
 </script>
 
 

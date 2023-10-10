@@ -45,6 +45,16 @@ include('includes/Header.php');
                                             </span>
                                     </div>
 
+                                    <div class="form-group">
+                                        <button type="button" name="LottoExpBtn" id="LottoExpBtn"
+                                                tabindex="4"
+                                                class="form-control btn btn-info">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                Export หมายเลขเลือก Lotto
+                                            </span>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -67,6 +77,14 @@ include('includes/Header.php');
         $(document).ready(function () {
             $("#LottoShoBtn").click(function () {
                 window.location.href = "sac_lotto_show";
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#LottoExpBtn").click(function () {
+                window.location.href = "export_process/export_lotto_list";
             });
         });
     </script>
