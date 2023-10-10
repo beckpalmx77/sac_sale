@@ -57,6 +57,7 @@ include('includes/Header.php');
                                     <label class="control-label" for="lotto_province">จังหวัด</label>
                                     <div class=”form-group”>
                                         <select id="lotto_province" name="lotto_province"
+                                                required="true"
                                                 class="form-control" data-live-search="true"
                                                 title="Please select">
                                             <option
@@ -82,6 +83,7 @@ include('includes/Header.php');
                                     <label class="control-label" for="sale_name">ชื่อ Sale</label>
                                     <div class=”form-group”>
                                         <select id="sale_name" name="sale_name"
+                                                required="true"
                                                 class="form-control" data-live-search="true"
                                                 title="Please select">
                                             <option
@@ -343,7 +345,7 @@ include('includes/Header.php');
         let lotto_number = $('#lotto_number').val();
         let sale_name = $('#sale_name').val();
 
-        if (lotto_name !== "" && lotto_phone !== "" && lotto_number !== "") {
+        if (lotto_name !== "" && lotto_phone !== "" && lotto_province !== "" && sale_name !== "" && lotto_number !== "") {
 
             let formData = {
                 action: action,
