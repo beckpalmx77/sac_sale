@@ -34,6 +34,16 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $lotto_province = $_POST["lotto_province"];
     $sale_name = $_POST["sale_name"];
 
+    if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        //ip from share internet
+        $client_ip_address = $_SERVER['HTTP_CLIENT_IP'];
+    }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        //ip pass from proxy
+        $client_ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }else{
+        $client_ip_address = $_SERVER['REMOTE_ADDR'];
+    }
+
     //$lotto_number = $_POST["lotto_number"];
 
     $lotto_number = sprintf("%03d", $_POST["lotto_number"]);
@@ -60,14 +70,15 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     if ($record<=0) {
 
-        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name)
-            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name)";
+        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address)
+            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address)";
         $query = $conn->prepare($sql);
         $query->bindParam(':lotto_name', $lotto_name, PDO::PARAM_STR);
         $query->bindParam(':lotto_phone', $lotto_phone, PDO::PARAM_STR);
         $query->bindParam(':lotto_province', $lotto_province, PDO::PARAM_STR);
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
+        $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
