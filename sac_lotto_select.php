@@ -89,7 +89,7 @@ include('includes/Header.php');
                                             <option
                                                     value=""
                                                     selected></option>
-                                            <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1";
+                                            <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1 ORDER BY id ";
                                             $query2 = $conn->prepare($sql2);
                                             $query2->execute();
                                             $results2 = $query2->fetchAll(PDO::FETCH_OBJ);
