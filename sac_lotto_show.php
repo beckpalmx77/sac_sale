@@ -36,9 +36,9 @@
                 <thead>
                 <tr>
                     <th width="10%">ลำดับ</th>
-                    <th width="30%">ชื่อร้าน</th>
+                    <th width="25%">ชื่อร้าน</th>
                     <th width="10%">หมายเลขโทรศัพท์</th>
-                    <th width="10%">จังหวัด</th>
+                    <th width="15%">จังหวัด</th>
                     <th width="10%">หมายเลขที่เลือก</th>
                     <th width="15%">ชื่อ Sale</th>
                     <th width="15%">วันที่บันทึก</th>
