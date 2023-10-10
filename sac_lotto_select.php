@@ -58,8 +58,8 @@ include('includes/Header.php');
                                                 class="form-control" data-live-search="true"
                                                 title="Please select">
                                             <option
-                                                    value="<?php echo htmlentities($result->province_name); ?>"
-                                                    selected><?php echo htmlentities($result->province_name); ?></option>
+                                                    value="<?php echo htmlentities($result1->province_name); ?>"
+                                                    selected><?php echo htmlentities($result1->province_name); ?></option>
                                             <?php $sql1 = "SELECT * FROM ims_provinces WHERE 1 =1";
                                             $query1 = $conn->prepare($sql1);
                                             $query1->execute();
@@ -83,16 +83,16 @@ include('includes/Header.php');
                                                 class="form-control" data-live-search="true"
                                                 title="Please select">
                                             <option
-                                                    value="<?php echo htmlentities($result->sale_name); ?>"
-                                                    selected><?php echo htmlentities($result->sale_name); ?></option>
-                                            <?php $sql1 = "SELECT * FROM ims_sale_team WHERE 1 =1";
-                                            $query1 = $conn->prepare($sql1);
-                                            $query1->execute();
-                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
-                                            if ($query1->rowCount() > 0) {
-                                                foreach ($results1 as $result1) { ?>
+                                                    value="-"
+                                                    selected>-</option>
+                                            <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1";
+                                            $query2 = $conn->prepare($sql2);
+                                            $query2->execute();
+                                            $results2 = $query2->fetchAll(PDO::FETCH_OBJ);
+                                            if ($query2->rowCount() > 0) {
+                                                foreach ($results2 as $result2) { ?>
                                                     <option
-                                                            value="<?php echo htmlentities($result1->sale_name); ?>"><?php echo htmlentities($result1->sale_name); ?></option>
+                                                            value="<?php echo htmlentities($result2->sale_name); ?>"><?php echo htmlentities($result2->sale_name); ?></option>
                                                 <?php }
                                             } ?>
                                         </select>
@@ -328,6 +328,7 @@ include('includes/Header.php');
         let lotto_phone = $('#lotto_phone').val();
         let lotto_province = $('#lotto_province').val();
         let lotto_number = $('#lotto_number').val();
+        let sale_name = $('#sale_name').val();
 
         if (lotto_name !== "" && lotto_phone !== "" && lotto_number !== "") {
 
@@ -337,7 +338,8 @@ include('includes/Header.php');
                 lotto_name: lotto_name,
                 lotto_phone: lotto_phone,
                 lotto_province: lotto_province,
-                lotto_number: lotto_number
+                lotto_number: lotto_number,
+                sale_name: sale_name
             };
             $.ajax({
                 type: "POST",
