@@ -86,7 +86,7 @@ include('includes/Header.php');
                                                 title="Please select">
                                             <option
                                                     value=""
-                                                    selected>-</option>
+                                                    selected></option>
                                             <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1";
                                             $query2 = $conn->prepare($sql2);
                                             $query2->execute();
