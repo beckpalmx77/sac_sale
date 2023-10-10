@@ -85,7 +85,7 @@ include('includes/Header.php');
                                                 class="form-control" data-live-search="true"
                                                 title="Please select">
                                             <option
-                                                    value="-"
+                                                    value=""
                                                     selected>-</option>
                                             <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1";
                                             $query2 = $conn->prepare($sql2);
