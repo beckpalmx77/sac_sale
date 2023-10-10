@@ -45,9 +45,11 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $return_arr = array();
     $sql_get = "SELECT count(*) as record_counts  FROM " . $table_name . $cond;
 
+/*
     $my_file = fopen("sql_getdata0.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_get = " . $sql_get . "\n\r" . $data . "\n\r" . "Sale = " . $sale_name);
     fclose($my_file);
+*/
 
 
     $statement = $conn->query($sql_get);
