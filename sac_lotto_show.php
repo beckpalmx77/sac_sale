@@ -36,10 +36,12 @@
                 <thead>
                 <tr>
                     <th width="10%">ลำดับ</th>
-                    <th width="25%">ชื่อร้าน</th>
-                    <th width="25%">หมายเลขโทรศัพท์</th>
-                    <th width="25%">จังหวัด</th>
-                    <th width="15%">หมายเลขที่เลือก</th>
+                    <th width="30%">ชื่อร้าน</th>
+                    <th width="10%">หมายเลขโทรศัพท์</th>
+                    <th width="10%">จังหวัด</th>
+                    <th width="10%">หมายเลขที่เลือก</th>
+                    <th width="15%">ชื่อ Sale</th>
+                    <th width="15%">วันที่บันทึก</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,6 +61,8 @@
                         <td><?= $rows['lotto_phone'];?></td>
                         <td><?= $rows['lotto_province'];?></td>
                         <td><?= $rows['lotto_number'];?></td>
+                        <td><?= $rows['sale_name'];?></td>
+                        <td><?= $rows['create_date'];?></td>
                     </tr>
                 <?php } ?>
                 </tbody>

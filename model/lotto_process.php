@@ -32,6 +32,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $lotto_name = $_POST["lotto_name"];
     $lotto_phone = $_POST["lotto_phone"];
     $lotto_province = $_POST["lotto_province"];
+    $sale_name = $_POST["sale_name"];
 
     //$lotto_number = $_POST["lotto_number"];
 
@@ -57,13 +58,14 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     if ($record<=0) {
 
-        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number)
-            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number)";
+        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name)
+            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name)";
         $query = $conn->prepare($sql);
         $query->bindParam(':lotto_name', $lotto_name, PDO::PARAM_STR);
         $query->bindParam(':lotto_phone', $lotto_phone, PDO::PARAM_STR);
         $query->bindParam(':lotto_province', $lotto_province, PDO::PARAM_STR);
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
+        $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();

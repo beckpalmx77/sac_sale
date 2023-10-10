@@ -76,6 +76,31 @@ include('includes/Header.php');
                                     <span class="help-block"></span>
                                 </div>
 
+                                <div class="form-group has-success">
+                                    <label class="control-label" for="sale_name">ชื่อ Sale</label>
+                                    <div class=”form-group”>
+                                        <select id="sale_name" name="sale_name"
+                                                class="form-control" data-live-search="true"
+                                                title="Please select">
+                                            <option
+                                                    value="<?php echo htmlentities($result->sale_name); ?>"
+                                                    selected><?php echo htmlentities($result->sale_name); ?></option>
+                                            <?php $sql1 = "SELECT * FROM ims_sale_team WHERE 1 =1";
+                                            $query1 = $conn->prepare($sql1);
+                                            $query1->execute();
+                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+                                            if ($query1->rowCount() > 0) {
+                                                foreach ($results1 as $result1) { ?>
+                                                    <option
+                                                            value="<?php echo htmlentities($result1->sale_name); ?>"><?php echo htmlentities($result1->sale_name); ?></option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+
+                                    </div>
+                                    <span class="help-block"></span>
+                                </div>
+
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label for="lotto_number" class="control-label">หมายเลขที่เลือก (001-999)</label>
