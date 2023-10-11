@@ -50,7 +50,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     $cond = " WHERE lotto_name = '" . $lotto_name . "'" . " OR lotto_phone = '" . $lotto_phone . "'";
 
-    $data = $lotto_name . " | " . $lotto_phone . " | " . $lotto_province . " | " . $lotto_number ;
+    $data = $lotto_name . " | " . $lotto_phone . " | " . $lotto_province . " | " . $lotto_number  . " | " . $client_ip_address ;
 
     $return_arr = array();
     $sql_get = "SELECT count(*) as record_counts  FROM " . $table_name . $cond;
@@ -60,6 +60,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
     fwrite($my_file, " sql_get = " . $sql_get . "\n\r" . $data . "\n\r" . "Sale = " . $sale_name);
     fclose($my_file);
 */
+
 
 
     $statement = $conn->query($sql_get);
@@ -79,7 +80,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
-        $query->execute();
+        //$query->execute();
 
         $lastInsertId = $conn->lastInsertId();
         if ($lastInsertId) {
@@ -89,7 +90,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
             $query = $conn->prepare($sql_update);
             $query->bindParam(':reserve_status', $reserve_status, PDO::PARAM_STR);
             $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
-            $query->execute();
+            //$query->execute();
             $ins = 1;
         } else {
             $ins = 3;

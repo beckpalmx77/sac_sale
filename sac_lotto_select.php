@@ -248,11 +248,20 @@ include('includes/Header.php');
 </script>
 
 <script>
+    function pad(n, width, fill) {
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(fill) + n;
+    }
+</script>
+
+<script>
 
     $('#lotto_number').blur(function () {
 
+        let width = 3;
+        let fil = 0;
+        $('#lotto_number').val(pad($('#lotto_number').val(),width,fil)) ;
         if ($('#lotto_number').val() >=1 && $('#lotto_number').val() <=999) {
-
         let action = "CHECK_NUMBER_DATA";
         let table_name = "ims_lotto";
         let cond = " WHERE lotto_number = " + $('#lotto_number').val();
