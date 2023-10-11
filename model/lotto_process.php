@@ -30,7 +30,8 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $ins = 3 ;
     $sql = "";
     $lotto_name = $_POST["lotto_name"];
-    $lotto_phone = $_POST["lotto_phone"];
+    //$lotto_phone = $_POST["lotto_phone"];
+    $lotto_phone = str_replace("-", "", $_POST["lotto_phone"]);
     $lotto_province = $_POST["lotto_province"];
     $sale_name = $_POST["sale_name"];
 
@@ -80,7 +81,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
-        //$query->execute();
+        $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
         if ($lastInsertId) {
@@ -90,7 +91,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
             $query = $conn->prepare($sql_update);
             $query->bindParam(':reserve_status', $reserve_status, PDO::PARAM_STR);
             $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
-            //$query->execute();
+            $query->execute();
             $ins = 1;
         } else {
             $ins = 3;

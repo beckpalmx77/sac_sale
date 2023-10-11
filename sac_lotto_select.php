@@ -8,114 +8,118 @@ include('includes/Header.php');
 <body class="bg-gradient-login" id="page-top">
 
 <form id="form">
-<div class="container-login">
-    <div class="row justify-content-center">
-        <div class="col-md-9 col-lg-6 col-md-9">
-            <div class="card shadow-sm my-5">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="product-form">
-                                <div class="text-center">
-                                    <div><img src="img/logo/logo text-01.png" width="200" height="79"/></div>
-                                    <h6 style="color: blue"><b>SAC LOTTO LIST</b></h6>
-                                    <input type="hidden" class="form-control" id="action" name="action" value="SAVE_DATA">
-                                    <input type="hidden" class="form-control" id="table_name" name="table_name" value="ims_lotto">
-                                </div>
-                            </div>
+    <div class="container-login">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-6 col-md-9">
+                <div class="card shadow-sm my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
                             <div class="col-lg-12">
-                                <div class="form-group">
+                                <div class="product-form">
+                                    <div class="text-center">
+                                        <div><img src="img/logo/logo text-01.png" width="200" height="79"/></div>
+                                        <h6 style="color: blue"><b>SAC LOTTO LIST</b></h6>
+                                        <input type="hidden" class="form-control" id="action" name="action"
+                                               value="SAVE_DATA">
+                                        <input type="hidden" class="form-control" id="table_name" name="table_name"
+                                               value="ims_lotto">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="lotto_name" class="control-label">ชื่อร้านค้า</label>
-                                        <input type="text" class="form-control" id="lotto_name" name="lotto_name"
-                                               required="true"
-                                               value=""
-                                               placeholder="">
+                                        <div class="form-group">
+                                            <label for="lotto_name" class="control-label">ชื่อร้านค้า</label>
+                                            <input type="text" class="form-control" id="lotto_name" name="lotto_name"
+                                                   required="true"
+                                                   value=""
+                                                   placeholder="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
                                     <div class="form-group">
-                                        <label for="lotto_phone" class="control-label">หมายเลขโทรศัพท์</label>
-                                        <input type="text" class="form-control" id="lotto_phone" name="lotto_phone"
-                                               required="true"
-                                               value=""
-                                               placeholder="">
+                                        <div class="form-group">
+                                            <label for="lotto_phone" class="control-label">หมายเลขโทรศัพท์</label>
+                                            <input type="number}" class="form-control" id="lotto_phone" name="lotto_phone"
+                                                   required="true"
+                                                   value=""
+                                                   placeholder="">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!--div class="form-group">
+                                    <!--div class="form-group">
+                                        <div class="form-group">
+                                            <label for="lotto_province" class="control-label">จังหวัด</label>
+                                            <input type="text" class="form-control" id="lotto_province" name="lotto_province"
+                                                   required="true"
+                                                   value=""
+                                                   placeholder="">
+                                        </div>
+                                    </div-->
+
+                                    <div class="form-group has-success">
+                                        <label class="control-label" for="lotto_province">จังหวัด</label>
+                                        <div class=”form-group”>
+                                            <select id="lotto_province" name="lotto_province"
+                                                    required="true"
+                                                    class="form-control" data-live-search="true"
+                                                    title="Please select">
+                                                <option
+                                                        value=""
+                                                        selected></option>
+                                                <?php $sql1 = "SELECT * FROM ims_provinces WHERE 1 =1";
+                                                $query1 = $conn->prepare($sql1);
+                                                $query1->execute();
+                                                $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+                                                if ($query1->rowCount() > 0) {
+                                                    foreach ($results1 as $result1) { ?>
+                                                        <option
+                                                                value="<?php echo htmlentities($result1->province_name); ?>"><?php echo htmlentities($result1->province_name); ?></option>
+                                                    <?php }
+                                                } ?>
+                                            </select>
+
+                                        </div>
+                                        <span class="help-block"></span>
+                                    </div>
+
+                                    <div class="form-group has-success">
+                                        <label class="control-label" for="sale_name">ชื่อ Sale</label>
+                                        <div class=”form-group”>
+                                            <select id="sale_name" name="sale_name"
+                                                    required="true"
+                                                    class="form-control" data-live-search="true"
+                                                    title="Please select">
+                                                <option
+                                                        value=""
+                                                        selected></option>
+                                                <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1 ORDER BY id ";
+                                                $query2 = $conn->prepare($sql2);
+                                                $query2->execute();
+                                                $results2 = $query2->fetchAll(PDO::FETCH_OBJ);
+                                                if ($query2->rowCount() > 0) {
+                                                    foreach ($results2 as $result2) { ?>
+                                                        <option
+                                                                value="<?php echo htmlentities($result2->sale_name); ?>"><?php echo htmlentities($result2->sale_name); ?></option>
+                                                    <?php }
+                                                } ?>
+                                            </select>
+
+                                        </div>
+                                        <span class="help-block"></span>
+                                    </div>
+
                                     <div class="form-group">
-                                        <label for="lotto_province" class="control-label">จังหวัด</label>
-                                        <input type="text" class="form-control" id="lotto_province" name="lotto_province"
-                                               required="true"
-                                               value=""
-                                               placeholder="">
+                                        <div class="form-group">
+                                            <label for="lotto_number" class="control-label">หมายเลขที่เลือก
+                                                (001-999)</label>
+                                            <input type="number" class="form-control" id="lotto_number"
+                                                   name="lotto_number"
+                                                   min="1" max="999" required="true"
+                                                   value=""
+                                                   placeholder="">
+                                        </div>
                                     </div>
-                                </div-->
 
-                                <div class="form-group has-success">
-                                    <label class="control-label" for="lotto_province">จังหวัด</label>
-                                    <div class=”form-group”>
-                                        <select id="lotto_province" name="lotto_province"
-                                                required="true"
-                                                class="form-control" data-live-search="true"
-                                                title="Please select">
-                                            <option
-                                                    value="<?php echo htmlentities($result1->province_name); ?>"
-                                                    selected><?php echo htmlentities($result1->province_name); ?></option>
-                                            <?php $sql1 = "SELECT * FROM ims_provinces WHERE 1 =1";
-                                            $query1 = $conn->prepare($sql1);
-                                            $query1->execute();
-                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
-                                            if ($query1->rowCount() > 0) {
-                                                foreach ($results1 as $result1) { ?>
-                                                    <option
-                                                            value="<?php echo htmlentities($result1->province_name); ?>"><?php echo htmlentities($result1->province_name); ?></option>
-                                                <?php }
-                                            } ?>
-                                        </select>
-
-                                    </div>
-                                    <span class="help-block"></span>
-                                </div>
-
-                                <div class="form-group has-success">
-                                    <label class="control-label" for="sale_name">ชื่อ Sale</label>
-                                    <div class=”form-group”>
-                                        <select id="sale_name" name="sale_name"
-                                                required="true"
-                                                class="form-control" data-live-search="true"
-                                                title="Please select">
-                                            <option
-                                                    value=""
-                                                    selected></option>
-                                            <?php $sql2 = "SELECT * FROM ims_sale_team WHERE 1 =1 ORDER BY id ";
-                                            $query2 = $conn->prepare($sql2);
-                                            $query2->execute();
-                                            $results2 = $query2->fetchAll(PDO::FETCH_OBJ);
-                                            if ($query2->rowCount() > 0) {
-                                                foreach ($results2 as $result2) { ?>
-                                                    <option
-                                                            value="<?php echo htmlentities($result2->sale_name); ?>"><?php echo htmlentities($result2->sale_name); ?></option>
-                                                <?php }
-                                            } ?>
-                                        </select>
-
-                                    </div>
-                                    <span class="help-block"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label for="lotto_number" class="control-label">หมายเลขที่เลือก (001-999)</label>
-                                        <input type="number" class="form-control" id="lotto_number" name="lotto_number"
-                                               min="1" max="999" required="true"
-                                               value=""
-                                               placeholder="">
-                                    </div>
-                                </div>
-
-                                <!--div class="form-group has-success">
+                                    <!--div class="form-group has-success">
                                     <label class="control-label" for="lotto_number">หมายเลขที่เลือก (1-900)</label>
                                     <div class=”form-group”>
                                         <select id="lotto_number" name="lotto_number"
@@ -125,58 +129,58 @@ include('includes/Header.php');
                                                     value="<?php echo htmlentities($result->lotto_number); ?>"
                                                     selected><?php echo htmlentities($result->lotto_number); ?></option>
                                             <?php $sql1 = "SELECT * FROM ims_number_reserve WHERE reserve_status = 'N' ";
-                                            $query1 = $conn->prepare($sql1);
-                                            $query1->execute();
-                                            $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
-                                            if ($query1->rowCount() > 0) {
-                                                foreach ($results1 as $result1) { ?>
+                                    $query1 = $conn->prepare($sql1);
+                                    $query1->execute();
+                                    $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+                                    if ($query1->rowCount() > 0) {
+                                        foreach ($results1 as $result1) { ?>
                                                     <option
                                                             value="<?php echo htmlentities($result1->lotto_number); ?>"><?php echo htmlentities($result1->lotto_number); ?></option>
                                                 <?php }
-                                            } ?>
+                                    } ?>
                                         </select>
 
                                     </div>
                                     <span class="help-block"></span>
                                 </div-->
 
-                            </div>
+                                </div>
 
-                            <div class="form-group">
-                                <button type="button" name="saveBtn" id="saveBtn" tabindex="4"
-                                        class="form-control btn btn-primary">
+                                <div class="form-group">
+                                    <button type="button" name="saveBtn" id="saveBtn" tabindex="4"
+                                            class="form-control btn btn-primary">
                                             <span>
                                                 <i class="fa fa-save" aria-hidden="true"></i>
                                                 บันทึก
                                             </span>
-                            </div>
+                                </div>
 
 
-                            <!--div class="form-group">
-                                <button type="button" name="saveBtn1" id="saveBtn1" tabindex="4"
-                                        class="form-control btn btn-primary">
-                                            <span>
-                                                <i class="fa fa-save" aria-hidden="true"></i>
-                                                บันทึก 1
-                                            </span>
-                            </div-->
+                                <!--div class="form-group">
+                                    <button type="button" name="saveBtn1" id="saveBtn1" tabindex="4"
+                                            class="form-control btn btn-primary">
+                                                <span>
+                                                    <i class="fa fa-save" aria-hidden="true"></i>
+                                                    บันทึก 1
+                                                </span>
+                                </div-->
 
-                            <div class="form-group">
-                                <button type="button" name="backBtn" id="backBtn" tabindex="4"
-                                        class="form-control btn btn-danger">
+                                <div class="form-group">
+                                    <button type="button" name="backBtn" id="backBtn" tabindex="4"
+                                            class="form-control btn btn-danger">
                                             <span>
                                                 <i class="fa fa-reply" aria-hidden="true"></i>
                                                 กลับหน้าแรก
                                             </span>
-                            </div>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </form>
 
@@ -260,28 +264,28 @@ include('includes/Header.php');
 
         let width = 3;
         let fil = 0;
-        $('#lotto_number').val(pad($('#lotto_number').val(),width,fil)) ;
-        if ($('#lotto_number').val() >=1 && $('#lotto_number').val() <=999) {
-        let action = "CHECK_NUMBER_DATA";
-        let table_name = "ims_lotto";
-        let cond = " WHERE lotto_number = " + $('#lotto_number').val();
-        let formData = {action: action, table_name: table_name, cond: cond};
-        $.ajax({
-            type: "POST",
-            url: 'model/lotto_process.php',
-            data: formData,
-            success: function (response) {
-                if (response > 0) {
-                    alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
-                    $('#lotto_number').val("");
+        $('#lotto_number').val(pad($('#lotto_number').val(), width, fil));
+        if ($('#lotto_number').val() >= 1 && $('#lotto_number').val() <= 999) {
+            let action = "CHECK_NUMBER_DATA";
+            let table_name = "ims_lotto";
+            let cond = " WHERE lotto_number = " + $('#lotto_number').val();
+            let formData = {action: action, table_name: table_name, cond: cond};
+            $.ajax({
+                type: "POST",
+                url: 'model/lotto_process.php',
+                data: formData,
+                success: function (response) {
+                    if (response > 0) {
+                        alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
+                        $('#lotto_number').val("");
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
                 }
-            },
-            error: function (response) {
-                alertify.error("error : " + response);
-            }
-        });
+            });
 
-    } else {
+        } else {
             alertify.error("ป้อนเลข 001 - 999 เท่านั้น");
             $('#lotto_number').val('');
         }
@@ -296,7 +300,7 @@ include('includes/Header.php');
 
         let action = "CHECK_NUMBER_DATA";
         let table_name = "ims_lotto";
-        let cond = " WHERE lotto_phone = '" + $('#lotto_phone').val() + "'" ;
+        let cond = " WHERE lotto_phone = '" + $('#lotto_phone').val() + "'";
         let formData = {action: action, table_name: table_name, cond: cond};
         $.ajax({
             type: "POST",
@@ -322,7 +326,7 @@ include('includes/Header.php');
 
         let action = "CHECK_NUMBER_DATA";
         let table_name = "ims_lotto";
-        let cond = " WHERE lotto_name = '" + $('#lotto_name').val() + "'" ;
+        let cond = " WHERE lotto_name = '" + $('#lotto_name').val() + "'";
         let formData = {action: action, table_name: table_name, cond: cond};
         $.ajax({
             type: "POST",
@@ -391,7 +395,7 @@ include('includes/Header.php');
 </script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#saveBtn1').click(function () {
 
             let formData = $("form").serialize();
