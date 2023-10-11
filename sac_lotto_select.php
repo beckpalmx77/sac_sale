@@ -45,16 +45,6 @@ include('includes/Header.php');
                                         </div>
                                     </div>
 
-                                    <!--div class="form-group">
-                                        <div class="form-group">
-                                            <label for="lotto_province" class="control-label">จังหวัด</label>
-                                            <input type="text" class="form-control" id="lotto_province" name="lotto_province"
-                                                   required="true"
-                                                   value=""
-                                                   placeholder="">
-                                        </div>
-                                    </div-->
-
                                     <div class="form-group has-success">
                                         <label class="control-label" for="lotto_province">จังหวัด</label>
                                         <div class=”form-group”>
@@ -155,16 +145,6 @@ include('includes/Header.php');
                                             </span>
                                 </div>
 
-
-                                <!--div class="form-group">
-                                    <button type="button" name="saveBtn1" id="saveBtn1" tabindex="4"
-                                            class="form-control btn btn-primary">
-                                                <span>
-                                                    <i class="fa fa-save" aria-hidden="true"></i>
-                                                    บันทึก 1
-                                                </span>
-                                </div-->
-
                                 <div class="form-group">
                                     <button type="button" name="backBtn" id="backBtn" tabindex="4"
                                             class="form-control btn btn-danger">
@@ -198,14 +178,6 @@ include('includes/Header.php');
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>
-
-
-<!-- Page level plugins -->
-
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css"/-->
 
 <script src="vendor/datatables/v11/bootbox.min.js"></script>
 <script src="vendor/datatables/v11/jquery.dataTables.min.js"></script>
