@@ -85,15 +85,6 @@ require_once 'config/connect_lotto_db.php';
     });
 </script>
 
-<!--script>
-
-    $("#DataTable").on('click', '.delete', function () {
-        let id = $(this).attr("id");
-        alert(id);
-    });
-
-</script-->
-
 <script>
 
     $("#DataTable").on('click', '.delete', function () {
