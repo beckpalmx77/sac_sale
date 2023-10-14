@@ -15,11 +15,11 @@ if ($_POST["action"] === 'CHECK_NUMBER_DATA') {
         $record = $result['record_counts'];
     }
 
-/*
-    $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " sql_get = " . $sql_get . " Count = " . $record);
-    fclose($my_file);
-*/
+    /*
+        $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, " sql_get = " . $sql_get . " Count = " . $record);
+        fclose($my_file);
+    */
 
     echo $record;
 
@@ -27,7 +27,7 @@ if ($_POST["action"] === 'CHECK_NUMBER_DATA') {
 
 if ($_POST["action"] === 'SAVE_DATA') {
 
-    $ins = 3 ;
+    $ins = 3;
     $sql = "";
     $lotto_name = $_POST["lotto_name"];
     //$lotto_phone = $_POST["lotto_phone"];
@@ -35,13 +35,13 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $lotto_province = $_POST["lotto_province"];
     $sale_name = $_POST["sale_name"];
 
-    if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         //ip from share internet
         $client_ip_address = $_SERVER['HTTP_CLIENT_IP'];
-    }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         //ip pass from proxy
         $client_ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    }else{
+    } else {
         $client_ip_address = $_SERVER['REMOTE_ADDR'];
     }
 
@@ -51,17 +51,16 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     $cond = " WHERE lotto_name = '" . $lotto_name . "'" . " OR lotto_phone = '" . $lotto_phone . "'";
 
-    $data = $lotto_name . " | " . $lotto_phone . " | " . $lotto_province . " | " . $lotto_number  . " | " . $client_ip_address ;
+    $data = $lotto_name . " | " . $lotto_phone . " | " . $lotto_province . " | " . $lotto_number . " | " . $client_ip_address;
 
     $return_arr = array();
     $sql_get = "SELECT count(*) as record_counts  FROM " . $table_name . $cond;
 
-/*
-    $my_file = fopen("sql_getdata0.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " sql_get = " . $sql_get . "\n\r" . $data . "\n\r" . "Sale = " . $sale_name);
-    fclose($my_file);
-*/
-
+    /*
+        $my_file = fopen("sql_getdata0.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, " sql_get = " . $sql_get . "\n\r" . $data . "\n\r" . "Sale = " . $sale_name);
+        fclose($my_file);
+    */
 
 
     $statement = $conn->query($sql_get);
@@ -70,7 +69,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $record = $result['record_counts'];
     }
 
-    if ($record<=0) {
+    if ($record <= 0) {
 
         $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address)
             VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address)";
@@ -109,6 +108,96 @@ if ($_POST["action"] === 'SAVE_DATA') {
     } else {
         echo 3;
     }
+
+}
+
+if ($_POST["action"] === 'DELETE1') {
+    $lotto_number = $_POST["id"];
+    $sql_find = "SELECT * FROM ims_lotto WHERE lotto_number = " . $lotto_number;
+
+    $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_find = " . $sql_find);
+    fclose($my_file);
+
+    $nRows = $conn->query($sql_find)->fetchColumn();
+    if ($nRows > 0) {
+        try {
+            $sql_del = "DELETE FROM ims_lotto WHERE lotto_number = " . $lotto_number;
+            $query = $conn->prepare($sql);
+            //$query->execute();
+
+            $sql_up = "UPDATE ims_lotto SET reserve_status = 'N' WHERE lotto_number = " . $lotto_number;
+            $query = $conn->prepare($sql);
+            //$query->execute();
+
+
+            $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
+            fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
+            fclose($my_file);
+
+
+            $del = 1;
+
+        } catch (Exception $e) {
+            $del = 3;
+        }
+    } else {
+        $del = 2;
+    }
+
+    $my_file = fopen("sql_del_res.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_del_res = " . $del);
+    fclose($my_file);
+
+    if ($del === 1) {
+        echo 1;
+    } else {
+        echo 3;
+    }
+
+}
+
+
+if ($_POST["action"] === 'DELETE') {
+
+    if ($_POST["lotto_number"] !== '') {
+        $lotto_number = $_POST["lotto_number"];
+        $sql_find = "SELECT * FROM ims_lotto WHERE lotto_number = '" . $lotto_number . "'";
+
+/*
+        $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, " sql_find = " . $sql_find);
+        fclose($my_file);
+*/
+
+        $nRows = $conn->query($sql_find)->fetchColumn();
+        if ($nRows > 0) {
+
+            $sql_del = "DELETE FROM ims_lotto WHERE lotto_number = " . $lotto_number;
+            $query = $conn->prepare($sql_del);
+            $query->execute();
+
+            $sql_up = "UPDATE ims_number_reserve SET reserve_status = 'N' WHERE lotto_number = " . $lotto_number;
+            $query = $conn->prepare($sql_up);
+            $query->execute();
+/*
+            $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
+            fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
+            fclose($my_file);
+*/
+
+            $del = 1;
+        } else {
+            $del = 3;
+        }
+
+    }
+
+/*
+    $my_file = fopen("sql_search.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_search = " . $del);
+    fclose($my_file);
+*/
 
 }
 
@@ -152,13 +241,13 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
 ## Fetch records
 
     $columnName = " id,lotto_number,lotto_name ";
-/*
-    $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
-        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
-*/
+    /*
+        $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
+            . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
+    */
 
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
-        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row.  "," . $rowperpage;
+        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row . "," . $rowperpage;
 
 
     /*
@@ -174,10 +263,10 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
         $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
     }
 
-/*
-    $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
-*/
+    /*
+        $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+    */
 
     $stmt->execute();
     $empRecords = $stmt->fetchAll();

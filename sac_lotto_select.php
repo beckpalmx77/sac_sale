@@ -385,8 +385,6 @@ include('includes/Header.php');
                     //dataRecords.ajax.reload();
                 }
             })
-
-
         });
     });
 </script>
