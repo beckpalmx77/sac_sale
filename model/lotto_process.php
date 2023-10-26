@@ -129,10 +129,11 @@ if ($_POST["action"] === 'DELETE1') {
             $query = $conn->prepare($sql);
             //$query->execute();
 
-
+/*
             $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
             fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
             fclose($my_file);
+*/
 
 
             $del = 1;
@@ -144,9 +145,11 @@ if ($_POST["action"] === 'DELETE1') {
         $del = 2;
     }
 
+/*
     $my_file = fopen("sql_del_res.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_del_res = " . $del);
     fclose($my_file);
+*/
 
     if ($del === 1) {
         echo 1;
