@@ -22,8 +22,6 @@
     <!--script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script-->
 
-
-
     <script src="vendor/alertify/js/alertify.js"></script>
 
     <link href="../css/select2_4010.css" rel="stylesheet"/>
@@ -31,6 +29,8 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link href="../vendor/datatables/v11/fontawesome53.all.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
 
     <script src="../vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
     <script src="../vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
@@ -46,7 +46,7 @@
 
     <style>
         body, h1, h2, h3, h4, h5, h6 {
-            font-family: 'Kanit', sans-serif !important;
+            font-family: 'Prompt', sans-serif !important;
         }
     </style>
 

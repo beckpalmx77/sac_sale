@@ -7,7 +7,7 @@ include('includes/Header.php');
 
 <style>
     body {
-        font-family: 'Kanit', sans-serif;
+        font-family: 'Prompt', sans-serif;
     }
 </style>
 
