@@ -11,10 +11,16 @@ if ($_POST["action"] === 'GET_STOCK') {
     
     $product_id_detail = $_POST["product_id_detail"];
 
+    $sql_get = " SELECT ICCAT_CODE,SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM v_stock_movement "
+        . " WHERE SKU_CODE = '" . $product_id_detail . "'"
+        . " GROUP BY ICCAT_CODE,SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME "
+        . " HAVING sum(CAST(QTY AS DECIMAL(10,2))) > 0 ";
+/*
     $sql_get = " SELECT SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME,sum(CAST(QTY AS DECIMAL(10,2))) as  QTY FROM v_stock_movement "
         . " WHERE SKU_CODE = '" . $product_id_detail . "'"
         . " GROUP BY SKU_CODE,SKU_NAME,WH_CODE,WH_NAME,WL_CODE,WL_NAME "
         . " HAVING sum(CAST(QTY AS DECIMAL(10,2))) > 0 ";
+*/
 
     //$my_file = fopen("get_stock.txt", "w") or die("Unable to open file!");
     //fwrite($my_file, $sql_get);
