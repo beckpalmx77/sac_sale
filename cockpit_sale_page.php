@@ -394,6 +394,10 @@ if (strlen($_SESSION['alogin']) == "") {
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
+                'autoWidth': true,
+                <?php  if ($_SESSION['deviceType']!=='computer') {
+                    echo "'scrollX': true,";
+                }?>
                 'ajax': {
                     'url': 'process/load_stock_balance_data_svr.php',
                     'data': formData

@@ -295,6 +295,8 @@ if (strlen($_SESSION['alogin']) == "") {
                         next: 'ต่อไป'
                     }
                 },
+                'searching': false,
+                'paging': false,
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
