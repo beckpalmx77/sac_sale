@@ -299,10 +299,6 @@ if (strlen($_SESSION['alogin']) == "") {
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
-                'autoWidth': true,
-                <?php  if ($_SESSION['deviceType']!=='computer') {
-                    echo "'scrollX': true,";
-                }?>
                 'ajax': {
                     'url': 'model/manage_product_btc_process.php',
                     'data': formData
