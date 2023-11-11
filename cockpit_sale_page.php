@@ -389,11 +389,13 @@ if (strlen($_SESSION['alogin']) == "") {
                         next: 'ต่อไป'
                     }
                 },
-                'searching': false,
-                'paging': false,
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
+                'autoWidth': true,
+                <?php  if ($_SESSION['deviceType']!=='computer') {
+                    echo "'scrollX': true,";
+                }?>
                 'ajax': {
                     'url': 'process/load_stock_balance_data_svr.php',
                     'data': formData
