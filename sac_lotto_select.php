@@ -230,6 +230,46 @@ include('includes/Header.php');
     }
 </script>
 
+
+<script>
+    $(document).ready(function(){
+
+        $("#lotto_number").change(function(){
+
+            let width = 3;
+            let fil = 0;
+            $('#lotto_number').val(pad($('#lotto_number').val(), width, fil));
+            if ($('#lotto_number').val() >= 1 && $('#lotto_number').val() <= 999) {
+                let action = "CHECK_NUMBER_DATA";
+                let table_name = "ims_lotto";
+                let cond = " WHERE lotto_number = " + $('#lotto_number').val();
+                let formData = {action: action, table_name: table_name, cond: cond};
+                $.ajax({
+                    type: "POST",
+                    url: 'model/lotto_process.php',
+                    data: formData,
+                    success: function (response) {
+                        if (response > 0) {
+                            alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
+                            $('#lotto_number').val("");
+                        }
+                    },
+                    error: function (response) {
+                        alertify.error("error : " + response);
+                    }
+                });
+
+            } else {
+                alertify.error("ป้อนเลข 001 - 999 เท่านั้น");
+                $('#lotto_number').val('');
+            }
+
+        });
+
+        });
+
+</script>
+
 <script>
 
     $('#lotto_number').blur(function () {
