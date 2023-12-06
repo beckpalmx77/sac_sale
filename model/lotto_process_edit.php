@@ -4,6 +4,33 @@ include('../config/connect_lotto_db.php');
 
 $table_name = $_POST["table_name"];
 
+if ($_POST["action"] === 'GET_DATA') {
+
+    $id = $_POST["id"];
+
+    $return_arr = array();
+
+    $sql_get = "SELECT * FROM ims_lotto WHERE id = " . $id;
+    $statement = $conn->query($sql_get);
+    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($results as $result) {
+        $return_arr[] = array("id" => $result['id'],
+            "lotto_name" => $result['lotto_name'],
+            "lotto_phone" => $result['lotto_phone'],
+            "lotto_province" => $result['lotto_province'],
+            "sale_name" => $result['sale_name'],
+            "create_date" => $result['create_date'],
+            "client_ip_address" => $result['client_ip_address'],
+            "lotto_number" => $result['lotto_number']);
+    }
+
+    //file_put_contents('sql_data_arr.txt', print_r($return_arr, true));
+
+    echo json_encode($return_arr);
+
+}
+
 if ($_POST["action"] === 'CHECK_NUMBER_DATA') {
     $cond = $_POST["cond"];
     $return_arr = array();
@@ -108,9 +135,11 @@ if ($_POST["action"] === 'DELETE1') {
     $lotto_number = $_POST["id"];
     $sql_find = "SELECT * FROM ims_lotto WHERE lotto_number = " . $lotto_number;
 
+/*
     $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_find = " . $sql_find);
     fclose($my_file);
+*/
 
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
@@ -245,48 +274,47 @@ if ($_POST["action"] === 'GET_SHOW_LOTTO') {
     $sql_getdata = "SELECT * FROM ims_lotto WHERE 1 = 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT " . $row . "," . $rowperpage;
 
+    $stmt = $conn->prepare($sql_getdata);
 
     /*
     $my_file = fopen("sql_getdata.txt", "w") or die("Unable to open file!");
     fwrite($my_file, " sql_getdata = " . $sql_getdata);
     fclose($my_file);
-*/
-
-    $stmt = $conn->prepare($sql_getdata);
-
-// Bind values
-    foreach ($searchArray as $key => $search) {
-        $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
-    }
-
-    /*
-        $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
     */
 
     $stmt->execute();
     $empRecords = $stmt->fetchAll();
     $data = array();
 
-    foreach ($empRecords as $rows) {
+    foreach ($empRecords as $row) {
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
-                "id" => $rows['id'],
-                "lotto_name" => $rows['lotto_name'],
-                "lotto_phone" => $rows['lotto_phone'],
-                "lotto_province" => $rows['lotto_province'],
-                "lotto_number" => $rows['lotto_number']
+                "id" => $row['id'],
+                "lotto_name" => $row['lotto_name'],
+                "lotto_phone" => $row['lotto_phone'],
+                "lotto_province" => $row['lotto_province'],
+                "sale_name" => $row['sale_name'],
+                "lotto_number" => $row['lotto_number'],
+                "edit" => $row['lotto_number']
+            );
+        } else {
+            $data[] = array(
+                "id" => $row['id'],
+                "lotto_name" => $row['lotto_name'],
+                "lotto_number" => $row['lotto_number'],
+                "edit" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Edit'>Edit</button>"
             );
         }
-
     }
 
-    //file_put_contents("data_get.txt", print_r($data, true), FILE_APPEND);
+    //file_put_contents('sql_data.txt', print_r($data, true));
 
-    //$my_file = fopen("getproduct_data.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
-    //fclose($my_file);
+/*
+    $my_file = fopen("sql_data.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_data = " . implode(" ",$data));
+    fclose($my_file);
+*/
 
 ## Response Return Value
     $response = array(

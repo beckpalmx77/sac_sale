@@ -166,33 +166,6 @@ if (strlen($_SESSION['alogin']) == "") {
                            id="product_detail"
                            name="product_detail"
                            placeholder="">
-                    <!--label for="product_id_detail"
-                           class="control-label"><b>รหัสสินค้า</b></label>
-                    <input type="text" class="form-control"
-                           id="product_id_detail"
-                           name="product_id_detail"
-                           required="required"
-                           readonly="true"
-                           placeholder="สินค้า">
-
-                    <label for="product_name"
-                           class="control-label"><b>ชื่อสินค้า</b></label>
-                    <input type="text" class="form-control"
-                           id="product_name_detail"
-                           name="product_name_detail"
-                           required="required"
-                           readonly="true"
-                           placeholder="ชื่อสินค้า">
-                    <label for="price"
-                           class="control-label"><b>ราคา</b></label>
-                    <input type="text" class="form-control"
-                           id="price_detail"
-                           name="price_detail"
-                           required="required"
-                           readonly="true"
-                           placeholder="ราคา">
-                    <br-->
-
                     <table cellpadding="0" cellspacing="0" border="0"
                            class="display"
                            id="TableStockList"

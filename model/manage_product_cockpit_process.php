@@ -128,6 +128,8 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     //fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
     //fclose($my_file);
 
+    //file_put_contents('sql_cp_prod_data.txt', print_r($data, true));
+
 ## Response Return Value
     $response = array(
         "draw" => intval($draw),
