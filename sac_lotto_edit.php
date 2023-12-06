@@ -28,7 +28,7 @@ require_once 'config/connect_lotto_db.php';
     <div class="row">
         <div class="col-md-12"> <br>
             <div><img src="img/logo/logo text-01.png" width="200" height="79"/></div>
-            <h6 style="color: blue"><b>SAC LOTTO LIST</b></h6>
+            <h6 style="color: blue"><b>SAC LOTTO LIST EDIT</b></h6>
             <div class="form-group">
                 <button type="button" name="backBtn" id="backBtn" tabindex="4"
                         class="form-control btn btn-danger">
