@@ -1,6 +1,6 @@
 <?php
 #return echo value
-$system_name = "ระบบจัดการข้อมูลภายใน สงวนออโต้คาร์";
+$system_name = "ระบบจัดการข้อมูลภายใน สงวนยางยนต์ ชุมพร";
 $save_success = "Complete : บันทึกข้อมูลเรียบร้อยแล้ว";
 $del_success = "Complete : ลบข้อมูลเรียบร้อยแล้ว";
 $error = "Error : มีความผิดพลาดในระบบ  กรุณาตรวจสอบ";

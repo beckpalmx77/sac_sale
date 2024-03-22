@@ -28,6 +28,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <div class="text-center">
                                         <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                     </div>
+                                    <br>
 
                                     <!--
                                                                         <php if ($_SESSION['account_type'] !== 'cockpit') { ?>
