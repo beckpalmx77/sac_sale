@@ -29,19 +29,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <div><img src="img/logo/logo text-01.png" width="400" height="158"/></div>
                                     </div>
 
+                                    <!--
+                                                                        <php if ($_SESSION['account_type'] !== 'cockpit') { ?>
+                                                                            <div class="form-group">
+                                                                                <button type="button" name="productSacBtn" id="productSacBtn" tabindex="4"
+                                                                                        class="form-control btn btn-primary">
+                                                                                <span>
+                                                                                    <i class="fa fa-tags" aria-hidden="true"></i>
+                                                                                    รายการสินค้า SAC
+                                                                                </span>
+                                                                            </div>
+                                    -->
+                                    <?php //} ?>
 
-                                    <?php if ($_SESSION['account_type'] !== 'cockpit') { ?>
-                                        <div class="form-group">
-                                            <button type="button" name="productSacBtn" id="productSacBtn" tabindex="4"
-                                                    class="form-control btn btn-primary">
-                                            <span>
-                                                <i class="fa fa-tags" aria-hidden="true"></i>
-                                                รายการสินค้า SAC
-                                            </span>
-                                        </div>
-                                    <?php } ?>
-
-                                    <div class="form-group">
+                                    <!--div class="form-group">
                                         <button type="button" name="productBTCBtn" id="productBTCBtn"
                                                 tabindex="4"
                                                 class="form-control btn btn-primary">
@@ -49,8 +50,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
                                                 รายการสินค้า BTC
                                             </span>
-                                    </div>
-
+                                    </div> -->
 
 
                                     <div class="form-group">
