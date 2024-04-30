@@ -123,12 +123,13 @@ if ($_POST["action"] === 'GET_PRODUCT') {
         }
 
     }
+/*
+    $my_file = fopen("getproduct_data.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
+    fclose($my_file);
 
-    //$my_file = fopen("getproduct_data.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, " getproductdata = " . $draw . " | " . $totalRecords . " | " . $totalRecordwithFilter . " | " . $data);
-    //fclose($my_file);
-
-    //file_put_contents('sql_cp_prod_data.txt', print_r($data, true));
+    file_put_contents('sql_cp_prod_data.txt', print_r($data, true));
+*/
 
 ## Response Return Value
     $response = array(
