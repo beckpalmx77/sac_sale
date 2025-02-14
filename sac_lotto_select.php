@@ -118,25 +118,26 @@ include('includes/Header.php');
                                     </div>
 
                                 </div>
-
-                                <div class="form-group">
-                                    <button type="button" name="saveBtn" id="saveBtn" tabindex="4"
-                                            class="form-control btn btn-primary">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="button" name="saveBtn" id="saveBtn" tabindex="4"
+                                                class="form-control btn btn-primary">
                                             <span>
                                                 <i class="fa fa-save" aria-hidden="true"></i>
                                                 บันทึก
                                             </span>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <button type="button" name="backBtn" id="backBtn" tabindex="4"
-                                            class="form-control btn btn-danger">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="button" name="backBtn" id="backBtn" tabindex="4"
+                                                class="form-control btn btn-danger">
                                             <span>
                                                 <i class="fa fa-reply" aria-hidden="true"></i>
                                                 กลับหน้าแรก
                                             </span>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
