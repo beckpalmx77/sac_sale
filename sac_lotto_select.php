@@ -109,11 +109,10 @@ include('includes/Header.php');
                                     <!-- อัปโหลดรูปภาพ -->
                                     <div class="form-group">
                                         <label for="lotto_file" class="control-label">อัปโหลดรูปภาพ</label>
-                                        <input type="file" class="form-control" id="lotto_file" name="lotto_file"
-                                               accept="image/*">
-                                        <div class="preview mt-2">
-                                            <img id="previewImage" src="#" alt="Preview"
-                                                 style="max-width: 100%; display: none;">
+                                        <input type="file" class="form-control" id="lotto_file" name="lotto_file[]"
+                                               accept="image/*" multiple>
+                                        <div class="preview mt-2" id="previewContainer">
+                                            <!-- Preview รูปภาพจะแสดงที่นี่ -->
                                         </div>
                                     </div>
 
@@ -316,56 +315,105 @@ include('includes/Header.php');
         let lotto_province = $('#lotto_province').val();
         let lotto_number = $('#lotto_number').val();
         let sale_name = $('#sale_name').val();
-        let file_data = $('#lotto_file')[0].files[0]; // ดึงไฟล์จาก input
+        let files = $('#lotto_file')[0].files; // ดึงไฟล์จาก input ที่รองรับหลายไฟล์
 
-        if (lotto_name !== "" && lotto_phone !== "" && lotto_province !== "" && sale_name !== "" && lotto_number !== "") {
-            let formData = new FormData();
-            formData.append("action", action);
-            formData.append("table_name", table_name);
-            formData.append("lotto_name", lotto_name);
-            formData.append("lotto_phone", lotto_phone);
-            formData.append("lotto_province", lotto_province);
-            formData.append("lotto_number", lotto_number);
-            formData.append("sale_name", sale_name);
-            if (file_data) {
-                formData.append("lotto_file", file_data); // แนบไฟล์เข้าไป
-            }
-            //alert(formData);
-            $.ajax({
-                type: "POST",
-                url: 'model/lotto_process_new.php',
-                data: formData,
-                contentType: false,  // ไม่ต้องกำหนด Content-Type ให้เป็น multipart/form-data
-                processData: false,  // ไม่ต้องแปลงข้อมูล
-                success: function (response) {
-                    if (response > 1) {
-                        alertify.error("ไม่สามารถบันทึกข้อมูลได้ กรุณาตรวจสอบข้อมูล");
-                        $('#lotto_number').val("");
-                    } else {
-                        alertify.success("บันทึกสำเร็จ");
-                        $('#lotto_form')[0].reset(); // ล้างฟอร์มหลังจากบันทึก
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        } else {
-            alertify.error("error : ป้อนข้อมูลให้ครบถ้วน");
+        // ตรวจสอบการกรอกข้อมูลทั้งหมด
+        if (lotto_name === "") {
+            alertify.error("กรุณากรอกชื่อผู้ขาย");
+            return;
+        }
+        if (lotto_phone === "") {
+            alertify.error("กรุณากรอกหมายเลขโทรศัพท์");
+            return;
+        }
+        if (lotto_province === "") {
+            alertify.error("กรุณากรอกจังหวัด");
+            return;
+        }
+        if (sale_name === "") {
+            alertify.error("กรุณากรอกชื่อผู้ขาย");
+            return;
+        }
+        if (lotto_number === "") {
+            alertify.error("กรุณากรอกหมายเลขสลาก");
+            return;
         }
 
-    });
+        // เตรียมข้อมูลที่ต้องการส่ง
+        let formData = new FormData();
+        formData.append("action", action);
+        formData.append("table_name", table_name);
+        formData.append("lotto_name", lotto_name);
+        formData.append("lotto_phone", lotto_phone);
+        formData.append("lotto_province", lotto_province);
+        formData.append("lotto_number", lotto_number);
+        formData.append("sale_name", sale_name);
 
+        // เช็คว่ามีไฟล์ที่ถูกเลือกหรือไม่
+        if (files.length > 0) {
+            // แนบไฟล์ทั้งหมดที่เลือกเข้าไปใน FormData
+            for (let i = 0; i < files.length; i++) {
+                formData.append("lotto_file[]", files[i]); // ใช้ lotto_file[] เพื่อรองรับหลายไฟล์
+            }
+        }
+
+        // ส่งข้อมูลไปยัง server
+        $.ajax({
+            type: "POST",
+            url: 'model/lotto_process.php',
+            data: formData,
+            contentType: false,  // ไม่ต้องกำหนด Content-Type ให้เป็น multipart/form-data
+            processData: false,  // ไม่ต้องแปลงข้อมูล
+            success: function (response) {
+                // ตรวจสอบค่าผลลัพธ์จาก PHP
+                if (response === "duplicate") {
+                    alertify.error("หมายเลขสลากซ้ำ กรุณาตรวจสอบใหม่");
+                } else if (response > 1) {
+                    alertify.error("ไม่สามารถบันทึกข้อมูลได้ กรุณาตรวจสอบข้อมูล");
+                } else {
+                    alertify.success("บันทึกสำเร็จ");
+                    $('#lotto_form')[0].reset(); // ล้างฟอร์มหลังจากบันทึก
+                }
+            },
+            error: function (xhr, status, error) {
+                // แสดงข้อผิดพลาดที่มีรายละเอียด
+                let errorMessage = "เกิดข้อผิดพลาด : " + error;
+                if (xhr.responseText) {
+                    try {
+                        // หาก response เป็น JSON, ให้แสดงข้อมูลจาก response
+                        let response = JSON.parse(xhr.responseText);
+                        errorMessage += "\n" + JSON.stringify(response, null, 2);
+                    } catch (e) {
+                        errorMessage += "\n" + xhr.responseText;
+                    }
+                }
+                alertify.error(errorMessage);
+            }
+        });
+    });
 </script>
 
 <script>
     $(document).ready(function () {
         $('#lotto_file').change(function (event) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                $('#previewImage').attr('src', e.target.result).show();
+            // Clear existing previews
+            $('#previewContainer').empty();
+
+            // Loop through selected files and create previews
+            let files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let imgElement = $('<img>')
+                        .attr('src', e.target.result)
+                        .css('max-width', '30%')
+                        .css('margin-right', '10px')
+                        .css('margin-bottom', '10px')
+                        .show();
+                    $('#previewContainer').append(imgElement);
+                }
+                reader.readAsDataURL(files[i]);
             }
-            reader.readAsDataURL(event.target.files[0]);
         });
     });
 </script>

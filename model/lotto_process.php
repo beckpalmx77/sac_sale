@@ -30,32 +30,39 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $ins = 3;
     $sql = "";
     $lotto_name = $_POST["lotto_name"];
-    //$lotto_phone = $_POST["lotto_phone"];
     $lotto_phone = str_replace("-", "", $_POST["lotto_phone"]);
     $lotto_province = $_POST["lotto_province"];
     $sale_name = $_POST["sale_name"];
 
-    /*
-        $my_file = fopen("sql_savedata.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, " lotto_name = " . $lotto_name . " lotto_phone = " . $lotto_phone);
-        fclose($my_file);
-    */
-    // ตรวจสอบว่ามีไฟล์ถูกอัปโหลดหรือไม่
-    if (!empty($_FILES['lotto_file']['name'])) {
+// ตรวจสอบว่ามีไฟล์ถูกอัปโหลดหรือไม่
+    if (!empty($_FILES['lotto_file']['name'][0])) { // ตรวจสอบว่ามีไฟล์หลายไฟล์
         $upload_dir = "../uploads/"; // กำหนดโฟลเดอร์อัปโหลด
-        $file_name = time() . "_" . basename($_FILES["lotto_file"]["name"]); // ตั้งชื่อไฟล์ใหม่ป้องกันชื่อซ้ำ
-        $file_path = $upload_dir . $file_name;
+        $lotto_files = []; // สร้าง array เพื่อเก็บชื่อไฟล์ที่อัปโหลด
 
-        if (move_uploaded_file($_FILES["lotto_file"]["tmp_name"], $file_path)) {
-            $lotto_file = $file_name; // บันทึกชื่อไฟล์
-        } else {
-            echo "UPLOAD_FAILED"; // ถ้าอัปโหลดไม่สำเร็จ
-            exit();
+        // ลูปผ่านไฟล์ทั้งหมดที่ถูกเลือก
+        for ($i = 0; $i < count($_FILES['lotto_file']['name']); $i++) {
+            // สร้างชื่อไฟล์ใหม่ที่ไม่ซ้ำกันโดยใช้ uniqid() และเพิ่มนามสกุลไฟล์
+            $file_extension = pathinfo($_FILES["lotto_file"]["name"][$i], PATHINFO_EXTENSION);
+            $unique_id = uniqid("file_", true); // ใช้ uniqid เพื่อให้ชื่อไฟล์ไม่ซ้ำ
+            $file_name = $unique_id . "." . $file_extension; // รวม uniqid และนามสกุลไฟล์
+            $file_path = $upload_dir . $file_name;
+
+            // ย้ายไฟล์ไปยังโฟลเดอร์ที่กำหนด
+            if (move_uploaded_file($_FILES["lotto_file"]["tmp_name"][$i], $file_path)) {
+                $lotto_files[] = $file_name; // เก็บชื่อไฟล์ลงใน array
+            } else {
+                echo "UPLOAD_FAILED"; // ถ้าอัปโหลดไม่สำเร็จ
+                exit();
+            }
         }
+
+        // แปลง array ของชื่อไฟล์เป็น string
+        $lotto_files_str = implode(",", $lotto_files); // เก็บชื่อไฟล์เป็นคอมม่า (file1,file2,...)
     } else {
-        $lotto_file = NULL; // ถ้าไม่มีไฟล์ ให้เป็น NULL
+        $lotto_files_str = NULL; // ถ้าไม่มีไฟล์ ให้เป็น NULL
     }
 
+    // รับ IP ของผู้ใช้
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         //ip from share internet
         $client_ip_address = $_SERVER['HTTP_CLIENT_IP'];
@@ -66,13 +73,11 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $client_ip_address = $_SERVER['REMOTE_ADDR'];
     }
 
-    //$lotto_number = $_POST["lotto_number"];
-
+    // รับ lotto_number และปรับรูปแบบ
     $lotto_number = sprintf("%03d", $_POST["lotto_number"]);
 
+    // ตรวจสอบข้อมูลซ้ำ
     $cond = " WHERE lotto_name = '" . $lotto_name . "'" . " OR lotto_phone = '" . $lotto_phone . "' OR lotto_number = '" . $lotto_number . "' ";
-
-    $data = $lotto_name . " | " . $lotto_phone . " | " . $lotto_province . " | " . $lotto_number . " | " . $client_ip_address;
 
     $return_arr = array();
     $sql_get = "SELECT count(*) as record_counts  FROM " . $table_name . $cond;
@@ -84,7 +89,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
     }
 
     if ($record <= 0) {
-
+        // Insert ข้อมูลใหม่
         $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address,lotto_file)
             VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address,:lotto_file)";
         $query = $conn->prepare($sql);
@@ -94,11 +99,12 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
-        $query->bindParam(':lotto_file', $lotto_file, PDO::PARAM_STR);
+        $query->bindParam(':lotto_file', $lotto_files_str, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
         if ($lastInsertId) {
+            // อัปเดตสถานะการสำรองหมายเลข
             $reserve_status = 'Y';
             $sql_update = "UPDATE ims_number_reserve SET reserve_status=:reserve_status            
             WHERE lotto_number = :lotto_number";
@@ -114,26 +120,24 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $ins = 2;
     }
 
-    //$my_file = fopen("sql_getdata1.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, " record = " . $record . " : " . $sql . " : ins = " . $ins);
-    //fclose($my_file);
-
     if ($record <= 0 && $ins == 1) {
-        echo 1;
+        echo 1; // สำเร็จ
     } else {
-        echo 3;
+        echo 3; // ล้มเหลว
     }
 
 }
+
 
 if ($_POST["action"] === 'DELETE1') {
     $lotto_number = $_POST["id"];
     $sql_find = "SELECT * FROM ims_lotto WHERE lotto_number = " . $lotto_number;
 
-    $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, " sql_find = " . $sql_find);
-    fclose($my_file);
-
+    /*
+        $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, " sql_find = " . $sql_find);
+        fclose($my_file);
+    */
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
         try {
