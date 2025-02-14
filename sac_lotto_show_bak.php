@@ -1,0 +1,104 @@
+<?php
+include('includes/Header.php');
+require_once 'config/connect_lotto_db.php';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- datatable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#DataTable').DataTable();
+        });
+    </script>
+
+    <title>SAC LOTTO LIST</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"> <br>
+            <div><img src="img/logo/logo text-01.png" width="200" height="79"/></div>
+            <h6 style="color: blue"><b>SAC LOTTO LIST</b></h6>
+            <div class="form-group">
+                <button type="button" name="backBtn" id="backBtn" tabindex="4" class="form-control btn btn-danger">
+                    <span>
+                        <i class="fa fa-reply" aria-hidden="true"></i>
+                        กลับหน้าแรก
+                    </span>
+                </button>
+            </div>
+            <table id="DataTable" class="display table table-striped table-hover table-responsive table-bordered">
+                <thead>
+                <tr>
+                    <th width="5%">ลำดับ</th>
+                    <th width="25%">ชื่อร้าน</th>
+                    <th width="10%">หมายเลขโทรศัพท์</th>
+                    <th width="15%">จังหวัด</th>
+                    <th width="15%">หมายเลขที่เลือก</th>
+                    <th width="15%">ชื่อ Sale</th>
+                    <th width="15%">วันที่บันทึก</th>
+                    <th width="15%">การอนุมัติ</th>
+                    <th width="15%">รูปภาพ</th> <!-- คอลัมน์ใหม่ -->
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $stmt = $conn->prepare("SELECT * FROM ims_lotto order by id");
+                $stmt->execute();
+                $result = $stmt->fetchAll();
+                $line_no = 0;
+                foreach($result as $rows) {
+                    $line_no++;
+                    ?>
+                    <tr>
+                        <td><?= $line_no;?></td>
+                        <td><?= $rows['lotto_name'];?></td>
+                        <td><?= $rows['lotto_phone'];?></td>
+                        <td><?= $rows['lotto_province'];?></td>
+                        <td><?= $rows['lotto_number'];?></td>
+                        <td><?= $rows['sale_name'];?></td>
+                        <td><?= $rows['approve_status'];?></td>
+                        <td><?= $rows['create_date'];?></td>
+                        <td>
+                            <?php
+                            // ตรวจสอบว่ามีไฟล์ภาพหรือไม่ และแสดงลิงก์
+                            if (!empty($rows['lotto_file'])) {
+                                $files = explode(",", $rows['lotto_file']); // แยกไฟล์หลายไฟล์
+                                $index = 1; // เริ่มต้นที่ลำดับ 1
+                                foreach ($files as $file) {
+                                    echo '<a href="uploads/' . $file . '" target="_blank">ดูรูปที่ ' . $index . '</a><br>';
+                                    $index++; // เพิ่มลำดับทุกครั้ง
+                                }
+                            } else {
+                                echo "ไม่มีรูปภาพ";
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#backBtn").click(function () {
+            window.location.href = "sac_lotto";
+        });
+    });
+</script>
+
+</body>
+</html>
