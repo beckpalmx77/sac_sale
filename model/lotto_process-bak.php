@@ -35,27 +35,6 @@ if ($_POST["action"] === 'SAVE_DATA') {
     $lotto_province = $_POST["lotto_province"];
     $sale_name = $_POST["sale_name"];
 
-    /*
-        $my_file = fopen("sql_savedata.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, " lotto_name = " . $lotto_name . " lotto_phone = " . $lotto_phone);
-        fclose($my_file);
-    */
-    // ตรวจสอบว่ามีไฟล์ถูกอัปโหลดหรือไม่
-    if (!empty($_FILES['lotto_file']['name'])) {
-        $upload_dir = "../uploads/"; // กำหนดโฟลเดอร์อัปโหลด
-        $file_name = time() . "_" . basename($_FILES["lotto_file"]["name"]); // ตั้งชื่อไฟล์ใหม่ป้องกันชื่อซ้ำ
-        $file_path = $upload_dir . $file_name;
-
-        if (move_uploaded_file($_FILES["lotto_file"]["tmp_name"], $file_path)) {
-            $lotto_file = $file_name; // บันทึกชื่อไฟล์
-        } else {
-            echo "UPLOAD_FAILED"; // ถ้าอัปโหลดไม่สำเร็จ
-            exit();
-        }
-    } else {
-        $lotto_file = NULL; // ถ้าไม่มีไฟล์ ให้เป็น NULL
-    }
-
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         //ip from share internet
         $client_ip_address = $_SERVER['HTTP_CLIENT_IP'];
@@ -85,8 +64,8 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     if ($record <= 0) {
 
-        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address,lotto_file)
-            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address,:lotto_file)";
+        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address)
+            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address)";
         $query = $conn->prepare($sql);
         $query->bindParam(':lotto_name', $lotto_name, PDO::PARAM_STR);
         $query->bindParam(':lotto_phone', $lotto_phone, PDO::PARAM_STR);
@@ -94,7 +73,6 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $query->bindParam(':lotto_number', $lotto_number, PDO::PARAM_STR);
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
-        $query->bindParam(':lotto_file', $lotto_file, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
@@ -145,11 +123,11 @@ if ($_POST["action"] === 'DELETE1') {
             $query = $conn->prepare($sql);
             //$query->execute();
 
-            /*
-                        $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
-                        fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
-                        fclose($my_file);
-            */
+/*
+            $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
+            fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
+            fclose($my_file);
+*/
 
 
             $del = 1;
@@ -161,11 +139,11 @@ if ($_POST["action"] === 'DELETE1') {
         $del = 2;
     }
 
-    /*
-        $my_file = fopen("sql_del_res.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, " sql_del_res = " . $del);
-        fclose($my_file);
-    */
+/*
+    $my_file = fopen("sql_del_res.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_del_res = " . $del);
+    fclose($my_file);
+*/
 
     if ($del === 1) {
         echo 1;
@@ -182,11 +160,11 @@ if ($_POST["action"] === 'DELETE') {
         $lotto_number = $_POST["lotto_number"];
         $sql_find = "SELECT * FROM ims_lotto WHERE lotto_number = '" . $lotto_number . "'";
 
-        /*
-                $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
-                fwrite($my_file, " sql_find = " . $sql_find);
-                fclose($my_file);
-        */
+/*
+        $my_file = fopen("sql_find.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, " sql_find = " . $sql_find);
+        fclose($my_file);
+*/
 
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
@@ -198,11 +176,11 @@ if ($_POST["action"] === 'DELETE') {
             $sql_up = "UPDATE ims_number_reserve SET reserve_status = 'N' WHERE lotto_number = " . $lotto_number;
             $query = $conn->prepare($sql_up);
             $query->execute();
-            /*
-                        $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
-                        fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
-                        fclose($my_file);
-            */
+/*
+            $my_file = fopen("sql_del.txt", "w") or die("Unable to open file!");
+            fwrite($my_file, " sql_del = " . $sql_del . " | " . $sql_up);
+            fclose($my_file);
+*/
 
             $del = 1;
         } else {
@@ -211,11 +189,11 @@ if ($_POST["action"] === 'DELETE') {
 
     }
 
-    /*
-        $my_file = fopen("sql_search.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, " sql_search = " . $del);
-        fclose($my_file);
-    */
+/*
+    $my_file = fopen("sql_search.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, " sql_search = " . $del);
+    fclose($my_file);
+*/
 
 }
 
