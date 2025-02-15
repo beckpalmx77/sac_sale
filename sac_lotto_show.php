@@ -76,7 +76,7 @@ require_once 'config/connect_lotto_db.php';
                                 $files = explode(",", $rows['lotto_file']); // แยกไฟล์หลายไฟล์
                                 $index = 1; // เริ่มต้นที่ลำดับ 1
                                 foreach ($files as $file) {
-                                    echo '<a href="uploads/' . $file . '" target="_blank">ดูรูปที่ ' . $index . '</a><br>';
+                                    echo '<a href="uploads/' . $file . '" target="_blank">รูปที่ ' . $index . '</a><br>';
                                     $index++; // เพิ่มลำดับทุกครั้ง
                                 }
                             } else {
