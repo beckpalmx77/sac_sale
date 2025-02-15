@@ -17,50 +17,60 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card shadow-sm">
-                            <div class="card-header">
+                            <div class="card-header" style="background-color: #28a745; color: white;">
                                 ตรวจรางวัล
                             </div>
                             <div class="card-body">
                                 <!-- ฟอร์มตรวจรางวัล -->
                                 <form method="post" action="">
-                                    <div class="form-group">
-                                        <label for="period_no">งวดวันที่</label>
-                                        <select class="form-control" id="period_no" name="period_no" required>
-                                            <option value="">เลือกวันที่</option>
-                                            <option value="1">1</option>
-                                            <option value="16">16</option>
-                                        </select>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="period_no">งวดวันที่</label>
+                                            <select class="form-control" id="period_no" name="period_no" required>
+                                                <option value="">เลือกวันที่</option>
+                                                <option value="1">1</option>
+                                                <option value="16">16</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="period_month">เดือน</label>
+                                            <select class="form-control" id="period_month" name="period_month" required>
+                                                <option value="">เลือกเดือน</option>
+                                                <?php
+                                                $months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+                                                foreach ($months as $index => $month) {
+                                                    echo "<option value='" . ($index + 1) . "'>$month</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="period_year">ปีงวด</label>
+                                            <select class="form-control" id="period_year" name="period_year" required>
+                                                <?php
+                                                $currentYear = date("Y");
+                                                for ($year = $currentYear; $year >= $currentYear - 0; $year--) {
+                                                    echo "<option value='$year'>$year</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="period_month">เดือน</label>
-                                        <select class="form-control" id="period_month" name="period_month" required>
-                                            <option value="">เลือกเดือน</option>
-                                            <?php
-                                            $months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-                                            foreach ($months as $index => $month) {
-                                                echo "<option value='" . ($index + 1) . "'>$month</option>";
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="d-flex">
+                                        <button type="button" id="LottoResultCheckBtn" class="btn btn-outline-primary flex-fill">
+                                            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i> ตรวจรางวัล Lotto</span>
+                                        </button>
+                                        <!--button type="button" id="exportExcelBtn" class="btn btn-outline-success flex-fill">
+                                            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i> Export Excel</span>
+                                        </button-->
+                                        <button type="button" id="backBtn" class="btn btn-outline-danger flex-fill">
+                                            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i> กลับหน้าแรก</span>
+                                        </button>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="period_year">ปีงวด</label>
-                                        <select class="form-control" id="period_year" name="period_year" required>
-                                            <?php
-                                            $currentYear = date("Y");
-                                            for ($year = $currentYear; $year >= $currentYear - 0; $year--) {
-                                                echo "<option value='$year'>$year</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-
-                                    <button type="button" id="LottoResultCheckBtn"
-                                            class="form-control btn btn-outline-primary">
-                                        <span><i class="fa fa-thumbs-up" aria-hidden="true"></i> ตรวจรางวัล Lotto</span>
-                                    </button>
 
                                 </form>
 
@@ -92,13 +102,22 @@
         width: 100%;
         border-collapse: collapse;
     }
+
     #winnersTable th, #winnersTable td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: center;
     }
+
     #winnersTable th {
         background-color: #f2f2f2;
+    }
+</style>
+
+<style>
+    .card-header {
+        background-color: #28a745; /* สีเขียว */
+        color: white; /* ข้อความเป็นสีขาว */
     }
 </style>
 
@@ -110,7 +129,7 @@
         let period_year = $("#period_year").val();
 
         // ตรวจสอบว่าค่าครบถ้วนไหม
-        if(period_no == "" || period_month == "" || period_year == "") {
+        if (period_no == "" || period_month == "" || period_year == "") {
             alert("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
@@ -124,18 +143,51 @@
                 period_month: period_month,
                 period_year: period_year
             },
-            beforeSend: function() {
+            beforeSend: function () {
                 $('#result').html("กำลังค้นหาผล...");
             },
-            success: function(response) {
+            success: function (response) {
                 // แสดงผลลัพธ์ที่ได้รับจาก PHP
                 $('#result').html(response);
             },
-            error: function() {
+            error: function () {
                 alert("เกิดข้อผิดพลาดในการค้นหา");
             }
         });
     });
+</script>
+
+<script>
+    $("#exportExcelBtn").click(function () {
+        // ดึงค่าที่เลือกจากฟอร์ม
+        let period_no = $("#period_no").val();
+        let period_month = $("#period_month").val();
+        let period_year = $("#period_year").val();
+
+        // ตรวจสอบว่าค่าครบถ้วนไหม
+        if (period_no == "" || period_month == "" || period_year == "") {
+            alert("กรุณากรอกข้อมูลให้ครบ");
+            return;
+        }
+
+        // ส่งข้อมูลไปยังไฟล์ PHP ด้วย AJAX
+        $.ajax({
+            url: "export_process/export_result_lotto.php", // ไฟล์ PHP ที่จะทำการส่งออก
+            method: "POST",
+            data: {
+                period_no: period_no,
+                period_month: period_month,
+                period_year: period_year
+            },
+            success: function (response) {
+                // หลังจากส่งข้อมูลแล้วไม่มีการตอบกลับจาก PHP เพราะเป็นการดาวน์โหลดไฟล์
+            },
+            error: function () {
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+            }
+        });
+    });
+
 </script>
 
 </body>

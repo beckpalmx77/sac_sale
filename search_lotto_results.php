@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $lotto_number_result_last2 = substr($row['lotto_number_result'], -2);
                 $where = "WHERE lotto_number LIKE '%" . $lotto_number_result_last2 . "'"; // เปรียบเทียบเลขท้าย 2 ตัว
             }
-
+            echo "<br>";
             echo "<div class='result-item'>";
-            echo $lotto_type_desc;
-            echo "ผลรางวัล: " . htmlspecialchars($row['lotto_number_result']) . "<br>";
+            echo "<b>" . $lotto_type_desc . "</b>";
+            echo "<b>ผลรางวัล: " . htmlspecialchars($row['lotto_number_result']) . "</b><br>";
 
             // ค้นหาผู้ถูกรางวัลจากตาราง ims_lotto
             $sql_str = "SELECT * FROM ims_lotto " . $where;
@@ -49,10 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt_lotto->rowCount() > 0) {
                 // ถ้ามีผู้ถูกรางวัล
                 echo "<table id='winnersTable' class='display' style='width: 100%; border-collapse: collapse;'>";
-                echo "<thead><tr><th>ผู้ถูกรางวัล</th><th>หมายเลขที่เลือก</th><th>เบอร์โทร</th><th>จังหวัด</th></tr></thead>";
+                echo "<thead><tr><th>ลำดับ</th><th>ผู้ถูกรางวัล</th><th>หมายเลขที่เลือก</th><th>เบอร์โทร</th><th>จังหวัด</th></tr></thead>";
                 echo "<tbody>";
+
+                $rank = 1; // เริ่มต้นที่ลำดับที่ 1
                 while ($lotto = $stmt_lotto->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr style='border: 1px solid #ddd;'>";
+                    echo "<td style='border: 1px solid #ddd; padding: 8px;'>" . $rank++ . "</td>"; // แสดงลำดับและเพิ่มค่าลำดับ
                     echo "<td style='border: 1px solid #ddd; padding: 8px;'>" . htmlspecialchars($lotto['lotto_name']) . "</td>";
                     echo "<td style='border: 1px solid #ddd; padding: 8px;'>" . htmlspecialchars($lotto['lotto_number']) . "</td>";
                     echo "<td style='border: 1px solid #ddd; padding: 8px;'>" . htmlspecialchars($lotto['lotto_phone']) . "</td>";

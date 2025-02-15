@@ -1,6 +1,7 @@
 {
     "require": {
         "mobiledetect/mobiledetectlib": "^2.8",
-        "geoip2/geoip2": "^2.13"
+        "geoip2/geoip2": "^2.13",
+        "phpoffice/phpspreadsheet": "^4.0"
     }
 }
