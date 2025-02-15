@@ -74,4 +74,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "ไม่พบผลรางวัลที่ค้นหา";
     }
 }
-?>
+

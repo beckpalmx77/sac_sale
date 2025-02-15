@@ -190,5 +190,13 @@
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("#backBtn").click(function () {
+            window.location.href = "sac_lotto_dashboard";
+        });
+    });
+</script>
+
 </body>
 </html>
