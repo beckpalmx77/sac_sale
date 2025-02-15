@@ -51,7 +51,7 @@ require_once 'config/connect_lotto_db.php';
                 </thead>
                 <tbody>
                 <?php
-                $stmt = $conn->prepare("SELECT * FROM ims_lotto order by id");
+                $stmt = $conn->prepare("SELECT * FROM ims_lotto ORDER BY id DESC ");
                 $stmt->execute();
                 $result = $stmt->fetchAll();
                 $line_no = 0;
@@ -86,7 +86,7 @@ require_once 'config/connect_lotto_db.php';
                         </td>
                         <td>
                             <!-- ปุ่ม Update -->
-                            <button class="btn btn-warning" onclick="openPopup(<?= $rows['id']; ?>)">Update Approve
+                            <button class="btn btn-outline-success" onclick="openPopup(<?= $rows['id']; ?>)">Update Approve
                                 Status
                             </button>
                         </td>
