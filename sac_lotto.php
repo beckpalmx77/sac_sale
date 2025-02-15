@@ -39,18 +39,18 @@ include('includes/CheckDevice.php');
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="button" id="sac-submit" class="form-control btn btn-primary">
+                                    <button type="button" id="customer-submit" class="form-control btn btn-primary">
                                         <span class="spinner">
                                             <i class="icon-spin icon-refresh" id="spinner"></i>
-                                        </span>ผู้ดูแลระบบ
+                                        </span>ลงทะเบียนร้านค้า
                                     </button>
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="button" id="customer-submit" class="form-control btn btn-primary">
+                                    <button type="button" id="sac-submit" class="form-control btn btn-primary">
                                         <span class="spinner">
                                             <i class="icon-spin icon-refresh" id="spinner"></i>
-                                        </span>ลงทะเบียนลูกค้า
+                                        </span>ผู้ดูแลระบบ
                                     </button>
                                 </div>
 

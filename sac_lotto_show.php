@@ -45,7 +45,8 @@ require_once 'config/connect_lotto_db.php';
                     <th width="15%">ชื่อ Sale</th>
                     <th width="15%">การอนุมัติ</th>
                     <th width="15%">วันที่บันทึก</th>
-                    <th width="15%">รูปภาพ</th> <!-- คอลัมน์ใหม่ -->
+                    <th width="15%">รูปภาพป้ายไวนิล</th> <!-- คอลัมน์ใหม่ -->
+                    <th width="15%">รูปภาพเลขหลังป้ายไวนิล</th> <!-- คอลัมน์ใหม่ -->
                     <th width="10%">Action</th> <!-- ปุ่ม Update -->
                 </tr>
                 </thead>
@@ -85,8 +86,24 @@ require_once 'config/connect_lotto_db.php';
                             ?>
                         </td>
                         <td>
+                            <?php
+                            // ตรวจสอบว่ามีไฟล์ภาพหรือไม่ และแสดงลิงก์
+                            if (!empty($rows['lotto_file2'])) {
+                                $files2 = explode(",", $rows['lotto_file2']); // แยกไฟล์หลายไฟล์
+                                $index2 = 1; // เริ่มต้นที่ลำดับ 1
+                                foreach ($files2 as $file2) {
+                                    echo '<a href="uploads/' . $file2 . '" target="_blank">รูปที่ ' . $index2 . '</a><br>';
+                                    $index2++; // เพิ่มลำดับทุกครั้ง
+                                }
+                            } else {
+                                echo "ไม่มีรูปภาพ";
+                            }
+                            ?>
+                        </td>
+                        <td>
                             <!-- ปุ่ม Update -->
-                            <button class="btn btn-outline-success" onclick="openPopup(<?= $rows['id']; ?>)">Update Approve
+                            <button class="btn btn-outline-success" onclick="openPopup(<?= $rows['id']; ?>)">Update
+                                Approve
                                 Status
                             </button>
                         </td>

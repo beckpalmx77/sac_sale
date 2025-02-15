@@ -108,10 +108,22 @@ include('includes/Header.php');
 
                                     <!-- อัปโหลดรูปภาพ -->
                                     <div class="form-group">
-                                        <label for="lotto_file" class="control-label">อัปโหลดรูปภาพ</label>
+                                        <label for="lotto_file" class="control-label">อัปโหลดรูปภาพ
+                                            (รูปป้ายไวนิล)</label>
                                         <input type="file" class="form-control" id="lotto_file" name="lotto_file[]"
                                                accept="image/*" multiple>
                                         <div class="preview mt-2" id="previewContainer">
+                                            <!-- Preview รูปภาพจะแสดงที่นี่ -->
+                                        </div>
+                                    </div>
+
+                                    <!-- อัปโหลดรูปภาพ -->
+                                    <div class="form-group">
+                                        <label for="lotto_file2" class="control-label">อัปโหลดรูปภาพ
+                                            (รูปเลขหลังป้ายไวนิล)</label>
+                                        <input type="file" class="form-control" id="lotto_file2" name="lotto_file2[]"
+                                               accept="image/*" multiple>
+                                        <div class="preview mt-2" id="previewContainer2">
                                             <!-- Preview รูปภาพจะแสดงที่นี่ -->
                                         </div>
                                     </div>
@@ -129,6 +141,16 @@ include('includes/Header.php');
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <button type="button" name="SearchBtn" id="SearchBtn" tabindex="4"
+                                                class="form-control btn btn-info">
+                                            <span>
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                                ค้นหาข้อมูลการลงทะเบียน
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <button type="button" name="backBtn" id="backBtn" tabindex="4"
                                                 class="form-control btn btn-danger">
                                             <span>
@@ -137,6 +159,7 @@ include('includes/Header.php');
                                             </span>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -306,6 +329,7 @@ include('includes/Header.php');
 </script>
 
 <script>
+
     $('#saveBtn').click(function () {
 
         let action = "SAVE_DATA";
@@ -316,6 +340,7 @@ include('includes/Header.php');
         let lotto_number = $('#lotto_number').val();
         let sale_name = $('#sale_name').val();
         let files = $('#lotto_file')[0].files; // ดึงไฟล์จาก input ที่รองรับหลายไฟล์
+        let files2 = $('#lotto_file2')[0].files; // ดึงไฟล์จาก input ที่รองรับหลายไฟล์
 
         // ตรวจสอบการกรอกข้อมูลทั้งหมด
         if (lotto_name === "") {
@@ -339,6 +364,18 @@ include('includes/Header.php');
             return;
         }
 
+        // ตรวจสอบว่ามีการอัพโหลดอย่างน้อย 2 รูปภาพ
+        if (files.length < 2) {
+            alertify.error("กรุณาอัพโหลดรูปภาพ ป้ายไวนิล อย่างน้อย 2 รูป");
+            return; // ไม่ทำการส่งข้อมูลไปยัง server หากมีไฟล์น้อยกว่า 2 รูป
+        }
+
+        // ตรวจสอบว่ามีการอัพโหลดอย่างน้อย 2 รูปภาพ
+        if (files2.length < 1) {
+            alertify.error("กรุณาอัพโหลดรูปภาพ เลขหลังป้ายไวนิล อย่างน้อย 1 รูป");
+            return; // ไม่ทำการส่งข้อมูลไปยัง server หากมีไฟล์น้อยกว่า 1 รูป
+        }
+
         // เตรียมข้อมูลที่ต้องการส่ง
         let formData = new FormData();
         formData.append("action", action);
@@ -349,12 +386,14 @@ include('includes/Header.php');
         formData.append("lotto_number", lotto_number);
         formData.append("sale_name", sale_name);
 
-        // เช็คว่ามีไฟล์ที่ถูกเลือกหรือไม่
-        if (files.length > 0) {
-            // แนบไฟล์ทั้งหมดที่เลือกเข้าไปใน FormData
-            for (let i = 0; i < files.length; i++) {
-                formData.append("lotto_file[]", files[i]); // ใช้ lotto_file[] เพื่อรองรับหลายไฟล์
-            }
+        // แนบไฟล์ทั้งหมดที่เลือกเข้าไปใน FormData
+        for (let i = 0; i < files.length; i++) {
+            formData.append("lotto_file[]", files[i]); // ใช้ lotto_file[] เพื่อรองรับหลายไฟล์
+        }
+
+        // แนบไฟล์ทั้งหมดที่เลือกเข้าไปใน FormData
+        for (let i = 0; i < files2.length; i++) {
+            formData.append("lotto_file2[]", files2[i]); // ใช้ lotto_file2[] เพื่อรองรับหลายไฟล์
         }
 
         // ส่งข้อมูลไปยัง server
@@ -368,11 +407,12 @@ include('includes/Header.php');
                 // ตรวจสอบค่าผลลัพธ์จาก PHP
                 if (response === "duplicate") {
                     alertify.error("หมายเลขสลากซ้ำ กรุณาตรวจสอบใหม่");
-                } else if (response > 1) {
+                } else if (response === 0) {
                     alertify.error("ไม่สามารถบันทึกข้อมูลได้ กรุณาตรวจสอบข้อมูล");
                 } else {
                     alertify.success("บันทึกสำเร็จ");
                     $('#lotto_form')[0].reset(); // ล้างฟอร์มหลังจากบันทึก
+                    window.location.href = `show_data_lotto.php?id=${response}`;
                 }
             },
             error: function (xhr, status, error) {
@@ -391,6 +431,7 @@ include('includes/Header.php');
             }
         });
     });
+
 </script>
 
 <script>
@@ -414,6 +455,39 @@ include('includes/Header.php');
                 }
                 reader.readAsDataURL(files[i]);
             }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#lotto_file2').change(function (event) {
+            // Clear existing previews
+            $('#previewContainer2').empty();
+
+            // Loop through selected files and create previews
+            let files2 = event.target.files;
+            for (let i = 0; i < files2.length; i++) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let imgElement = $('<img>')
+                        .attr('src', e.target.result)
+                        .css('max-width', '30%')
+                        .css('margin-right', '10px')
+                        .css('margin-bottom', '10px')
+                        .show();
+                    $('#previewContainer2').append(imgElement);
+                }
+                reader.readAsDataURL(files2[i]);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#SearchBtn').click(function () {
+            window.open('search_lotto_data', '_blank');
         });
     });
 </script>

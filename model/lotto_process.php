@@ -62,6 +62,33 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $lotto_files_str = NULL; // ถ้าไม่มีไฟล์ ให้เป็น NULL
     }
 
+
+    if (!empty($_FILES['lotto_file2']['name'][0])) {
+        $upload_dir = "../uploads/"; // โฟลเดอร์สำหรับเก็บไฟล์ที่อัปโหลด
+        $lotto_files2 = []; // Array เก็บชื่อไฟล์ที่อัปโหลด
+
+        // ลูปผ่านไฟล์ทั้งหมดที่ถูกเลือก
+        for ($i = 0; $i < count($_FILES['lotto_file2']['name']); $i++) {
+            $file_extension = pathinfo($_FILES["lotto_file2"]["name"][$i], PATHINFO_EXTENSION);
+            $unique_id = uniqid("file_", true); // ใช้ uniqid เพื่อให้ชื่อไฟล์ไม่ซ้ำ
+            $file_name = $unique_id . "." . $file_extension; // ชื่อไฟล์ใหม่ที่ไม่ซ้ำ
+            $file_path = $upload_dir . $file_name;
+
+            // ย้ายไฟล์ไปยังโฟลเดอร์ที่กำหนด
+            if (move_uploaded_file($_FILES["lotto_file2"]["tmp_name"][$i], $file_path)) {
+                $lotto_files2[] = $file_name; // เก็บชื่อไฟล์ลงใน array
+            } else {
+                echo "UPLOAD_FAILED";
+                exit();
+            }
+        }
+
+        // แปลง array ของชื่อไฟล์เป็น string
+        $lotto_files2_str = implode(",", $lotto_files2);
+    } else {
+        $lotto_files2_str = NULL;
+    }
+
     // รับ IP ของผู้ใช้
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         //ip from share internet
@@ -90,8 +117,8 @@ if ($_POST["action"] === 'SAVE_DATA') {
 
     if ($record <= 0) {
         // Insert ข้อมูลใหม่
-        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address,lotto_file)
-            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address,:lotto_file)";
+        $sql = "INSERT INTO ims_lotto(lotto_name,lotto_phone,lotto_province,lotto_number,sale_name,client_ip_address,lotto_file,lotto_file2)
+            VALUES (:lotto_name,:lotto_phone,:lotto_province,:lotto_number,:sale_name,:client_ip_address,:lotto_file,:lotto_file2)";
         $query = $conn->prepare($sql);
         $query->bindParam(':lotto_name', $lotto_name, PDO::PARAM_STR);
         $query->bindParam(':lotto_phone', $lotto_phone, PDO::PARAM_STR);
@@ -100,6 +127,7 @@ if ($_POST["action"] === 'SAVE_DATA') {
         $query->bindParam(':sale_name', $sale_name, PDO::PARAM_STR);
         $query->bindParam(':client_ip_address', $client_ip_address, PDO::PARAM_STR);
         $query->bindParam(':lotto_file', $lotto_files_str, PDO::PARAM_STR);
+        $query->bindParam(':lotto_file2', $lotto_files2_str, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
@@ -117,13 +145,13 @@ if ($_POST["action"] === 'SAVE_DATA') {
             $ins = 3;
         }
     } else {
-        $ins = 2;
+        $ins = 0;
     }
 
     if ($record <= 0 && $ins == 1) {
-        echo 1; // สำเร็จ
+        echo $lastInsertId; // สำเร็จ
     } else {
-        echo 3; // ล้มเหลว
+        echo 0; // ล้มเหลว
     }
 
 }

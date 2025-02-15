@@ -29,19 +29,25 @@ include('includes/Header.php');
 
                                 <div class="form-group">
                                     <button type="button" id="LottoSelBtn" class="form-control btn btn-primary">
-                                        <span><i class="fa fa-tags" aria-hidden="true"></i> เลือก Lotto</span>
+                                        <span><i class="fa fa-tags" aria-hidden="true"></i> เลือก Lotto สำหรับร้านค้า</span>
                                     </button>
                                 </div>
 
                                 <div class="form-group">
                                     <button type="button" id="LottoShoBtn" class="form-control btn btn-success">
-                                        <span><i class="fa fa-tags" aria-hidden="true"></i> หมายเลขเลือก Lotto</span>
+                                        <span><i class="fa fa-tags" aria-hidden="true"></i> หมายเลขที่ร้านค้าเลือก Lotto</span>
                                     </button>
                                 </div>
 
                                 <div class="form-group">
                                     <button type="button" id="LottoExpBtn" class="form-control btn btn-info">
                                         <span><i class="fa fa-tags" aria-hidden="true"></i> Export หมายเลขเลือก Lotto</span>
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="button" id="LottoResultBtn" class="form-control btn btn-success">
+                                        <span><i class="fa fa-tags" aria-hidden="true"></i> บันทึกเลขรางวัล Lotto ที่ออก</span>
                                     </button>
                                 </div>
 
@@ -68,6 +74,10 @@ include('includes/Header.php');
 
         $("#LottoShoBtn").click(function () {
             window.location.href = "sac_lotto_show";
+        });
+
+        $("#LottoResultBtn").click(function () {
+            window.location.href = "sac_lotto_result_period";
         });
 
         $("#LottoExpBtn").click(function () {
