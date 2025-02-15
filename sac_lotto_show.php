@@ -66,7 +66,10 @@ require_once 'config/connect_lotto_db.php';
                         <td><?= $rows['lotto_number']; ?></td>
                         <td><?= $rows['sale_name']; ?></td>
                         <td style="color: <?= $rows['approve_status'] == 'Y' ? 'green' : ($rows['approve_status'] == 'N' ? 'gray' : 'black'); ?>;">
-                            <?= $rows['approve_status']; ?>
+                            <?= $rows['approve_status'] == 'Y' ? 'อนุมัติ' : ($rows['approve_status'] == 'N' ? 'ยังไม่อนุมัติ' : ''); ?>
+                        </td>
+
+                        <?= $rows['approve_status']; ?>
                         </td>
                         <td><?= $rows['create_date']; ?></td>
                         <td>
