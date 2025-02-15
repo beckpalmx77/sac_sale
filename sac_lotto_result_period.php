@@ -76,10 +76,21 @@ include('includes/CheckDevice.php');
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="lotto_type">ประเภทเลขท้าย</label>
+                                        <select class="form-control" id="lotto_type" name="lotto_type" required>
+                                            <option value="">เลือกประเภทรางวัล</option>
+                                            <option value="2">เลขท้าย 3 ตัว</option>
+                                            <option value="1">เลขท้าย 2 ตัว</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="lotto_number_result">เลขรางวัล</label>
                                         <input type="text" class="form-control" id="lotto_number_result"
                                                name="lotto_number_result" required>
                                     </div>
+
+                                    <input type="hidden" id="action" name="action" value="SAVE_PERIOD_RESULT">
 
                                     <div class="form-group">
                                         <button type="submit" class="form-control btn btn-primary">
@@ -120,7 +131,7 @@ include('includes/CheckDevice.php');
             let formData = $(this).serialize();
 
             $.ajax({
-                url: "save_lotto_period.php",
+                url: "model/manage_lotto_process.php",
                 type: "POST",
                 data: formData,
                 beforeSend: function () {
@@ -141,16 +152,17 @@ include('includes/CheckDevice.php');
 </script>
 
 <script>
-    // ดึงเดือนปัจจุบัน (0-11) และเพิ่ม 1 เพื่อให้ตรงกับค่าของ option (1-12)
-    let currentMonth = new Date().getMonth() + 1;
-
-    // กำหนดค่าให้กับ select โดยอัตโนมัติ
-    document.getElementById('period_month').value = currentMonth;
+    $(document).ready(function () {
+        let currentMonth = new Date().getMonth() + 1;
+        $('#period_month').val(currentMonth);
+    });
 </script>
 
 <script>
-    // ดึงปีปัจจุบันและใส่ในช่อง input
-    document.getElementById('period_year').value = new Date().getFullYear();
+    $(document).ready(function () {
+        let currentYear = new Date().getFullYear();
+        $('#period_year').val(currentYear);
+    });
 </script>
 
 <script>

@@ -52,6 +52,12 @@ include('includes/Header.php');
                                 </div>
 
                                 <div class="form-group">
+                                    <button type="button" id="LottoResultCheckBtn" class="form-control btn btn-info">
+                                        <span><i class="fa fa-tags" aria-hidden="true"></i> ตรวจรางวัล Lotto</span>
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
                                     <button type="button" id="backBtn" class="form-control btn btn-danger">
                                         <span><i class="fa fa-reply" aria-hidden="true"></i> กลับหน้าแรก</span>
                                     </button>
@@ -77,7 +83,13 @@ include('includes/Header.php');
         });
 
         $("#LottoResultBtn").click(function () {
-            window.location.href = "sac_lotto_result_period";
+           //window.location.href = "sac_lotto_result_period";
+            window.location.href = "manage-period-lotto";
+        });
+
+        $("#LottoResultCheckBtn").click(function () {
+            //window.location.href = "sac_lotto_result_period";
+            window.location.href = "result_lotto";
         });
 
         $("#LottoExpBtn").click(function () {
