@@ -245,7 +245,7 @@ include('includes/Header.php');
             let width = 3;
             let fil = 0;
             $('#lotto_number').val(pad($('#lotto_number').val(), width, fil));
-            if ($('#lotto_number').val() >= 1 && $('#lotto_number').val() <= 999) {
+            if ($('#lotto_number').val() >= 0 && $('#lotto_number').val() <= 999) {
                 let action = "CHECK_NUMBER_DATA";
                 let table_name = "ims_lotto";
                 let cond = " WHERE lotto_number = " + $('#lotto_number').val();
@@ -256,8 +256,8 @@ include('includes/Header.php');
                     data: formData,
                     success: function (response) {
                         if (response > 0) {
-                            alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
-                            $('#lotto_number').val("");
+                            //alertify.error("มีการจองหมายเลขนี้ในระบบแล้ว");
+                            //$('#lotto_number').val("");
                         }
                     },
                     error: function (response) {
@@ -266,7 +266,7 @@ include('includes/Header.php');
                 });
 
             } else {
-                alertify.error("ป้อนเลข 001 - 999 เท่านั้น");
+                alertify.error("ป้อนเลข 000 - 999 เท่านั้น");
                 $('#lotto_number').val('');
             }
 
