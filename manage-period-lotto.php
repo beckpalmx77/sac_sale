@@ -119,7 +119,7 @@
                         <input type="hidden" name="action" id="action" value=""/>
                         <input type="submit" name="save" id="save" class="btn btn-primary" value="บันทึก"/>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด <i
-                                    class="fa fa-window-close"></i></button>
+                                    class="fa fa-times"></i></button>
                     </div>
                 </form>
             </div>
