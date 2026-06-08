@@ -148,6 +148,9 @@ if (strlen($_SESSION['alogin']) == "") {
                         <h6 class="m-0 font-weight-bold text-title-premium">
                             <i class="fa fa-table"></i> ตารางวิเคราะห์ระดับสต็อกสินค้าคงเหลือเทียบอัตราขาย
                         </h6>
+                        <button type="button" id="btn_export_excel" class="btn btn-success btn-sm font-weight-bold">
+                            <i class="fa fa-file-excel-o"></i> <i class="fa fa-download"></i> ส่งออก Excel (ตามตัวกรอง)
+                        </button>
                     </div>
                     
                     <div class="card-body">
@@ -375,6 +378,22 @@ if (strlen($_SESSION['alogin']) == "") {
             // Back Button navigation
             $("#backBtn").click(function () {
                 window.location.href = "dashboard";
+            });
+
+            // Export Excel button event listener
+            $("#btn_export_excel").click(function () {
+                let selected_year = $('#filter_year').val();
+                let selected_channel = $('#filter_channel').val();
+                let selected_category = $('#filter_category').val();
+                let search_val = $('#TableAnalysisList').DataTable().search();
+                
+                let url = 'export_process/export_stock_analysis.php?' + $.param({
+                    year: selected_year,
+                    channel: selected_channel,
+                    category: selected_category,
+                    search: search_val
+                });
+                window.location.href = url;
             });
 
             // Initialize DataTable
