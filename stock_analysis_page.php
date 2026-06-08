@@ -97,14 +97,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <option value="2022">2022</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3 mb-md-0" <?php if ($_SESSION['account_type'] === 'cockpit' || $_SESSION['account_type'] === 'btc') echo 'style="display:none;"'; ?>>
+                             <div class="col-md-4 mb-3 mb-md-0">
                                 <label for="filter_channel" class="form-label text-dark font-weight-bold">
                                     <i class="fa fa-shopping-bag text-primary"></i> เลือกประเภทช่องทางการขาย (Channel)
                                 </label>
                                 <select class="form-control" id="filter_channel" name="filter_channel">
-                                    <option value="cockpit" <?php if ($_SESSION['account_type'] === 'cockpit') echo 'selected'; ?>>Cockpit (ค้าปลีก)</option>
-                                    <option value="sac" <?php if ($_SESSION['account_type'] !== 'admin' && $_SESSION['account_type'] !== 'sac' && $_SESSION['account_type'] !== '') echo 'disabled'; ?>>SAC (ค้าส่ง)</option>
-                                    <option value="btc" <?php if ($_SESSION['account_type'] === 'btc') echo 'selected'; ?>>BTC</option>
+                                    <?php if ($_SESSION['account_type'] === 'admin' || $_SESSION['account_type'] === '') { ?>
+                                        <option value="cockpit" selected>Cockpit (ค้าปลีก)</option>
+                                        <option value="sac">SAC (ค้าส่ง)</option>
+                                        <option value="btc">BTC</option>
+                                    <?php } elseif ($_SESSION['account_type'] === 'cockpit') { ?>
+                                        <option value="cockpit" selected>Cockpit (ค้าปลีก)</option>
+                                    <?php } elseif ($_SESSION['account_type'] === 'btc') { ?>
+                                        <option value="btc" selected>BTC</option>
+                                    <?php } elseif ($_SESSION['account_type'] === 'sac') { ?>
+                                        <option value="sac" selected>SAC (ค้าส่ง)</option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div class="col-md-4 text-md-right mt-3 mt-md-0">
@@ -160,15 +168,15 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <th class="text-right">AVG</th>
                                     <th class="text-right">ส่งไปเพิ่ม</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                 </tr>
@@ -190,15 +198,15 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <th class="text-right">AVG</th>
                                     <th class="text-right">ส่งไปเพิ่ม</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                     <th class="text-right">340</th>
-                                    <th class="text-right">ราชพฤกษ</th>
+                                    <th class="text-right">ราชพฤกษ์</th>
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                     <th class="text-center">การดำเนินการ</th>

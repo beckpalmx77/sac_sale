@@ -5,6 +5,41 @@ error_reporting(0);
 include('../config/connect_db.php');
 include('../config/connect_sqlserver.php');
 
+// Helper functions for mapping DB codes to standard branch names
+function get_standard_branch_from_sales($db_branch) {
+    $db_branch = strtoupper(trim($db_branch));
+    if ($db_branch === 'CP-340' || $db_branch === '340' || $db_branch === 'SAC') {
+        return '340';
+    }
+    if ($db_branch === 'CP-RP' || $db_branch === 'RQ' || stripos($db_branch, 'ราชพฤกษ์') !== false) {
+        return 'ราชพฤกษ์';
+    }
+    if ($db_branch === 'CP-BY' || stripos($db_branch, 'บางใหญ่') !== false) {
+        return 'บางใหญ่';
+    }
+    if ($db_branch === 'CP-BB' || stripos($db_branch, 'บางบอน') !== false) {
+        return 'บางบอน';
+    }
+    return null;
+}
+
+function get_standard_branch_from_stock($wh_code) {
+    $wh_code = strtoupper(trim($wh_code));
+    if ($wh_code === 'T007' || $wh_code === 'T008' || $wh_code === 'SAC' || stripos($wh_code, '340') !== false) {
+        return '340';
+    }
+    if ($wh_code === 'T009' || stripos($wh_code, 'RP') !== false || stripos($wh_code, 'ราชพฤกษ์') !== false) {
+        return 'ราชพฤกษ์';
+    }
+    if ($wh_code === 'T010' || stripos($wh_code, 'BY') !== false || stripos($wh_code, 'บางใหญ่') !== false) {
+        return 'บางใหญ่';
+    }
+    if ($wh_code === 'T011' || stripos($wh_code, 'BB') !== false || stripos($wh_code, 'บางบอน') !== false) {
+        return 'บางบอน';
+    }
+    return null;
+}
+
 // Auto create the replenishment override table if not exists
 try {
     $conn->query("CREATE TABLE IF NOT EXISTS ims_product_branch_replenishment (
@@ -137,8 +172,8 @@ if ($_POST["action"] === 'GET_PRODUCT_ANALYSIS') {
         $needed = $avg_sales - $stock;
         $total_sales = array_sum(array_slice($b_monthly_12, 0, 6, true)); // Jan to Jun total
 
-        // 3. Branches breakdown (340, ราชพฤกษ, บางใหญ่, บางบอน)
-        $branches = ['340', 'ราชพฤกษ', 'บางใหญ่', 'บางบอน'];
+        // 3. Branches breakdown (340, ราชพฤกษ์, บางใหญ่, บางบอน)
+        $branches = ['340', 'ราชพฤกษ์', 'บางใหญ่', 'บางบอน'];
         
         // Branch Stock
         $branch_stock = array_fill_keys($branches, 0.0);
@@ -152,10 +187,9 @@ if ($_POST["action"] === 'GET_PRODUCT_ANALYSIS') {
                 $stmt_b_stk->execute(['sku' => $p_code]);
                 while ($bs_row = $stmt_b_stk->fetch(PDO::FETCH_ASSOC)) {
                     $wh = trim($bs_row['WH_CODE']);
-                    foreach ($branches as $b) {
-                        if (stripos($wh, $b) !== false) {
-                            $branch_stock[$b] += (float)$bs_row['total_stock'];
-                        }
+                    $std_b = get_standard_branch_from_stock($wh);
+                    if ($std_b !== null) {
+                        $branch_stock[$std_b] += (float)$bs_row['total_stock'];
                     }
                 }
             } catch (Exception $e) {}
@@ -169,10 +203,9 @@ if ($_POST["action"] === 'GET_PRODUCT_ANALYSIS') {
                 $stmt_b_stk->execute(['sku' => $p_code]);
                 while ($bs_row = $stmt_b_stk->fetch(PDO::FETCH_ASSOC)) {
                     $wh = trim($bs_row['WH_CODE']);
-                    foreach ($branches as $b) {
-                        if (stripos($wh, $b) !== false) {
-                            $branch_stock[$b] += (float)$bs_row['total_stock'];
-                        }
+                    $std_b = get_standard_branch_from_stock($wh);
+                    if ($std_b !== null) {
+                        $branch_stock[$std_b] += (float)$bs_row['total_stock'];
                     }
                 }
             } catch (Exception $e) {}
@@ -197,14 +230,13 @@ if ($_POST["action"] === 'GET_PRODUCT_ANALYSIS') {
                 $m = (int)$bs_row['month_num'];
                 $qty = (float)$bs_row['qty'];
                 
-                foreach ($branches as $b) {
-                    if (stripos($br, $b) !== false) {
-                        if ($m >= 1 && $m <= 6) { // Jan to Jun total
-                            $branch_sales_tot[$b] += $qty;
-                        }
-                        if ($m >= 1 && $m <= 5) { // Jan to May average
-                            $temp_b_m[$b][$m] += $qty;
-                        }
+                $std_b = get_standard_branch_from_sales($br);
+                if ($std_b !== null) {
+                    if ($m >= 1 && $m <= 6) { // Jan to Jun total
+                        $branch_sales_tot[$std_b] += $qty;
+                    }
+                    if ($m >= 1 && $m <= 5) { // Jan to May average
+                        $temp_b_m[$std_b][$m] += $qty;
                     }
                 }
             }
@@ -254,19 +286,19 @@ if ($_POST["action"] === 'GET_PRODUCT_ANALYSIS') {
             "needed_raw" => $needed,
             // Branch sales
             "sales_340" => number_format($branch_sales_tot['340'], 2),
-            "sales_ratchaphruek" => number_format($branch_sales_tot['ราชพฤกษ'], 2),
+            "sales_ratchaphruek" => number_format($branch_sales_tot['ราชพฤกษ์'], 2),
             "sales_bangyai" => number_format($branch_sales_tot['บางใหญ่'], 2),
             "sales_bangbon" => number_format($branch_sales_tot['บางบอน'], 2),
             // Branch stocks
             "stock_340" => number_format($branch_stock['340'], 2),
-            "stock_ratchaphruek" => number_format($branch_stock['ราชพฤกษ'], 2),
+            "stock_ratchaphruek" => number_format($branch_stock['ราชพฤกษ์'], 2),
             "stock_bangyai" => number_format($branch_stock['บางใหญ่'], 2),
             "stock_bangbon" => number_format($branch_stock['บางบอน'], 2),
             // Branch needed
             "needed_340" => number_format($branch_needed['340'], 2),
             "needed_340_raw" => $branch_needed['340'],
-            "needed_ratchaphruek" => number_format($branch_needed['ราชพฤกษ'], 2),
-            "needed_ratchaphruek_raw" => $branch_needed['ราชพฤกษ'],
+            "needed_ratchaphruek" => number_format($branch_needed['ราชพฤกษ์'], 2),
+            "needed_ratchaphruek_raw" => $branch_needed['ราชพฤกษ์'],
             "needed_bangyai" => number_format($branch_needed['บางใหญ่'], 2),
             "needed_bangyai_raw" => $branch_needed['บางใหญ่'],
             "needed_bangbon" => number_format($branch_needed['บางบอน'], 2),
@@ -304,8 +336,8 @@ if ($_POST["action"] === 'GET_BRANCH_DETAILS') {
         $sales_table = 'ims_product_sale_cockpit';
     }
     
-    // We analyze 4 main branches: 340, ราชพฤกษ, บางใหญ่, บางบอน
-    $branches = ['340', 'ราชพฤกษ', 'บางใหญ่', 'บางบอน'];
+    // We analyze 4 main branches: 340, ราชพฤกษ์, บางใหญ่, บางบอน
+    $branches = ['340', 'ราชพฤกษ์', 'บางใหญ่', 'บางบอน'];
     
     // Load saved replenishment overrides
     $saved_needed = array_fill_keys($branches, null);
@@ -325,50 +357,74 @@ if ($_POST["action"] === 'GET_BRANCH_DETAILS') {
     // Check if SQL Server connection is active
     $sqlserver_active = isset($conn_sqlsvr) && $conn_sqlsvr;
 
-    foreach ($branches as $b) {
-        // 1. Calculate Branch Stock
-        $b_stock = 0;
-        if ($sqlserver_active) {
-            try {
-                $sql_stk = "SELECT SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM v_stock_movement WHERE SKU_CODE = :sku AND WH_CODE = :branch";
-                $stmt_stk = $conn_sqlsvr->prepare($sql_stk);
-                $stmt_stk->execute(['sku' => $p_code, 'branch' => $b]);
-                $b_stock = $stmt_stk->fetch(PDO::FETCH_ASSOC)['total_stock'] ?? 0;
-            } catch (Exception $e) {
-                // MySQL Fallback
-                $sql_stk = "SELECT SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM ims_product_stock_balance WHERE SKU_CODE = :sku AND WH_CODE = :branch";
-                $stmt_stk = $conn->prepare($sql_stk);
-                $stmt_stk->execute(['sku' => $p_code, 'branch' => $b]);
-                $b_stock = $stmt_stk->fetch(PDO::FETCH_ASSOC)['total_stock'] ?? 0;
-            }
-        } else {
-            // MySQL
-            $sql_stk = "SELECT SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM ims_product_stock_balance WHERE SKU_CODE = :sku AND WH_CODE = :branch";
-            $stmt_stk = $conn->prepare($sql_stk);
-            $stmt_stk->execute(['sku' => $p_code, 'branch' => $b]);
-            $b_stock = $stmt_stk->fetch(PDO::FETCH_ASSOC)['total_stock'] ?? 0;
-        }
-
-        // 2. Calculate Branch Monthly Sales (Jan-Dec)
-        $b_monthly_12 = array_fill(1, 12, 0.0);
+    // 1. Calculate Mapped Branch Stocks (Grouped from all WHs for this SKU)
+    $b_stock_mapped = array_fill_keys($branches, 0.0);
+    if ($sqlserver_active) {
         try {
-            $sql_b_m_12 = "SELECT CAST(DI_MONTH AS UNSIGNED) as month_num, SUM(CAST(TRD_QTY AS DECIMAL(10,2))) as qty 
-                           FROM " . $sales_table . " 
-                           WHERE SKU_CODE = :sku AND DI_YEAR = :year AND BRANCH LIKE :branch
-                           GROUP BY DI_MONTH";
-            $stmt_b_m_12 = $conn->prepare($sql_b_m_12);
-            // In SQL DB, BRANCH is stored as 'CP-340' or similar, let's normalize or check matches.
-            $branch_param = ($channel === 'cockpit') ? "%" . $b : $b;
-            $stmt_b_m_12->execute(['sku' => $p_code, 'year' => $year, 'branch' => $branch_param]);
-            while ($bm_row = $stmt_b_m_12->fetch(PDO::FETCH_ASSOC)) {
-                $m = (int)$bm_row['month_num'];
-                if ($m >= 1 && $m <= 12) {
-                    $b_monthly_12[$m] = (float)$bm_row['qty'];
+            $sql_stk = "SELECT WH_CODE, SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM v_stock_movement WHERE SKU_CODE = :sku GROUP BY WH_CODE";
+            $stmt_stk = $conn_sqlsvr->prepare($sql_stk);
+            $stmt_stk->execute(['sku' => $p_code]);
+            while ($stk_row = $stmt_stk->fetch(PDO::FETCH_ASSOC)) {
+                $wh = trim($stk_row['WH_CODE']);
+                $std_b = get_standard_branch_from_stock($wh);
+                if ($std_b !== null) {
+                    $b_stock_mapped[$std_b] += (float)$stk_row['total_stock'];
                 }
             }
         } catch (Exception $e) {
-            // Keep 0
+            // MySQL fallback
+            $sql_stk = "SELECT WH_CODE, SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM ims_product_stock_balance WHERE SKU_CODE = :sku GROUP BY WH_CODE";
+            $stmt_stk = $conn->prepare($sql_stk);
+            $stmt_stk->execute(['sku' => $p_code]);
+            while ($stk_row = $stmt_stk->fetch(PDO::FETCH_ASSOC)) {
+                $wh = trim($stk_row['WH_CODE']);
+                $std_b = get_standard_branch_from_stock($wh);
+                if ($std_b !== null) {
+                    $b_stock_mapped[$std_b] += (float)$stk_row['total_stock'];
+                }
+            }
         }
+    } else {
+        $sql_stk = "SELECT WH_CODE, SUM(CAST(QTY AS DECIMAL(10,2))) as total_stock FROM ims_product_stock_balance WHERE SKU_CODE = :sku GROUP BY WH_CODE";
+        $stmt_stk = $conn->prepare($sql_stk);
+        $stmt_stk->execute(['sku' => $p_code]);
+        while ($stk_row = $stmt_stk->fetch(PDO::FETCH_ASSOC)) {
+            $wh = trim($stk_row['WH_CODE']);
+            $std_b = get_standard_branch_from_stock($wh);
+            if ($std_b !== null) {
+                $b_stock_mapped[$std_b] += (float)$stk_row['total_stock'];
+            }
+        }
+    }
+
+    // 2. Calculate Mapped Branch Monthly Sales (Grouped from all BRANCH/Month combinations)
+    $b_sales_monthly = [];
+    foreach ($branches as $b) {
+        $b_sales_monthly[$b] = array_fill(1, 12, 0.0);
+    }
+    
+    try {
+        $sql_b_sales = "SELECT BRANCH, CAST(DI_MONTH AS UNSIGNED) as month_num, SUM(CAST(TRD_QTY AS DECIMAL(10,2))) as qty 
+                        FROM " . $sales_table . " 
+                        WHERE SKU_CODE = :sku AND DI_YEAR = :year 
+                        GROUP BY BRANCH, DI_MONTH";
+        $stmt_b_sales = $conn->prepare($sql_b_sales);
+        $stmt_b_sales->execute(['sku' => $p_code, 'year' => $year]);
+        while ($s_row = $stmt_b_sales->fetch(PDO::FETCH_ASSOC)) {
+            $br = trim($s_row['BRANCH']);
+            $m = (int)$s_row['month_num'];
+            $qty = (float)$s_row['qty'];
+            
+            $std_b = get_standard_branch_from_sales($br);
+            if ($std_b !== null && $m >= 1 && $m <= 12) {
+                $b_sales_monthly[$std_b][$m] += $qty;
+            }
+        }
+    } catch (Exception $e) {}
+
+    foreach ($branches as $b) {
+        $b_stock = $b_stock_mapped[$b];
+        $b_monthly_12 = $b_sales_monthly[$b];
         
         $b_sales_total = array_sum($b_monthly_12);
         $b_avg_sales = array_sum(array_slice($b_monthly_12, 0, 5, true)) / 5; // Jan to May average
