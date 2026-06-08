@@ -1,4 +1,5 @@
 <?php
+include('config/connect_db.php');
 include('includes/Header.php');
 if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
@@ -67,7 +68,7 @@ if (strlen($_SESSION['alogin']) == "") {
     
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
-            <div class="col-lg-11 col-xl-10">
+            <div class="col-12">
                 
                 <!-- Page Title Header -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -85,9 +86,9 @@ if (strlen($_SESSION['alogin']) == "") {
                 <div class="card control-card mb-4">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="col-md-3 mb-3 mb-md-0">
                                 <label for="filter_year" class="form-label text-dark font-weight-bold">
-                                    <i class="fa fa-calendar text-primary"></i> เลือกปีในการวิเคราะห์ยอดขาย
+                                    <i class="fa fa-calendar text-primary"></i> เลือกปีในการวิเคราะห์
                                 </label>
                                 <select class="form-control" id="filter_year" name="filter_year">
                                     <option value="2026" selected>2026 (ปีปัจจุบัน)</option>
@@ -97,9 +98,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <option value="2022">2022</option>
                                 </select>
                             </div>
-                             <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="col-md-3 mb-3 mb-md-0">
                                 <label for="filter_channel" class="form-label text-dark font-weight-bold">
-                                    <i class="fa fa-shopping-bag text-primary"></i> เลือกประเภทช่องทางการขาย (Channel)
+                                    <i class="fa fa-shopping-bag text-primary"></i> ช่องทางการขาย
                                 </label>
                                 <select class="form-control" id="filter_channel" name="filter_channel">
                                     <?php if ($_SESSION['account_type'] === 'admin' || $_SESSION['account_type'] === '') { ?>
@@ -115,8 +116,25 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                <button type="button" id="btn_refresh" class="btn btn-primary btn-block-md">
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label for="filter_category" class="form-label text-dark font-weight-bold">
+                                    <i class="fa fa-tags text-primary"></i> หมวดหมู่สินค้า (ICCAT_NAME)
+                                </label>
+                                <select class="form-control" id="filter_category" name="filter_category">
+                                    <option value="">--- ทั้งหมด ---</option>
+                                    <?php
+                                    try {
+                                        $stmt_cats = $conn->query("SELECT ICCAT_NAME FROM ims_product_stock_balance WHERE ICCAT_NAME IS NOT NULL AND ICCAT_NAME != '' GROUP BY ICCAT_NAME ORDER BY ICCAT_NAME ASC");
+                                        $categories = $stmt_cats->fetchAll(PDO::FETCH_COLUMN);
+                                        foreach ($categories as $cat) {
+                                            echo '<option value="' . htmlspecialchars($cat, ENT_QUOTES) . '">' . htmlspecialchars($cat) . '</option>';
+                                        }
+                                    } catch (Exception $e) {}
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-3 text-md-right mt-3 mt-md-0">
+                                <button type="button" id="btn_refresh" class="btn btn-primary btn-block" style="margin-top: 32px;">
                                     <i class="fa fa-refresh"></i> ประมวลผลข้อมูลใหม่
                                 </button>
                             </div>
@@ -180,6 +198,39 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <th class="text-right">บางใหญ่</th>
                                     <th class="text-right">บางบอน</th>
                                 </tr>
+                                <!--
+                                <tr id="table_sum_row" style="background-color: #eef2f7; font-weight: bold; border-bottom: 2px solid #cbd5e0;">
+                                    <th colspan="2" class="text-center text-primary font-weight-bold" style="vertical-align: middle;">ผลรวมทั้งหมด (กรองแล้ว)</th>
+                                    <th id="sum_m1" class="text-right text-dark">0.00</th>
+                                    <th id="sum_m2" class="text-right text-dark">0.00</th>
+                                    <th id="sum_m3" class="text-right text-dark">0.00</th>
+                                    <th id="sum_m4" class="text-right text-dark">0.00</th>
+                                    <th id="sum_m5" class="text-right text-dark">0.00</th>
+                                    <th id="sum_m6" class="text-right text-dark">0.00</th>
+                                    <th id="sum_total_sales" class="text-right text-primary font-weight-bold">0.00</th>
+                                    <th id="sum_stock" class="text-right text-dark">0.00</th>
+                                    <th id="sum_max" class="text-right text-dark">0.00</th>
+                                    <th id="sum_min" class="text-right text-dark">0.00</th>
+                                    <th id="sum_avg" class="text-right text-dark">0.00</th>
+                                    <th id="sum_needed" class="text-right text-dark">0.00</th>
+                                    
+                                    <th id="sum_sales_340" class="text-right text-dark">0.00</th>
+                                    <th id="sum_sales_ratchaphruek" class="text-right text-dark">0.00</th>
+                                    <th id="sum_sales_bangyai" class="text-right text-dark">0.00</th>
+                                    <th id="sum_sales_bangbon" class="text-right text-dark">0.00</th>
+                                    
+                                    <th id="sum_stock_340" class="text-right text-dark">0.00</th>
+                                    <th id="sum_stock_ratchaphruek" class="text-right text-dark">0.00</th>
+                                    <th id="sum_stock_bangyai" class="text-right text-dark">0.00</th>
+                                    <th id="sum_stock_bangbon" class="text-right text-dark">0.00</th>
+                                    
+                                    <th id="sum_needed_340" class="text-right text-dark">0.00</th>
+                                    <th id="sum_needed_ratchaphruek" class="text-right text-dark">0.00</th>
+                                    <th id="sum_needed_bangyai" class="text-right text-dark">0.00</th>
+                                    <th id="sum_needed_bangbon" class="text-right text-dark">0.00</th>
+                                    <th></th>
+                                </tr>
+                                -->
                                 </thead>
                                 <tfoot>
                                 <tr>
@@ -330,13 +381,15 @@ if (strlen($_SESSION['alogin']) == "") {
             function load_analysis_table() {
                 let selected_year = $('#filter_year').val();
                 let selected_channel = $('#filter_channel').val();
+                let selected_category = $('#filter_category').val();
                 
                 $('#TableAnalysisList').DataTable().clear().destroy();
                 
                 let formData = {
                     action: "GET_PRODUCT_ANALYSIS", 
                     year: selected_year, 
-                    channel: selected_channel
+                    channel: selected_channel,
+                    category: selected_category
                 };
                 
                 $('#TableAnalysisList').DataTable({
@@ -360,7 +413,56 @@ if (strlen($_SESSION['alogin']) == "") {
                     'scrollX': true,
                     'ajax': {
                         'url': 'model/manage_stock_analysis_process.php',
-                        'data': formData
+                        'data': formData,
+                        'dataSrc': function (json) {
+                            /*
+                            if (json.searchSums) {
+                                let sums = json.searchSums;
+                                $('#sum_m1').text(sums.sum_m1);
+                                $('#sum_m2').text(sums.sum_m2);
+                                $('#sum_m3').text(sums.sum_m3);
+                                $('#sum_m4').text(sums.sum_m4);
+                                $('#sum_m5').text(sums.sum_m5);
+                                $('#sum_m6').text(sums.sum_m6);
+                                $('#sum_total_sales').text(sums.sum_total_sales);
+                                $('#sum_stock').text(sums.sum_stock);
+                                $('#sum_max').text(sums.sum_max);
+                                $('#sum_min').text(sums.sum_min);
+                                $('#sum_avg').text(sums.sum_avg);
+                                
+                                let needed_val = parseFloat(sums.sum_needed.replace(/,/g, ''));
+                                if (needed_val > 0) {
+                                    $('#sum_needed').html('<span class="badge-danger-custom">+' + sums.sum_needed + '</span>');
+                                } else {
+                                    $('#sum_needed').html('<span class="badge-success-custom">' + sums.sum_needed + '</span>');
+                                }
+                                
+                                $('#sum_sales_340').text(sums.sum_sales_340);
+                                $('#sum_sales_ratchaphruek').text(sums.sum_sales_ratchaphruek);
+                                $('#sum_sales_bangyai').text(sums.sum_sales_bangyai);
+                                $('#sum_sales_bangbon').text(sums.sum_sales_bangbon);
+                                
+                                $('#sum_stock_340').text(sums.sum_stock_340);
+                                $('#sum_stock_ratchaphruek').text(sums.sum_stock_ratchaphruek);
+                                $('#sum_stock_bangyai').text(sums.sum_stock_bangyai);
+                                $('#sum_stock_bangbon').text(sums.sum_stock_bangbon);
+                                
+                                function update_badge(selector, value_str) {
+                                    let val = parseFloat(value_str.replace(/,/g, ''));
+                                    if (val > 0) {
+                                        $(selector).html('<span class="badge-danger-custom">+' + value_str + '</span>');
+                                    } else {
+                                        $(selector).html('<span class="badge-success-custom">' + value_str + '</span>');
+                                    }
+                                }
+                                update_badge('#sum_needed_340', sums.sum_needed_340);
+                                update_badge('#sum_needed_ratchaphruek', sums.sum_needed_ratchaphruek);
+                                update_badge('#sum_needed_bangyai', sums.sum_needed_bangyai);
+                                update_badge('#sum_needed_bangbon', sums.sum_needed_bangbon);
+                            }
+                            */
+                            return json.aaData;
+                        }
                     },
                     'columns': [
                         {data: 'product_id'},
@@ -440,7 +542,7 @@ if (strlen($_SESSION['alogin']) == "") {
             load_analysis_table();
 
             // Refresh button & Filter change triggers reloading
-            $("#btn_refresh, #filter_year, #filter_channel").change(function () {
+            $("#btn_refresh, #filter_year, #filter_channel, #filter_category").change(function () {
                 load_analysis_table();
             });
             $("#btn_refresh").click(function () {
