@@ -63,6 +63,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </span>
                                     </div>
 
+                                    <div class="form-group">
+                                        <button type="button" name="stockAnalysisBtn" id="stockAnalysisBtn"
+                                                tabindex="4"
+                                                class="form-control btn btn-success">
+                                            <span>
+                                                <i class="fa fa-calculator" aria-hidden="true"></i>
+                                                ระบบวิเคราะห์สต็อกสินค้า (STOCK / MAX / MIN / AVG)
+                                            </span>
+                                        </button>
+                                    </div>
 
                                     <div class="form-group">
                                         <button type="button" name="exitBtn" id="exitBtn" tabindex="4"
@@ -111,6 +121,14 @@ if (strlen($_SESSION['alogin']) == "") {
         $(document).ready(function () {
             $("#productCockpitBtn").click(function () {
                 window.location.href = "cockpit_products";
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#stockAnalysisBtn").click(function () {
+                window.location.href = "stock_analysis_page";
             });
         });
     </script>
