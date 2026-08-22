@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบวิเคราะห์และแสดงผลราคาสินค้าแยกตามช่องทาง (SAC / CP / BTC)</title>
+    
+    <!-- Google Fonts: Kanit & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    
+    <style>
+        :root {
+            --primary-navy: #0f172a;
+            --sac-theme: #1d4ed8;
+            --sac-light: #eff6ff;
+            --cp-theme: #dc2626;
+            --cp-light: #fef2f2;
+            --btc-theme: #d97706;
+            --btc-light: #fffbeb;
+            --bg-page: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Kanit', 'Outfit', sans-serif;
+            background-color: var(--bg-page);
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Hero Header */
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: white;
+            padding: 2.5rem 0 2rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Top Channel Selector Cards */
+        .channel-btn {
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .channel-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .channel-btn.active-sac {
+            border-color: var(--sac-theme);
+            background: linear-gradient(to bottom right, #ffffff, var(--sac-light));
+            box-shadow: 0 8px 25px rgba(29, 78, 216, 0.2);
+        }
+        .channel-btn.active-cp {
+            border-color: var(--cp-theme);
+            background: linear-gradient(to bottom right, #ffffff, var(--cp-light));
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.2);
+        }
+        .channel-btn.active-btc {
+            border-color: var(--btc-theme);
+            background: linear-gradient(to bottom right, #ffffff, var(--btc-light));
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.2);
+        }
+
+        /* Badge and Price Styling */
+        .price-chip {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            min-width: 85px;
+        }
+        .price-chip-sac {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .price-chip-cp {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .price-chip-btc {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header-sac {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.2rem 1.5rem;
+        }
+        .card-header-cp {
+            background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.2rem 1.5rem;
+        }
+        .card-header-btc {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.2rem 1.5rem;
+        }
+
+        /* Nav Tabs in Doc Section */
+        .doc-tabs .nav-link {
+            font-weight: 500;
+            color: #64748b;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.2s ease;
+        }
+        .doc-tabs .nav-link.active {
+            background-color: #0f172a;
+            color: white;
+        }
+
+        pre {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 1.2rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #0f172a;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="hero-banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-primary px-3 py-2 fw-bold mb-2">
+                        <i class="fa-solid fa-layer-group me-1"></i> Multi-Price Channel Architecture
+                    </span>
+                    <h1 class="display-6 fw-bold mb-2">ระบบแสดงรายการสินค้า 1 รายการ มีหลายช่องราคา</h1>
+                    <p class="lead text-light opacity-90 mb-0">
+                        จำแนกแยกตามช่องทางธุรกิจหลัก: <strong>SAC</strong>, <strong>Cockpit (CP)</strong>, และ <strong>BTC</strong> 
+                        เพื่อความถูกต้องในการขายและควบคุมสิทธิ์อย่างปลอดภัย
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <a href="#doc-section" class="btn btn-outline-light btn-sm px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-book-bookmark me-1"></i> อ่านบทวิเคราะห์ & ขั้นตอนเขียนโค้ด
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Channel Selector Bar -->
+    <div class="container mt-4 mb-4">
+        <div class="row g-3">
+            <!-- SAC Channel Card -->
+            <div class="col-md-4">
+                <div class="channel-btn active-sac" id="btnChannelSac" onclick="switchChannel('sac')">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="badge bg-primary px-2 py-1">ช่องทางที่ 1</span>
+                        <i class="fa-solid fa-tags fa-xl text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1 text-primary">1. สินค้าช่องทาง SAC</h4>
+                    <p class="small text-secondary mb-2">หน้าร้าน SAC, ศูนย์บริการ และเครือข่ายตัวแทน SAC</p>
+                    <div class="d-flex gap-1 flex-wrap">
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง S1 (ปลีก)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง S2 (ส่ง)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง S3 (ช่าง/อู่)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง S4 (โครงการ)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cockpit (CP) Channel Card -->
+            <div class="col-md-4">
+                <div class="channel-btn" id="btnChannelCp" onclick="switchChannel('cp')">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="badge bg-danger px-2 py-1">ช่องทางที่ 2</span>
+                        <i class="fa-solid fa-wrench fa-xl text-danger"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1 text-danger">2. สินค้าช่องทาง Cockpit (CP)</h4>
+                    <p class="small text-secondary mb-2">ศูนย์บริการ Cockpit สาขา 340, ราชพฤกษ์, บางใหญ่, บางบอน</p>
+                    <div class="d-flex gap-1 flex-wrap">
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง CP1 (ราคาป้าย)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง CP2 (สมาชิก)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง CP3 (โปรโมชั่น)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง CP4 (Fleet)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BTC Channel Card -->
+            <div class="col-md-4">
+                <div class="channel-btn" id="btnChannelBtc" onclick="switchChannel('btc')">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="badge bg-warning text-dark px-2 py-1">ช่องทางที่ 3</span>
+                        <i class="fa-solid fa-building fa-xl text-warning"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1 text-warning text-dark">3. สินค้าช่องทาง BTC</h4>
+                    <p class="small text-secondary mb-2">Bridgestone Tyre Center และศูนย์กระจายยางหลัก</p>
+                    <div class="d-flex gap-1 flex-wrap">
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง B1 (ส่งศูนย์)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง B2 (ดีลเลอร์)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง B3 (ปลีกหน้าร้าน)</span>
+                        <span class="badge badge-sm bg-light text-dark border">ช่อง B4 (พิเศษ)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Interactive Tables Container -->
+    <div class="container mb-5">
+
+        <!-- ==================== 1. SAC PANEL ==================== -->
+        <div id="panel-sac" class="channel-panel">
+            <div class="card card-custom">
+                <div class="card-header-sac d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-tags me-2"></i>ตารางสินค้าช่องทาง SAC (1 สินค้า มีหลายช่องราคา SAC)</h4>
+                        <small class="opacity-90">อ้างอิงหน้าใช้งานจริง: <code class="text-warning code-font">sac_sale_page.php</code></small>
+                    </div>
+                    <div>
+                        <span class="badge bg-light text-primary fw-bold px-3 py-2">Price Code Prefix: S</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Search Filter Toolbar -->
+                    <div class="row g-2 mb-3 align-items-center bg-light p-3 rounded-3 border">
+                        <div class="col-md-4">
+                            <label class="small fw-bold text-secondary mb-1">ค้นหาด่วน (SKU / ชื่อสินค้า)</label>
+                            <input type="text" id="searchSac" class="form-control form-control-sm" placeholder="พิมพ์คำค้นหา เช่น 195/55R15, EP300...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold text-secondary mb-1">เลือกยี่ห้อ (Brand)</label>
+                            <select id="brandSac" class="form-select form-select-sm">
+                                <option value="">ทุกยี่ห้อ (All Brands)</option>
+                                <option value="BRIDGESTONE">BRIDGESTONE</option>
+                                <option value="MICHELIN">MICHELIN</option>
+                                <option value="MAXXIS">MAXXIS</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 text-md-end">
+                            <span class="small text-muted d-block mb-1">แสดงผล: <strong>1 แถว รวมช่องราคา S1 ถึง S4</strong></span>
+                            <button class="btn btn-outline-primary btn-sm" onclick="exportData('SAC')">
+                                <i class="fa fa-file-excel me-1"></i> ส่งออกตารางราคา SAC
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SAC Table -->
+                    <div class="table-responsive">
+                        <table id="tableSac" class="table table-hover align-middle w-100 border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th style="width: 140px;">รหัสสินค้า (SKU)</th>
+                                    <th>ชื่อสินค้า / รายละเอียด</th>
+                                    <th style="width: 120px;">ยี่ห้อ</th>
+                                    <th class="text-end" style="background-color: #f0f7ff; width: 125px;">
+                                        <div class="fw-bold text-primary">ช่อง S1</div>
+                                        <small class="text-muted">ราคาขายปลีก</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #f0f7ff; width: 125px;">
+                                        <div class="fw-bold text-primary">ช่อง S2</div>
+                                        <small class="text-muted">ราคาขายส่ง</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #f0f7ff; width: 125px;">
+                                        <div class="fw-bold text-primary">ช่อง S3</div>
+                                        <small class="text-muted">ราคาอู่/ช่าง</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #f0f7ff; width: 125px;">
+                                        <div class="fw-bold text-primary">ช่อง S4</div>
+                                        <small class="text-muted">ราคาโครงการ</small>
+                                    </th>
+                                    <th class="text-center" style="width: 90px;">สต็อกรวม</th>
+                                    <th class="text-center" style="width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- SAC rows dynamically generated -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 2. COCKPIT (CP) PANEL ==================== -->
+        <div id="panel-cp" class="channel-panel" style="display: none;">
+            <div class="card card-custom">
+                <div class="card-header-cp d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-wrench me-2"></i>ตารางสินค้าช่องทาง Cockpit (1 สินค้า มีหลายช่องราคา CP)</h4>
+                        <small class="opacity-90">อ้างอิงหน้าใช้งานจริง: <code class="text-warning code-font">cockpit_sale_page.php</code></small>
+                    </div>
+                    <div>
+                        <span class="badge bg-light text-danger fw-bold px-3 py-2">Price Code Prefix: C / CP</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Search Filter Toolbar -->
+                    <div class="row g-2 mb-3 align-items-center bg-light p-3 rounded-3 border">
+                        <div class="col-md-4">
+                            <label class="small fw-bold text-secondary mb-1">ค้นหาด่วน Cockpit</label>
+                            <input type="text" id="searchCp" class="form-control form-control-sm" placeholder="ค้นหาเบอร์ยาง, น้ำมันเครื่อง, ผ้าเบรก...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold text-secondary mb-1">เลือกยี่ห้อ</label>
+                            <select id="brandCp" class="form-select form-select-sm">
+                                <option value="">ทุกยี่ห้อ (All Brands)</option>
+                                <option value="BRIDGESTONE">BRIDGESTONE</option>
+                                <option value="FIRESTONE">FIRESTONE</option>
+                                <option value="CASTROL">CASTROL</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 text-md-end">
+                            <span class="small text-muted d-block mb-1">แสดงผล: <strong>1 แถว รวมช่องราคา CP1 ถึง CP4</strong></span>
+                            <button class="btn btn-outline-danger btn-sm" onclick="exportData('Cockpit')">
+                                <i class="fa fa-file-excel me-1"></i> ส่งออกตารางราคา Cockpit
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cockpit Table -->
+                    <div class="table-responsive">
+                        <table id="tableCp" class="table table-hover align-middle w-100 border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th style="width: 140px;">รหัสสินค้า (SKU)</th>
+                                    <th>ชื่อสินค้า / รายละเอียด</th>
+                                    <th style="width: 120px;">ยี่ห้อ</th>
+                                    <th class="text-end" style="background-color: #fff1f2; width: 125px;">
+                                        <div class="fw-bold text-danger">ช่อง CP1</div>
+                                        <small class="text-muted">ราคาป้ายหน้าร้าน</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fff1f2; width: 125px;">
+                                        <div class="fw-bold text-danger">ช่อง CP2</div>
+                                        <small class="text-muted">ราคาสมาชิก Cockpit</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fff1f2; width: 125px;">
+                                        <div class="fw-bold text-danger">ช่อง CP3</div>
+                                        <small class="text-muted">ราคาโปรโมชั่น</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fff1f2; width: 125px;">
+                                        <div class="fw-bold text-danger">ช่อง CP4</div>
+                                        <small class="text-muted">ราคา Fleet ลูกค้าองค์กร</small>
+                                    </th>
+                                    <th class="text-center" style="width: 90px;">สต็อกรวม</th>
+                                    <th class="text-center" style="width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- CP rows dynamically generated -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 3. BTC PANEL ==================== -->
+        <div id="panel-btc" class="channel-panel" style="display: none;">
+            <div class="card card-custom">
+                <div class="card-header-btc d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-building me-2"></i>ตารางสินค้าช่องทาง BTC (1 สินค้า มีหลายช่องราคา BTC)</h4>
+                        <small class="opacity-90">อ้างอิงหน้าใช้งานจริง: <code class="text-warning code-font">btc_sale_page.php</code></small>
+                    </div>
+                    <div>
+                        <span class="badge bg-light text-dark fw-bold px-3 py-2">Price Code Prefix: B / BTC</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Search Filter Toolbar -->
+                    <div class="row g-2 mb-3 align-items-center bg-light p-3 rounded-3 border">
+                        <div class="col-md-4">
+                            <label class="small fw-bold text-secondary mb-1">ค้นหาด่วน BTC</label>
+                            <input type="text" id="searchBtc" class="form-control form-control-sm" placeholder="ค้นหารหัสสินค้า BTC...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold text-secondary mb-1">เลือกยี่ห้อ</label>
+                            <select id="brandBtc" class="form-select form-select-sm">
+                                <option value="">ทุกยี่ห้อ (All Brands)</option>
+                                <option value="BRIDGESTONE">BRIDGESTONE</option>
+                                <option value="FIRESTONE">FIRESTONE</option>
+                                <option value="DAYTON">DAYTON</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 text-md-end">
+                            <span class="small text-muted d-block mb-1">แสดงผล: <strong>1 แถว รวมช่องราคา B1 ถึง B4</strong></span>
+                            <button class="btn btn-outline-warning text-dark btn-sm" onclick="exportData('BTC')">
+                                <i class="fa fa-file-excel me-1"></i> ส่งออกตารางราคา BTC
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- BTC Table -->
+                    <div class="table-responsive">
+                        <table id="tableBtc" class="table table-hover align-middle w-100 border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th style="width: 140px;">รหัสสินค้า (SKU)</th>
+                                    <th>ชื่อสินค้า / รายละเอียด</th>
+                                    <th style="width: 120px;">ยี่ห้อ</th>
+                                    <th class="text-end" style="background-color: #fffdf5; width: 125px;">
+                                        <div class="fw-bold text-dark">ช่อง B1</div>
+                                        <small class="text-muted">ราคาส่งศูนย์ BTC</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fffdf5; width: 125px;">
+                                        <div class="fw-bold text-dark">ช่อง B2</div>
+                                        <small class="text-muted">ราคาดีลเลอร์</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fffdf5; width: 125px;">
+                                        <div class="fw-bold text-dark">ช่อง B3</div>
+                                        <small class="text-muted">ราคาขายปลีก</small>
+                                    </th>
+                                    <th class="text-end" style="background-color: #fffdf5; width: 125px;">
+                                        <div class="fw-bold text-dark">ช่อง B4</div>
+                                        <small class="text-muted">ราคาพิเศษ VIP</small>
+                                    </th>
+                                    <th class="text-center" style="width: 90px;">สต็อกรวม</th>
+                                    <th class="text-center" style="width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- BTC rows dynamically generated -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Detailed Analysis & Coding Guide Section -->
+    <div class="container pb-5" id="doc-section">
+        <div class="card card-custom">
+            <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold"><i class="fa-solid fa-file-code text-warning me-2"></i>การวิเคราะห์ แนวคิด และขั้นตอนการเขียนโปรแกรม (Technical Specifications)</h4>
+            </div>
+            <div class="card-body p-4">
+                
+                <!-- Nav Tabs for Documentation -->
+                <ul class="nav nav-pills doc-tabs mb-4 gap-2" id="docTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="tab-analysis" data-bs-toggle="pill" data-bs-target="#pane-analysis" type="button">
+                            1. สรุปปัญหา & แนวคิดแยกตามช่องทาง
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tab-sql" data-bs-toggle="pill" data-bs-target="#pane-sql" type="button">
+                            2. SQL Query Pivot (SAC, CP, BTC)
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tab-backend" data-bs-toggle="pill" data-bs-target="#pane-backend" type="button">
+                            3. การเขียนโค้ดฝั่ง Backend (PHP Model)
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tab-frontend" data-bs-toggle="pill" data-bs-target="#pane-frontend" type="button">
+                            4. การปรับปรุงหน้าเว็บเดิม (Frontend PHP)
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="docTabContent">
+                    
+                    <!-- 1. Analysis Pane -->
+                    <div class="tab-pane fade show active" id="pane-analysis">
+                        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-compass-drafting me-2"></i>ทำไมต้องแยกเป็น SAC, CP, BTC อย่างชัดเจน?</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="p-3 border rounded-3 bg-light h-100">
+                                    <h6 class="fw-bold text-primary"><i class="fa-solid fa-shield-halved me-1"></i> 1. นโยบายสิทธิ์ความปลอดภัย (Data Isolation)</h6>
+                                    <p class="small text-muted mb-0">
+                                        พนักงานประจำ Cockpit หรือร้านค้าเครือข่าย BTC ไม่ควรเข้าถึงหรือมองเห็นโครงสร้างราคาของ SAC โดยตรง การแยกหน้า/ช่องทางช่วยให้สามารถควบคุมสิทธิ์ตาม <code class="code-font">$_SESSION['account_type']</code> ได้อย่างรัดกุม
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 border rounded-3 bg-light h-100">
+                                    <h6 class="fw-bold text-danger"><i class="fa-solid fa-users me-1"></i> 2. กลุ่มเป้าหมายราคาแตกต่างกัน</h6>
+                                    <p class="small text-muted mb-0">
+                                        • <strong>SAC:</strong> เน้นราคาขายส่ง, ช่างอู่, และงานโครงการ<br>
+                                        • <strong>Cockpit:</strong> เน้นราคาป้ายหน้าร้าน, บัตรสมาชิก, โปรโมชั่นผ่อน 0%<br>
+                                        • <strong>BTC:</strong> เน้นราคาส่งศูนย์บริการและดีลเลอร์ยาง
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 border rounded-3 bg-light h-100">
+                                    <h6 class="fw-bold text-warning text-dark"><i class="fa-solid fa-gauge-high me-1"></i> 3. ประสิทธิภาพการใช้งานของเซลล์</h6>
+                                    <p class="small text-muted mb-0">
+                                        เมื่อเปิดหน้า <code class="code-font">sac_sale_page.php</code> เซลล์จะเห็นเฉพาะราคาทุกช่องของ SAC (S1-S4) ทันทีใน 1 แถว โดยไม่มีคอลัมน์ของ Cockpit/BTC มาทำให้ตารางกว้างเกินไปและดูยาก
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-primary bg-opacity-10 border border-primary rounded-3">
+                            <h6 class="fw-bold text-primary mb-1"><i class="fa-solid fa-circle-check me-1"></i> ผลลัพธ์ของการปรับปรุง:</h6>
+                            <p class="small mb-0">
+                                เดิมในฐานข้อมูล <code class="code-font">ims_product</code> หากสินค้า 1 ตัวมีช่องราคา S1, S2, S3 จะถูกเก็บเป็น 3 แถว ทำให้หน้าเว็บแสดงสินค้าซ้ำกัน 3 บรรทัด<br>
+                                <strong>เมื่อปรับปรุงแล้ว:</strong> หน้าเว็บจะรวมข้อมูลเป็น <strong>1 บรรทัดต่อ 1 สินค้า</strong> และมีคอลัมน์ราคา <strong>S1, S2, S3, S4</strong> วางเรียงเคียงกันอย่างสวยงาม
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 2. SQL Pane -->
+                    <div class="tab-pane fade" id="pane-sql">
+                        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-database me-2"></i>คำสั่ง SQL Pivot Query แยกตามแต่ละช่องทาง</h5>
+                        
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-primary">1. SQL View สำหรับช่องทาง SAC (<code class="code-font">v_product_sac_prices</code>)</h6>
+                            <pre><code class="language-sql">CREATE OR REPLACE VIEW v_product_sac_prices AS
+SELECT 
+    p.product_id,
+    p.name_t AS product_name,
+    p.brand,
+    p.category,
+    -- ช่องราคาต่างๆ ของ SAC (ตัวอย่าง S01, S02, S03, S04 หรือ S1, S2, S3, S4)
+    MAX(CASE WHEN p.price_code = 'S01' OR p.price_code = 'S1' OR p.price_code = 'S' THEN p.price END) AS price_s1,
+    MAX(CASE WHEN p.price_code = 'S02' OR p.price_code = 'S2' THEN p.price END) AS price_s2,
+    MAX(CASE WHEN p.price_code = 'S03' OR p.price_code = 'S3' THEN p.price END) AS price_s3,
+    MAX(CASE WHEN p.price_code = 'S04' OR p.price_code = 'S4' THEN p.price END) AS price_s4
+FROM ims_product p
+WHERE p.price_code LIKE 'S%'
+GROUP BY p.product_id, p.name_t, p.brand, p.category;</code></pre>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-danger">2. SQL View สำหรับช่องทาง Cockpit (<code class="code-font">v_product_cp_prices</code>)</h6>
+                            <pre><code class="language-sql">CREATE OR REPLACE VIEW v_product_cp_prices AS
+SELECT 
+    p.product_id,
+    p.name_t AS product_name,
+    p.brand,
+    p.category,
+    -- ช่องราคาต่างๆ ของ Cockpit (CP1, CP2, CP3, CP4 หรือ C01, C02...)
+    MAX(CASE WHEN p.price_code = 'CP01' OR p.price_code = 'C1' OR p.price_code = 'CP' THEN p.price END) AS price_cp1,
+    MAX(CASE WHEN p.price_code = 'CP02' OR p.price_code = 'C2' THEN p.price END) AS price_cp2,
+    MAX(CASE WHEN p.price_code = 'CP03' OR p.price_code = 'C3' THEN p.price END) AS price_cp3,
+    MAX(CASE WHEN p.price_code = 'CP04' OR p.price_code = 'C4' THEN p.price END) AS price_cp4
+FROM ims_product p
+WHERE p.price_code LIKE 'C%' OR p.price_code LIKE 'CP%'
+GROUP BY p.product_id, p.name_t, p.brand, p.category;</code></pre>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-warning text-dark">3. SQL View สำหรับช่องทาง BTC (<code class="code-font">v_product_btc_prices</code>)</h6>
+                            <pre><code class="language-sql">CREATE OR REPLACE VIEW v_product_btc_prices AS
+SELECT 
+    p.product_id,
+    p.name_t AS product_name,
+    p.brand,
+    p.category,
+    -- ช่องราคาต่างๆ ของ BTC (B1, B2, B3, B4 หรือ BTC01, BTC02...)
+    MAX(CASE WHEN p.price_code = 'BTC01' OR p.price_code = 'B1' OR p.price_code = 'BTC' OR p.price_code = 'B' THEN p.price END) AS price_b1,
+    MAX(CASE WHEN p.price_code = 'BTC02' OR p.price_code = 'B2' THEN p.price END) AS price_b2,
+    MAX(CASE WHEN p.price_code = 'BTC03' OR p.price_code = 'B3' THEN p.price END) AS price_b3,
+    MAX(CASE WHEN p.price_code = 'BTC04' OR p.price_code = 'B4' THEN p.price END) AS price_b4
+FROM ims_product p
+WHERE p.price_code LIKE 'B%' OR p.price_code LIKE 'BTC%'
+GROUP BY p.product_id, p.name_t, p.brand, p.category;</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 3. Backend PHP Pane -->
+                    <div class="tab-pane fade" id="pane-backend">
+                        <h5 class="fw-bold text-primary mb-3"><i class="fa-brands fa-php me-2"></i>การปรับ Model ในโฟลเดอร์ <code class="code-font">model/</code></h5>
+                        <p class="text-muted small">
+                            สามารถปรับที่ไฟล์ <code class="code-font">model/manage_product_process.php</code>, <code class="code-font">model/manage_product_cockpit_process.php</code>, และ <code class="code-font">model/manage_product_btc_process.php</code> ให้คืนค่าฟิลด์ราคาแบบหลายช่อง:
+                        </p>
+
+                        <pre><code class="language-php">&lt;?php
+// ตัวอย่าง: model/manage_product_process.php สำหรับช่องทาง SAC
+session_start();
+include('../config/connect_db.php');
+
+if ($_POST["action"] === 'GET_PRODUCT_MULTI_CHANNEL') {
+    $channel = $_POST['channel'] ?? 'SAC'; // รับค่า SAC, CP, หรือ BTC
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = trim($_POST['search']['value'] ?? '');
+
+    // เลือก View หรือ Table ตาม Channel
+    $targetView = "v_product_sac_prices";
+    if ($channel === 'CP')  $targetView = "v_product_cp_prices";
+    if ($channel === 'BTC') $targetView = "v_product_btc_prices";
+
+    $searchQuery = " 1=1 ";
+    $params = [];
+    if (!empty($searchValue)) {
+        $searchQuery .= " AND (product_id LIKE :search OR product_name LIKE :search) ";
+        $params[':search'] = "%{$searchValue}%";
+    }
+
+    // นับจำนวนทั้งหมด
+    $countStmt = $conn->prepare("SELECT COUNT(*) FROM {$targetView} WHERE {$searchQuery}");
+    $countStmt->execute($params);
+    $totalFiltered = $countStmt->fetchColumn();
+
+    // ดึงข้อมูลแบ่งหน้า
+    $stmt = $conn->prepare("SELECT * FROM {$targetView} WHERE {$searchQuery} ORDER BY product_id ASC LIMIT :start, :length");
+    foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+    $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+    $stmt->bindValue(':length', $length, PDO::PARAM_INT);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $data = [];
+    $no = $start + 1;
+    foreach ($rows as $r) {
+        if ($channel === 'SAC') {
+            $data[] = [
+                "no"           => $no++,
+                "product_id"   => $r['product_id'],
+                "product_name" => $r['product_name'],
+                "brand"        => $r['brand'] ?? '-',
+                "price_1"      => $r['price_s1'] ? number_format($r['price_s1'], 2) : '-',
+                "price_2"      => $r['price_s2'] ? number_format($r['price_s2'], 2) : '-',
+                "price_3"      => $r['price_s3'] ? number_format($r['price_s3'], 2) : '-',
+                "price_4"      => $r['price_s4'] ? number_format($r['price_s4'], 2) : '-',
+                "actions"      => "&lt;button class='btn btn-info btn-xs btn-detail' data-id='{$r['product_id']}'&gt;Detail&lt;/button&gt;"
+            ];
+        }
+        // ... (กรณี CP และ BTC ทำแบบเดียวกัน)
+    }
+
+    echo json_encode([
+        "draw" => $draw,
+        "recordsTotal" => $totalFiltered,
+        "recordsFiltered" => $totalFiltered,
+        "data" => $data
+    ]);
+}
+?&gt;</code></pre>
+                    </div>
+
+                    <!-- 4. Frontend Implementation Pane -->
+                    <div class="tab-pane fade" id="pane-frontend">
+                        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-window-maximize me-2"></i>การปรับหน้าเว็บ Frontend เดิม</h5>
+                        
+                        <div class="mb-3">
+                            <h6 class="fw-bold">1. ปรับหัวตารางใน <code class="code-font">sac_sale_page.php</code></h6>
+                            <pre><code class="language-html">&lt;table id='TableRecordList' class='display dataTable table table-bordered'&gt;
+    &lt;thead class='thead-light'&gt;
+        &lt;tr&gt;
+            &lt;th&gt;รหัสสินค้า&lt;/th&gt;
+            &lt;th&gt;ชื่อสินค้า&lt;/th&gt;
+            &lt;th&gt;ช่อง S1 (ปลีก)&lt;/th&gt;
+            &lt;th&gt;ช่อง S2 (ส่ง)&lt;/th&gt;
+            &lt;th&gt;ช่อง S3 (ช่าง)&lt;/th&gt;
+            &lt;th&gt;ช่อง S4 (โครงการ)&lt;/th&gt;
+            &lt;th&gt;Action&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+&lt;/table&gt;</code></pre>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="fw-bold">2. เรียกใช้ DataTables ใน JavaScript</h6>
+                            <pre><code class="language-javascript">let table = $('#TableRecordList').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": "model/manage_product_process.php",
+        "type": "POST",
+        "data": function(d) {
+            d.action = "GET_PRODUCT_MULTI_CHANNEL";
+            d.channel = "SAC"; // ส่งช่องทางที่ต้องการ
+        }
+    },
+    "columns": [
+        { "data": "product_id" },
+        { "data": "product_name" },
+        { "data": "price_1", "className": "text-right font-weight-bold text-primary" },
+        { "data": "price_2", "className": "text-right font-weight-bold text-primary" },
+        { "data": "price_3", "className": "text-right font-weight-bold text-primary" },
+        { "data": "price_4", "className": "text-right font-weight-bold text-primary" },
+        { "data": "actions", "className": "text-center" }
+    ]
+});</code></pre>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="detailModalTitle"><i class="fa fa-tag me-2"></i>รายละเอียดราคาและสต็อก</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detailModalContent">
+                    <!-- Loaded dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="alert('คัดลอกข้อมูลราคาเรียบร้อยแล้ว')">
+                        <i class="fa fa-copy me-1"></i> คัดลอกราคา
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: jQuery, Bootstrap 5, DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        // Mock Data for 3 Channels
+        const sacProducts = [
+            { sku: "195-55-15", name: "BRIDGESTONE 195/55R15 EP300", brand: "BRIDGESTONE", p1: "2,650.00", p2: "2,420.00", p3: "2,350.00", p4: "2,280.00", stock: 145 },
+            { sku: "215-60-16", name: "BRIDGESTONE 215/60R16 T005A", brand: "BRIDGESTONE", p1: "4,100.00", p2: "3,750.00", p3: "3,650.00", p4: "3,500.00", stock: 92 },
+            { sku: "185-60-15", name: "MICHELIN 185/60R15 XM2+", brand: "MICHELIN", p1: "2,550.00", p2: "2,350.00", p3: "2,280.00", p4: "2,200.00", stock: 110 },
+            { sku: "265-65-17", name: "MAXXIS 265/65R17 AT-700", brand: "MAXXIS", p1: "3,200.00", p2: "2,900.00", p3: "2,800.00", p4: "2,700.00", stock: 64 }
+        ];
+
+        const cpProducts = [
+            { sku: "195-55-15", name: "BRIDGESTONE 195/55R15 EP300 (CP)", brand: "BRIDGESTONE", p1: "2,750.00", p2: "2,600.00", p3: "2,490.00", p4: "2,380.00", stock: 65 },
+            { sku: "215-60-16", name: "BRIDGESTONE 215/60R16 T005A (CP)", brand: "BRIDGESTONE", p1: "4,250.00", p2: "4,050.00", p3: "3,890.00", p4: "3,700.00", stock: 40 },
+            { sku: "195-65-15", name: "FIRESTONE 195/65R15 F01 (CP)", brand: "FIRESTONE", p1: "1,950.00", p2: "1,850.00", p3: "1,750.00", p4: "1,680.00", stock: 85 },
+            { sku: "OIL-CASTROL-5W30", name: "CASTROL MAGNATEC 5W-30 (4L)", brand: "CASTROL", p1: "1,350.00", p2: "1,250.00", p3: "1,150.00", p4: "1,050.00", stock: 120 }
+        ];
+
+        const btcProducts = [
+            { sku: "195-55-15", name: "BRIDGESTONE 195/55R15 EP300 (BTC)", brand: "BRIDGESTONE", p1: "2,700.00", p2: "2,480.00", p3: "2,950.00", p4: "2,350.00", stock: 90 },
+            { sku: "215-60-16", name: "BRIDGESTONE 215/60R16 T005A (BTC)", brand: "BRIDGESTONE", p1: "4,150.00", p2: "3,850.00", p3: "4,500.00", p4: "3,650.00", stock: 55 },
+            { sku: "205-55-16", name: "DAYTON 205/55R16 DT30 (BTC)", brand: "DAYTON", p1: "1,850.00", p2: "1,650.00", p3: "2,100.00", p4: "1,550.00", stock: 130 }
+        ];
+
+        let dtSac, dtCp, dtBtc;
+
+        function switchChannel(channel) {
+            $('.channel-btn').removeClass('active-sac active-cp active-btc');
+            $('.channel-panel').hide();
+
+            if (channel === 'sac') {
+                $('#btnChannelSac').addClass('active-sac');
+                $('#panel-sac').fadeIn(200);
+            } else if (channel === 'cp') {
+                $('#btnChannelCp').addClass('active-cp');
+                $('#panel-cp').fadeIn(200);
+            } else if (channel === 'btc') {
+                $('#btnChannelBtc').addClass('active-btc');
+                $('#panel-btc').fadeIn(200);
+            }
+        }
+
+        $(document).ready(function() {
+            // Render SAC Table
+            const tbodySac = $('#tableSac tbody');
+            sacProducts.forEach((item, idx) => {
+                tbodySac.append(`
+                    <tr>
+                        <td class="text-center">${idx + 1}</td>
+                        <td class="fw-bold text-primary">${item.sku}</td>
+                        <td class="fw-semibold">${item.name}</td>
+                        <td><span class="badge bg-secondary">${item.brand}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-sac">฿${item.p1}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-sac">฿${item.p2}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-sac">฿${item.p3}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-sac">฿${item.p4}</span></td>
+                        <td class="text-center"><span class="badge bg-success">${item.stock}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-primary btn-sm btn-open-modal" data-channel="SAC" data-sku="${item.sku}" data-name="${item.name}" data-p1="${item.p1}" data-p2="${item.p2}" data-p3="${item.p3}" data-p4="${item.p4}">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+
+            // Render CP Table
+            const tbodyCp = $('#tableCp tbody');
+            cpProducts.forEach((item, idx) => {
+                tbodyCp.append(`
+                    <tr>
+                        <td class="text-center">${idx + 1}</td>
+                        <td class="fw-bold text-danger">${item.sku}</td>
+                        <td class="fw-semibold">${item.name}</td>
+                        <td><span class="badge bg-secondary">${item.brand}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-cp">฿${item.p1}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-cp">฿${item.p2}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-cp">฿${item.p3}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-cp">฿${item.p4}</span></td>
+                        <td class="text-center"><span class="badge bg-success">${item.stock}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-danger btn-sm btn-open-modal" data-channel="Cockpit" data-sku="${item.sku}" data-name="${item.name}" data-p1="${item.p1}" data-p2="${item.p2}" data-p3="${item.p3}" data-p4="${item.p4}">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+
+            // Render BTC Table
+            const tbodyBtc = $('#tableBtc tbody');
+            btcProducts.forEach((item, idx) => {
+                tbodyBtc.append(`
+                    <tr>
+                        <td class="text-center">${idx + 1}</td>
+                        <td class="fw-bold text-warning text-dark">${item.sku}</td>
+                        <td class="fw-semibold">${item.name}</td>
+                        <td><span class="badge bg-secondary">${item.brand}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-btc">฿${item.p1}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-btc">฿${item.p2}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-btc">฿${item.p3}</span></td>
+                        <td class="text-end"><span class="price-chip price-chip-btc">฿${item.p4}</span></td>
+                        <td class="text-center"><span class="badge bg-success">${item.stock}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-warning text-dark btn-sm btn-open-modal" data-channel="BTC" data-sku="${item.sku}" data-name="${item.name}" data-p1="${item.p1}" data-p2="${item.p2}" data-p3="${item.p3}" data-p4="${item.p4}">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+
+            // Init DataTables
+            dtSac = $('#tableSac').DataTable({ "dom": "t<p>" });
+            dtCp  = $('#tableCp').DataTable({ "dom": "t<p>" });
+            dtBtc = $('#tableBtc').DataTable({ "dom": "t<p>" });
+
+            // Search Filter bindings
+            $('#searchSac').on('keyup', function() { dtSac.search(this.value).draw(); });
+            $('#brandSac').on('change', function() { dtSac.column(3).search(this.value).draw(); });
+
+            $('#searchCp').on('keyup', function() { dtCp.search(this.value).draw(); });
+            $('#brandCp').on('change', function() { dtCp.column(3).search(this.value).draw(); });
+
+            $('#searchBtc').on('keyup', function() { dtBtc.search(this.value).draw(); });
+            $('#brandBtc').on('change', function() { dtBtc.column(3).search(this.value).draw(); });
+
+            // Modal Detail Trigger
+            $(document).on('click', '.btn-open-modal', function() {
+                const channel = $(this).data('channel');
+                const sku = $(this).data('sku');
+                const name = $(this).data('name');
+                const p1 = $(this).data('p1');
+                const p2 = $(this).data('p2');
+                const p3 = $(this).data('p3');
+                const p4 = $(this).data('p4');
+
+                let titleLabel = {
+                    'SAC': ['ช่อง S1 (ปลีก)', 'ช่อง S2 (ส่ง)', 'ช่อง S3 (ช่าง)', 'ช่อง S4 (โครงการ)'],
+                    'Cockpit': ['ช่อง CP1 (ป้าย)', 'ช่อง CP2 (สมาชิก)', 'ช่อง CP3 (โปรโมชั่น)', 'ช่อง CP4 (Fleet)'],
+                    'BTC': ['ช่อง B1 (ส่งศูนย์)', 'ช่อง B2 (ดีลเลอร์)', 'ช่อง B3 (ปลีก)', 'ช่อง B4 (พิเศษ)']
+                };
+
+                let labels = titleLabel[channel] || ['ช่อง 1', 'ช่อง 2', 'ช่อง 3', 'ช่อง 4'];
+
+                $('#detailModalTitle').html(`<i class="fa fa-tag me-2"></i>รายละเอียดราคาช่องทาง ${channel}`);
+                $('#detailModalContent').html(`
+                    <div class="mb-3">
+                        <div class="text-muted small">รหัสสินค้า:</div>
+                        <div class="h5 fw-bold text-primary mb-1">${sku}</div>
+                        <div class="fw-semibold text-dark">${name}</div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${labels[0]}</span>
+                            <span class="fw-bold text-primary">฿${p1}</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${labels[1]}</span>
+                            <span class="fw-bold text-primary">฿${p2}</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${labels[2]}</span>
+                            <span class="fw-bold text-primary">฿${p3}</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${labels[3]}</span>
+                            <span class="fw-bold text-primary">฿${p4}</span>
+                        </div>
+                    </div>
+                `);
+
+                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                modal.show();
+            });
+        });
+
+        function exportData(channelName) {
+            alert('กำลังส่งออกตารางราคาสินค้าช่องทาง ' + channelName + ' เป็นไฟล์ Excel (.xlsx)');
+        }
+    </script>
+</body>
+</html>
